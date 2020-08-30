@@ -1,0 +1,70 @@
+﻿<Window x:Class="BankingSystem.Views.Windows.OperationPanel.TransferWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        WindowStartupLocation="CenterOwner"
+        Title="Перевод с карты на карту" 
+        Height="450" Width="300"
+        MinHeight="450" MaxHeight="800"
+        MinWidth="340" MaxWidth="340">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="90"/>
+        </Grid.RowDefinitions>
+
+        <!--Вкладки-->
+        <TabControl>
+            <!--Клиенту банка-->
+            <TabItem 
+                Name="transferByClientName"
+                Header="Клиенту банка">
+                <TabItem.Content>
+                    <ListBox
+                        Name="listOfClients">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding }"/>
+                                    <TextBlock Text="{Binding }"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </TabItem.Content>
+            </TabItem>
+        </TabControl>
+
+        <!--Панель перевода-->
+        <StackPanel Grid.Row="2">
+            <!--Сумма перевода-->
+            <StackPanel Orientation="Horizontal">
+                <!--Текст блок: Сумма-->
+                <TextBlock 
+                    Text="Сумма:"
+                    Style="{StaticResource BaseDialogTextBlockStyle}"/>
+                <TextBox Style="{StaticResource BaseTextBoxStyle}"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <!--Кнопка перевода-->
+                <Button 
+                    Style="{StaticResource EditPanelButtonStyle}"
+                    Command="{Binding TransferCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="Resources/Icons/TransferIcon.png"/>
+                        <TextBlock 
+                            Text="Перевести"
+                            Style="{StaticResource BaseTextBlockStyle}"/>
+                    </StackPanel>
+                </Button>
+
+                <!--Отчет об операции-->
+                <TextBlock
+                    Text="Успешно"
+                    Foreground="Green"
+                    Visibility="Hidden"
+                    Style="{StaticResource BaseTextBoxStyle}" />
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

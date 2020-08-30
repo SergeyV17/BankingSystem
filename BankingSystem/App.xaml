@@ -1,0 +1,21 @@
+﻿<Application x:Class="BankingSystem.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             StartupUri="Views/MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Views/ResourceDictionaries/BorderDictionary.xaml"/>
+                <ResourceDictionary Source="Views/ResourceDictionaries/TextBlockDictionary.xaml"/>
+                <ResourceDictionary Source="Views/ResourceDictionaries/TextBoxDictionary.xaml"/>
+                <ResourceDictionary Source="Views/ResourceDictionaries/ProgressBarDictionary.xaml"/>
+                <ResourceDictionary Source="Views/ResourceDictionaries/StackPanelDictionary.xaml"/>
+                <ResourceDictionary Source="Views/ResourceDictionaries/GridViewColumnHeaderDictionary.xaml"/>
+                <ResourceDictionary Source="Views/ResourceDictionaries/ButtonDictionary.xaml"/>
+                <ResourceDictionary Source="Views/ResourceDictionaries/ComboBoxDictionary.xaml"/>
+                <ResourceDictionary Source="Views/ResourceDictionaries/ImageDictionary.xaml"/>
+                <ResourceDictionary Source="Views/ResourceDictionaries/ListBoxItemDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

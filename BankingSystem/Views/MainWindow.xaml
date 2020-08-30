@@ -1,0 +1,383 @@
+﻿<Window x:Class="BankingSystem.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        Icon="Resources/Icons/Bank.png"
+        Title ="BankingSystem"
+        Height="800" MinHeight="700"
+        Width="1400" MinWidth="1400" >
+    <!--Сетка-->
+    <Grid ShowGridLines="False">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="45"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="250"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="220" MinWidth="220"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!--Меню-->
+        <Menu Grid.ColumnSpan="4">
+            <MenuItem Header="Файл">
+                <MenuItem Header="История">
+                    <MenuItem Header="Операции"/>
+                    <MenuItem Header="Клиенты"/>
+                </MenuItem>
+                <Separator/>
+                <MenuItem 
+                    Header="Выход"
+                    Command="{Binding ExitCommand}"/>
+            </MenuItem>
+            <MenuItem 
+                Header="Справка"
+                Command="{Binding ShowInfoCommand}"/>
+        </Menu>
+
+        <Border
+            Grid.Row="1"
+            Grid.RowSpan="2"
+            Style="{StaticResource BaseBorderStyle}">
+            <DockPanel>
+                <!--Календарь-->
+                <Viewbox DockPanel.Dock="Bottom">
+                    <Calendar SelectedDate="{x:Static sys:DateTime.Now}"/>
+                </Viewbox>
+                <!--Дерево-->
+                <TreeView x:Name="Tree" DockPanel.Dock="Top">
+                    <TreeView.ItemTemplate>
+                        <HierarchicalDataTemplate 
+                            ItemsSource="{Binding Path=Children}">
+                            <TextBlock 
+                                Text="{Binding Name}" 
+                                FontSize="14"/>
+                        </HierarchicalDataTemplate>
+                    </TreeView.ItemTemplate>
+                </TreeView>
+            </DockPanel>
+        </Border>
+
+
+        <!--Заголовок выбранного узла с клиентами-->
+        <Border
+            Grid.Column="1"
+            Grid.Row="1"
+            Grid.ColumnSpan="3"
+            Style="{StaticResource BaseBorderStyle}">
+            <TextBlock 
+                Text="{Binding ElementName=Tree, Path=SelectedItem.Name}"
+                Style="{StaticResource TitleTextBlockStyle}"/>
+        </Border>
+
+        <!--Панель отображения клиентов-->
+        <Border
+            Grid.Row="2"
+            Grid.RowSpan="2"
+            Grid.Column="1"
+            Style="{StaticResource BaseBorderStyle}">
+            <StackPanel>
+                <!--Панель загрузки-->
+                <StackPanel
+                    Style="{StaticResource LoadingPanelStyle}"
+                    Visibility="Collapsed">
+                    <TextBlock 
+                        Text="Загрузка"
+                        HorizontalAlignment="Center"/>
+                    <ProgressBar Style="{StaticResource LoadingProgressBarStyle}"/>
+                </StackPanel>
+                <!--Выбранный список клиентов -->
+                <ListView 
+                    x:Name="ListOfClients"
+                    FontSize="14">
+                    <ListView.Resources>
+                        <Style TargetType="{x:Type GridViewColumnHeader}">
+                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                        </Style>
+                    </ListView.Resources>
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header=" ФИО" DisplayMemberBinding="{Binding full_name}" Width="280"/>
+                            <GridViewColumn Header=" Адрес" DisplayMemberBinding = "{Binding address}" Width="150"/>
+                            <GridViewColumn Header=" Паспорт" DisplayMemberBinding="{Binding passport}" Width="150"/>
+                            <GridViewColumn Header=" Номер телефона" DisplayMemberBinding="{Binding phone_number}" Width="140"/>
+                            <GridViewColumn Header=" Email" DisplayMemberBinding = "{Binding email}" Width="180"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+
+        <!--Главная панель-->
+        <Border
+            Grid.Row="3"
+            Grid.ColumnSpan="2"
+            Style="{StaticResource BaseBorderStyle}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="45"/>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="220"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!--Панель редактирования клиентов-->
+                <Border Style="{StaticResource BaseBorderStyle}">
+                    <TextBlock
+                        Text="Редактирование клиентов"
+                        Style="{StaticResource TitleTextBlockStyle}"/>
+                </Border>
+                <Border
+                    Grid.Row="1"
+                    Style="{StaticResource BaseBorderStyle}">
+                    <StackPanel HorizontalAlignment="Left" Margin="5">
+                        <!--Кнопка добавить клиента-->           
+                        <Button 
+                            Style="{StaticResource EditPanelButtonStyle}"
+                            Command="{Binding OpenAddIndividualWindowCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="Resources/Icons/AddIcon.png"/>
+                                <TextBlock 
+                                    Text="Добавить"
+                                    Style="{StaticResource BaseTextBlockStyle}"/>
+                            </StackPanel>
+                        </Button>
+                        <!--Кнопка редактировать клиента-->
+                        <Button Style="{StaticResource EditPanelButtonStyle}">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="Resources/Icons/EditIcon.png"/>
+                                <TextBlock 
+                                    Text="Редактировать"
+                                    Style="{StaticResource BaseTextBlockStyle}"/>
+                            </StackPanel>
+                        </Button>
+                        <!--Кнопка удалить клиента-->
+                        <Button Style="{StaticResource EditPanelButtonStyle}">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="Resources/Icons/DeleteIcon.png"/>
+                                <TextBlock 
+                                    Text="Удалить"
+                                    Style="{StaticResource BaseTextBlockStyle}"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Border>
+                <!--Панель клиента-->
+                <Border
+                    Grid.Column="1"
+                    Style="{StaticResource BaseBorderStyle}">
+                    <TextBlock 
+                        Text="Клиент"
+                        Style="{StaticResource TitleTextBlockStyle}"/>
+                </Border>
+                <Border
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Style="{StaticResource BaseBorderStyle}">
+                    <StackPanel Margin="5">
+                        <!--Имя клиента-->
+                        <TextBlock
+                            Text="Сергей"
+                            Style="{StaticResource BaseTextBlockStyle}"/>
+                        <!--Карта-->
+                        <StackPanel
+                                Orientation="Horizontal">
+                            <Button Style="{StaticResource ClientPanelButtonStyle}">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="Resources/Icons/CreditCardIcon.png"/>
+                                    <TextBlock 
+                                        Text="Карта:" 
+                                        Style="{StaticResource ButtonTextBlockStyle}"/>
+                                </StackPanel>
+                            </Button>
+                            <TextBlock
+                                Text="{Binding}"
+                                Style="{StaticResource BaseTextBlockStyle}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                Text="Баланс:"
+                                Style="{StaticResource BaseTextBlockStyle}"/>
+                            <TextBlock
+                                Text="{Binding}"
+                                Style="{StaticResource BaseTextBlockStyle}"/>
+                        </StackPanel>
+
+                        <!--Вклад-->
+                        <StackPanel Orientation="Horizontal">
+                            <Button Style="{StaticResource ClientPanelButtonStyle}">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="Resources/Icons/ContributionIcon.png"/>
+                                    <TextBlock 
+                                        Text="Вклад:" 
+                                        Style="{StaticResource ButtonTextBlockStyle}"/>
+                                </StackPanel>
+                            </Button>
+                            <TextBlock
+                                Text="{Binding}"
+                                Style="{StaticResource BaseTextBlockStyle}">
+                            </TextBlock>
+                        </StackPanel>
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock
+                                    Text="Баланс:"
+                                    Style="{StaticResource BaseTextBlockStyle}"/>
+                                <TextBlock
+                                    Text="{Binding}"
+                                    Style="{StaticResource BaseTextBlockStyle}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock
+                                    Text="Капитализация:"
+                                    Style="{StaticResource BaseTextBlockStyle}"/>
+                                <TextBlock
+                                    Text="{Binding}"
+                                    Style="{StaticResource BaseTextBlockStyle}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+                <!--Панель операций-->
+                <Border
+                    Grid.Column="2"
+                    Style="{StaticResource BaseBorderStyle}">
+                    <TextBlock 
+                        Text="Операции"
+                        Style="{StaticResource TitleTextBlockStyle}"/>
+                </Border>
+                <Border
+                    Grid.Row="1"
+                    Grid.Column="2"
+                    Style="{StaticResource BaseBorderStyle}"
+                    Visibility="Hidden">
+                    <!--Панель операций для карты-->
+                    <StackPanel HorizontalAlignment="Left" Margin="5">
+                        <!--Наименование-->
+                        <TextBlock
+                            Text="4276 7000"
+                            Style="{StaticResource BaseTextBlockStyle}"/>
+                        <!--Номер-->
+                        <TextBlock
+                            Text="397563"
+                            Style="{StaticResource BaseTextBlockStyle}"/>
+                        <!--Баланс-->
+                        <TextBlock
+                            Text="{Binding}"
+                            Style="{StaticResource BaseTextBlockStyle}"/>
+                        <!--Кнопка пополнить карту-->
+                        <Button Style="{StaticResource EditPanelButtonStyle}">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="Resources/Icons/ReplenishmentIcon.png"/>
+                                <TextBlock 
+                                    Text="Пополнить"
+                                    Style="{StaticResource ButtonTextBlockStyle}"/>
+                            </StackPanel>
+                        </Button>
+                        <!--Кнопка перевод-->
+                        <Button Style="{StaticResource EditPanelButtonStyle}">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="Resources/Icons/TransferIcon.png"/>
+                                <TextBlock
+                                    Text="Перевод"
+                                    Style="{StaticResource BaseTextBlockStyle}"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Border>
+                <Border
+                    Grid.Row="1"
+                    Grid.Column="2"
+                    Style="{StaticResource BaseBorderStyle}">
+                    <StackPanel HorizontalAlignment="Left" Margin="5">
+                        <!--Кнопка открыть вклад-->
+                        <Button Style="{StaticResource EditPanelButtonStyle}" Visibility="Collapsed">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="Resources/Icons/ReplenishmentIcon.png" />
+                                <TextBlock 
+                                    Text="Открыть вклад"
+                                    Style="{StaticResource BaseTextBlockStyle}"/>
+                            </StackPanel>
+                        </Button>
+                        <StackPanel>
+                            <!--Наименование-->
+                            <TextBlock 
+                                Text="123123"
+                                Style="{StaticResource BaseTextBlockStyle}"/>
+                            <!--Баланс-->
+                            <TextBlock
+                                Text="300 000"
+                                Style="{StaticResource BaseTextBlockStyle}"/>
+                            <!--Ставка-->
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock
+                                    Text="Ставка:"
+                                    Style="{StaticResource BaseTextBlockStyle}"/>
+                                <TextBlock
+                                    Text="{Binding}"
+                                    Style="{StaticResource BaseTextBlockStyle}"/>
+                            </StackPanel>
+                            <!--Дата открытия-->
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock
+                                    Text="Дата открытия:"
+                                    Style="{StaticResource BaseTextBlockStyle}"/>
+                                <TextBlock
+                                    Text="{Binding}"
+                                    Style="{StaticResource BaseTextBlockStyle}"/>
+                            </StackPanel>
+                            <!--Дата закрытия-->
+                            <StackPanel Orientation="Horizontal" >
+                                <TextBlock
+                                    Text="Дата закрытия:"
+                                    Style="{StaticResource BaseTextBlockStyle}"/>
+                                <TextBlock
+                                    Text="{Binding}"
+                                    Style="{StaticResource BaseTextBlockStyle}">
+                                </TextBlock>
+                            </StackPanel>
+                            <!--Закрыть вклад-->
+                            <Button
+                                Style="{StaticResource EditPanelButtonStyle}">
+                                <StackPanel 
+                                    Orientation="Horizontal">
+                                    <Image Source="Resources/Icons/CloseDepositIcon.png"/>
+                                    <TextBlock 
+                                        Text="Закрыть вклад"
+                                        Style="{StaticResource ButtonTextBlockStyle}"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+                <!--Калькулятор депозита-->
+                <Border
+                    Grid.Column="3"
+                    Style="{StaticResource BaseBorderStyle}">
+                    <TextBlock 
+                        Text="Калькулятор депозита"
+                        Style="{StaticResource TitleTextBlockStyle}"/>
+                </Border>
+                <Border
+                    Grid.Row="1"
+                    Grid.Column="3"
+                    Style="{StaticResource BaseBorderStyle}">
+                    <StackPanel>
+                        <TextBlock
+                            Text="123"
+                            Style="{StaticResource BaseTextBlockStyle}"/>
+                        <TextBlock
+                            Text="123"
+                            Style="{StaticResource BaseTextBlockStyle}"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

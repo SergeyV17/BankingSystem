@@ -1,4 +1,4 @@
-﻿namespace BankingSystem.Models.Implementations.Requisites.ClientRequisites
+﻿namespace BankingSystem.Models.Implementations.Requisites.ClientRequisites.ContactData
 {
     readonly struct PhoneNumber
     {

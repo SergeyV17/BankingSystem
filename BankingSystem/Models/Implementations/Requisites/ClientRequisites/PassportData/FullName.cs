@@ -1,4 +1,4 @@
-﻿namespace BankingSystem.Models.Implementations.Requisites.ClientRequisites
+﻿namespace BankingSystem.Models.Implementations.Requisites.ClientRequisites.PassportData
 {
     readonly struct FullName
     {

@@ -1,12 +1,14 @@
-﻿using BankingSystem.Models.Implementations.Accounts;
+﻿
+using BankingSystem.Models.Implementations.Accounts;
 using BankingSystem.Models.Implementations.Requisites.ClientRequisites;
+using BankingSystem.Models.Implementations.Requisites.ClientRequisites.ContactData;
+using BankingSystem.Models.Implementations.Requisites.ClientRequisites.PassportData;
 
 namespace BankingSystem.Models.Implementations.Clients
 {
     class Individual : Client
     {
-        public Individual(FullName fullName, string address, PhoneNumber phoneNumber, string email, Passport passport, Account account) 
-            : base(fullName, address, phoneNumber, email, passport, account)
+        public Individual(Passport passport, Contact contact, Account account) : base(passport, contact, account)
         {
         }
     }

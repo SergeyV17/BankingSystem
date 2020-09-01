@@ -7,8 +7,7 @@ namespace BankingSystem.Models.Implementations.Accounts
     {
         private const int DepositRateIncrease = 2;
 
-        public VipAccount(Card card, IDeposit deposit, bool accountLockout, decimal amountOfReplenishmentPerDay) 
-            : base(card, deposit, accountLockout, amountOfReplenishmentPerDay)
+        public VipAccount(Card card, IDeposit deposit) : base(card, deposit)
         {
             Deposit.DepositRate *= DepositRateIncrease;
         }

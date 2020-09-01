@@ -1,8 +1,6 @@
-﻿using BankingSystem.Models.Implementations.Requisites.ClientRequisites.PassportData;
-
-namespace BankingSystem.Models.Implementations.Requisites.ClientRequisites.Factories
+﻿namespace BankingSystem.Models.Implementations.Requisites.ClientRequisites.PassportData.Factories
 {
-    static class SeriesAndNumberPassportFactory
+    static class SeriesAndNumberFactory
     {
         private const int StartNumber = 000000;
         private const int MaxNumber = 999999;
@@ -10,7 +8,7 @@ namespace BankingSystem.Models.Implementations.Requisites.ClientRequisites.Facto
         private static int _uniqueSeries;
         private static int _uniqueNumber;
 
-        static SeriesAndNumberPassportFactory()
+        static SeriesAndNumberFactory()
         {
             _uniqueSeries = 0000;
             _uniqueNumber = 000000;
@@ -20,7 +18,7 @@ namespace BankingSystem.Models.Implementations.Requisites.ClientRequisites.Facto
         /// Создание паспорта
         /// </summary>
         /// <returns>паспорт</returns>
-        public static SeriesAndNumber CreatePassport()
+        public static SeriesAndNumber CreateSeriesAndNumber()
         {
             if (_uniqueNumber == MaxNumber)
             {

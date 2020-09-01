@@ -11,12 +11,13 @@ namespace BankingSystem.Models.Implementations.Accounts
         public decimal AmountOfReplenishmentPerDay { get; }
         public bool HasDeposit => Deposit.DepositNumber != null;
 
-        protected Account(Card card, IDeposit deposit, bool accountLockout, decimal amountOfReplenishmentPerDay)
+        protected Account(Card card, IDeposit deposit)
         {
             Card = card;
             Deposit = deposit;
-            AccountLockout = accountLockout;
-            AmountOfReplenishmentPerDay = amountOfReplenishmentPerDay;
+
+            AccountLockout = default;
+            AmountOfReplenishmentPerDay = default;
         }
     }
 }

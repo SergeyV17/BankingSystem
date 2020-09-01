@@ -5,8 +5,7 @@ namespace BankingSystem.Models.Implementations.Accounts
 {
     class RegularAccount : Account
     {
-        public RegularAccount(Card card, IDeposit deposit, bool accountLockout, decimal amountOfReplenishmentPerDay) 
-            : base(card, deposit, accountLockout, amountOfReplenishmentPerDay)
+        public RegularAccount(Card card, IDeposit deposit) : base(card, deposit)
         {
         }
     }

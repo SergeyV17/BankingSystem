@@ -2,11 +2,8 @@
 
 namespace BankingSystem.Models.Implementations.BankServices.DepositService.Factories
 {
-    class DepositFactory
+    abstract class DepositFactory
     {
-        public static Deposit CreateDeposit(decimal depositBalance, bool depositCapitalization, ClientType clientType)
-        {
-            return new Deposit(depositBalance, depositCapitalization, DepositRates.GetDepositRate(clientType));
-        }
+        public abstract IDeposit CreateDeposit(decimal depositBalance, bool depositCapitalization, ClientType clientType);
     }
 }

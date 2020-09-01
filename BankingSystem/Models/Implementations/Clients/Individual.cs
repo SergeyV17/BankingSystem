@@ -1,6 +1,4 @@
-﻿
-using BankingSystem.Models.Implementations.Accounts;
-using BankingSystem.Models.Implementations.Requisites.ClientRequisites;
+﻿using BankingSystem.Models.Implementations.Accounts;
 using BankingSystem.Models.Implementations.Requisites.ClientRequisites.ContactData;
 using BankingSystem.Models.Implementations.Requisites.ClientRequisites.PassportData;
 

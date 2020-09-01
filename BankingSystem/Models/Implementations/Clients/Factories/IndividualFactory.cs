@@ -5,8 +5,8 @@ using BankingSystem.Models.Implementations.Requisites.ClientRequisites.PassportD
 namespace BankingSystem.Models.Implementations.Clients.Factories
 {
     class IndividualFactory
-    {
-        public static Individual CreateInstance(Passport passport, Contact contact, Account account)
+    {   
+        public static Individual CreateIndividual(Passport passport, Contact contact, Account account)
         {
             return new Individual(passport, contact, account);
         }

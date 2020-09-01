@@ -3,8 +3,11 @@ using BankingSystem.Models.Implementations.BankServices.DepositService;
 
 namespace BankingSystem.Models.Implementations.Accounts.Factories
 {
-    abstract class AccountFactory
+    class VIPAccountFactory : AccountFactory
     {
-        public abstract Account CreateAccount(Card card, IDeposit deposit);
+        public override Account CreateAccount(Card card, IDeposit deposit)
+        {
+            return new VipAccount(card, deposit);
+        }
     }
 }

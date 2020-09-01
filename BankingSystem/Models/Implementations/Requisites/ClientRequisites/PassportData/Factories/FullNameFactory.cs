@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using BankingSystem.Models.Implementations.Requisites.ClientRequisites.PassportData;
 
-namespace BankingSystem.Models.Implementations.Requisites.ClientRequisites.Factories
+namespace BankingSystem.Models.Implementations.Requisites.ClientRequisites.PassportData.Factories
 {
     static class FullNameFactory
     {

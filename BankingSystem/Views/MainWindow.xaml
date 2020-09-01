@@ -109,6 +109,8 @@
                         </GridView>
                     </ListView.View>
                 </ListView>
+            </StackPanel>
+        </Border>
 
         <!--Главная панель-->
         <Border

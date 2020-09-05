@@ -9,12 +9,15 @@ namespace BankingSystem.Models.Implementations.Accounts
     class RegularAccount : Account
     {
         /// <summary>
+        /// Конструктор по умолчанию для EF
+        /// </summary>
+        public RegularAccount() { }
+
+        /// <summary>
         /// Конструктор стандартного аккаунта
         /// </summary>
         /// <param name="card">карта</param>
         /// <param name="deposit">депозит</param>
-        public RegularAccount(Card card, IDeposit deposit) : base(card, deposit)
-        {
-        }
+        public RegularAccount(Card card, Deposit deposit) : base(card, deposit) { }
     }
 }

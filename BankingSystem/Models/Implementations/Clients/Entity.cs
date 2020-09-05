@@ -11,6 +11,11 @@ namespace BankingSystem.Models.Implementations.Clients
     class Entity : Client
     {
         /// <summary>
+        /// Конструктор по умолчанию для EF
+        /// </summary>
+        public Entity() { }
+
+        /// <summary>
         /// Конструктор юр. лица
         /// </summary>
         /// <param name="passport">пасспортные данные</param>
@@ -22,6 +27,6 @@ namespace BankingSystem.Models.Implementations.Clients
             Company = company;
         }
 
-        public Company Company { get; }
+        public Company Company { get; private set; }
     }
 }

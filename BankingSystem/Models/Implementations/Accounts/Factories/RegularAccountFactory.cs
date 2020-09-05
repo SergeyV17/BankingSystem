@@ -14,6 +14,6 @@ namespace BankingSystem.Models.Implementations.Accounts.Factories
         /// <param name="card">карта</param>
         /// <param name="deposit">депозит</param>
         /// <returns>стандартный аккаунт</returns>
-        public override Account CreateAccount(Card card, IDeposit deposit) => new RegularAccount(card, deposit);
+        public override Account CreateAccount(Card card, Deposit deposit) => new RegularAccount(card, deposit);
     }
 }

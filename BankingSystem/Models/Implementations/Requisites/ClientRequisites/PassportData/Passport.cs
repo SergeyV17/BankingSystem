@@ -1,10 +1,18 @@
-﻿namespace BankingSystem.Models.Implementations.Requisites.ClientRequisites.PassportData
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace BankingSystem.Models.Implementations.Requisites.ClientRequisites.PassportData
 {
+    [Owned]
     /// <summary>
-    /// Структура паспортных данных
+    /// Класс паспортных данных
     /// </summary>
-    readonly struct Passport
+    class Passport
     {
+        /// <summary>
+        /// Конструктор по умолчанию для EF
+        /// </summary>
+        public Passport() { }
+
         /// <summary>
         /// Конструктор паспортных данных
         /// </summary>
@@ -18,8 +26,8 @@
             Address = address;
         }
 
-        public FullName FullName { get; }
-        public string Address { get; }
-        public SeriesAndNumber SeriesAndNumber { get; }
+        public FullName FullName { get; private set; }
+        public string Address { get; private set; }
+        public SeriesAndNumber SeriesAndNumber { get; private set; }
     }
 }

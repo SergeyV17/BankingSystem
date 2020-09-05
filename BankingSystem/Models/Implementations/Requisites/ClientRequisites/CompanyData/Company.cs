@@ -1,9 +1,12 @@
-﻿namespace BankingSystem.Models.Implementations.Requisites.ClientRequisites.CompanyData
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace BankingSystem.Models.Implementations.Requisites.ClientRequisites.CompanyData
 {
+    [Owned]
     /// <summary>
     /// Структура данных о компании
     /// </summary>
-    readonly struct Company
+    class Company
     {
         /// <summary>
         /// Конструктор данных о компании
@@ -16,7 +19,7 @@
             Website = website;
         }
 
-        public string Name { get; }
-        public string Website { get;  }
+        public string Name { get; private set; }
+        public string Website { get; private set; }
     }
 }

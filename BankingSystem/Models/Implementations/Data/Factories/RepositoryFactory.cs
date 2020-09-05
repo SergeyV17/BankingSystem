@@ -19,23 +19,23 @@ namespace BankingSystem.Models.Implementations.Data.Factories
     /// </summary>
     class RepositoryFactory
     {
-        private readonly Random random;
+        private static readonly Random random;
 
         // массивы с фабриками для возможности выбора рандомной фабрики
-        private readonly AccountFactory[] accountFactories;
-        private readonly CardFactory[] individualsCardFactories;
-        private readonly CardFactory[] entitiesCardFactories;
+        private static readonly AccountFactory[] accountFactories;
+        private static readonly CardFactory[] individualsCardFactories;
+        private static readonly CardFactory[] entitiesCardFactories;
 
         /// <summary>
         /// Конструктор репозитория
         /// </summary>
-        public RepositoryFactory()
+        static RepositoryFactory()
         {
             random = new Random();
 
             accountFactories = new AccountFactory[]
             {
-                new RegularAccountFactory(), new VIPAccountFactory()
+                new RegularAccountFactory(), new VipAccountFactory()
             };
 
             individualsCardFactories = new CardFactory[]
@@ -52,7 +52,7 @@ namespace BankingSystem.Models.Implementations.Data.Factories
         /// <param name="dbContext">контекст данных</param>
         /// <param name="quantity">кол-во клиентов</param>
         /// <returns>репозиторий</returns>
-        public  Repository CreateRepository(AppDbContext dbContext, int quantity)
+        public static Repository CreateRepository(AppDbContext dbContext, int quantity)
         {
             var root = CreateRepositoryTree();
 
@@ -68,7 +68,7 @@ namespace BankingSystem.Models.Implementations.Data.Factories
         /// Метод создания дерева для репозитория
         /// </summary>
         /// <returns>корневой узел</returns>
-        private Node CreateRepositoryTree()
+        private static Node CreateRepositoryTree()
         {
             var root = new Node("Банковская система");
 
@@ -94,7 +94,7 @@ namespace BankingSystem.Models.Implementations.Data.Factories
         /// </summary>
         /// <param name="dbContext">контекст данных</param>
         /// <param name="quantity">кол-во клиентов</param>
-        private void FillRepository(AppDbContext dbContext, int quantity)
+        private static void FillRepository(AppDbContext dbContext, int quantity)
         {
             Parallel.For(0, quantity, (i) =>
             {

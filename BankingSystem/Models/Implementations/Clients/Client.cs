@@ -10,20 +10,26 @@ namespace BankingSystem.Models.Implementations.Clients
     abstract class Client
     {
         /// <summary>
+        /// Конструктор по умолчаю для EF
+        /// </summary>
+        public Client() { }
+
+        /// <summary>
         /// Контруктор клиента
         /// </summary>
         /// <param name="passport">пасспортные данные</param>
         /// <param name="contact">контактные данные</param>
         /// <param name="account">аккаунт</param>
-        protected Client( Passport passport, Contact contact, Account account)
+        protected Client( Passport passport, Contact contact, Account account )
         {
             Passport = passport;
             Contact = contact;
             Account = account;
         }
 
-        public Passport Passport { get; }
-        public Contact Contact { get; }
-        public Account Account { get; }
+        public int ClientId { get; set; }
+        public Passport Passport { get; private set; }
+        public Contact Contact { get; private set; }
+        public Account Account { get; private set; }
     }
 }

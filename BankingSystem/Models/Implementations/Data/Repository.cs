@@ -1,13 +1,13 @@
 ﻿namespace BankingSystem.Models.Implementations.Data
 {
     /// <summary>
-    /// класс репозитория
+    /// Класс репозитория
     /// </summary>
     class Repository
     {
         private static Repository instance;
 
-        private static readonly object locker;
+        private static object locker;
 
         private readonly Node root;
 
@@ -18,6 +18,7 @@
         private Repository(Node root)
         {
             this.root = root;
+            locker = new object();
         }
 
         /// <summary>

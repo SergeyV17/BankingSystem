@@ -1,9 +1,12 @@
-﻿namespace BankingSystem.Models.Implementations.Requisites.ClientRequisites.PassportData
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace BankingSystem.Models.Implementations.Requisites.ClientRequisites.PassportData
 {
+    [Owned]
     /// <summary>
-    /// Структура ФИО
+    /// Класс ФИО
     /// </summary>
-    readonly struct FullName
+    class FullName
     {
         /// <summary>
         /// Конструктор ФИО
@@ -18,8 +21,8 @@
             this.MiddleName = middleName;
         }
 
-        public string LastName { get; }
-        public string FirstName { get; }
-        public string MiddleName { get; }
+        public string LastName { get; private set; }
+        public string FirstName { get; private set; }
+        public string MiddleName { get; private set; }
     }
 }

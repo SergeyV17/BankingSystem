@@ -1,9 +1,12 @@
-﻿namespace BankingSystem.Models.Implementations.Requisites.ClientRequisites.PassportData
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace BankingSystem.Models.Implementations.Requisites.ClientRequisites.PassportData
 {
+    [Owned]
     /// <summary>
-    /// Структура серии и номера паспорта
+    /// Класс серии и номера паспорта
     /// </summary>
-    readonly struct SeriesAndNumber
+    class SeriesAndNumber
     {
         /// <summary>
         /// Конструктор серии и номера паспорта
@@ -16,7 +19,7 @@
             this.Number = number;
         }
 
-        public string Series { get; }
-        public string Number { get; }
+        public string Series { get; private set; }
+        public string Number { get; private set; }
     }
 }

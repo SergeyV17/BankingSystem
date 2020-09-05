@@ -7,6 +7,7 @@ using BankingSystem.Views.Windows.EditClientPanel;
 using BankingSystem.ViewModels.EditPanelViewModels;
 using BankingSystem.ViewModels.OperationViewModels;
 using BankingSystem.ViewModels.HistoryViewModels;
+using BankingSystem.Models.Implementations.Data;
 
 namespace BankingSystem.ViewModels
 {
@@ -58,6 +59,29 @@ namespace BankingSystem.ViewModels
         #endregion
 
         #region Команды
+
+        /// <summary>
+        /// Команда открытия файла информации
+        /// </summary>
+        private ICommand windowLoaded;
+        public ICommand WindowLoaded
+        {
+            get
+            {
+                return windowLoaded ??
+                (windowLoaded = new RelayCommand(obj =>
+                {
+                    try
+                    {
+                        
+                    }
+                    catch (Exception ex)
+                    {
+                        _messageService.ShowErrorMessage(_mainWindow, ex.Message);
+                    }
+                }));
+            }
+        }
 
         #region Команды меню
 

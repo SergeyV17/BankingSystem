@@ -1,13 +1,16 @@
-﻿namespace BankingSystem.Models.Implementations.BankServices.CardService
+﻿using BankingSystem.Models.Implementations.Accounts;
+
+namespace BankingSystem.Models.Implementations.BankServices.CardService
 {
     /// <summary>
     /// Класс карты
     /// </summary>
     abstract class Card
     {
-        protected string CardName { get; }
-        protected string CardNumber { get; }
-        private decimal CardBalance { get; }
+        /// <summary>
+        /// Кoнструктор по умолчанию для EF
+        /// </summary>
+        public Card() { }
 
         /// <summary>
         /// Конструктор карты
@@ -21,5 +24,13 @@
             CardNumber = cardNumber;
             CardBalance = cardBalance;
         }
+
+        public int CardId { get; set; }
+        public string CardName { get; private set; }
+        public string CardNumber { get; private set; }
+        public decimal CardBalance { get; private set; }
+
+        public int AccountId { get; set; }
+        public Account Account { get; set; }
     }
 }

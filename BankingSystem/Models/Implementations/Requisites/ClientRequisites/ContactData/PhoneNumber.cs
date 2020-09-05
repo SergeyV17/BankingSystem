@@ -1,9 +1,12 @@
-﻿namespace BankingSystem.Models.Implementations.Requisites.ClientRequisites.ContactData
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace BankingSystem.Models.Implementations.Requisites.ClientRequisites.ContactData
 {
+    [Owned]
     /// <summary>
-    /// Структура номера телефона
+    /// Класс номера телефона
     /// </summary>
-    readonly struct PhoneNumber
+    class PhoneNumber
     {
         /// <summary>
         /// Конструктор номера телефона
@@ -14,6 +17,6 @@
             this.Number = number;
         }
 
-        public string Number { get; }
+        public string Number { get; private set; }
     }
 }

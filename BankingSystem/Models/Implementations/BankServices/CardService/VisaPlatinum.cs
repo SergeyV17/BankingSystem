@@ -11,8 +11,6 @@ namespace BankingSystem.Models.Implementations.BankServices.CardService
         /// Конструктор "Visa platinum" карты
         /// </summary>
         /// <param name="cardBalance">баланс</param>
-        public VisaPlatinum(decimal cardBalance) : base("Visa platinum", CardNumberFactory.CreateCardNumber(), cardBalance)
-        {
-        }
+        public VisaPlatinum(decimal cardBalance) : base("Visa platinum", CardNumberFactory.CreateCardNumber(), cardBalance) { }
     }
 }

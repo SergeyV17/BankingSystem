@@ -11,8 +11,6 @@ namespace BankingSystem.Models.Implementations.BankServices.CardService
         /// Конструктор "Visa black" карты
         /// </summary>
         /// <param name="cardBalance">баланс</param>
-        public VisaBlack(decimal cardBalance) : base("Visa black", CardNumberFactory.CreateCardNumber(), cardBalance)
-        {
-        }
+        public VisaBlack(decimal cardBalance) : base("Visa black", CardNumberFactory.CreateCardNumber(), cardBalance) { }
     }
 }

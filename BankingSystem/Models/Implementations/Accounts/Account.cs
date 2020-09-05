@@ -1,5 +1,6 @@
 ﻿using BankingSystem.Models.Implementations.BankServices.CardService;
 using BankingSystem.Models.Implementations.BankServices.DepositService;
+using BankingSystem.Models.Implementations.Clients;
 
 namespace BankingSystem.Models.Implementations.Accounts
 {
@@ -8,18 +9,17 @@ namespace BankingSystem.Models.Implementations.Accounts
     /// </summary>
     abstract class Account
     {
-        public Card Card { get; }
-        public IDeposit Deposit { get; }
-        public bool AccountLockout { get; }
-        public decimal AmountOfReplenishmentPerDay { get; }
-        public bool HasDeposit => Deposit.DepositNumber != null;
+        /// <summary>
+        /// Конструктор по умолчанию для EF
+        /// </summary>
+        public Account() { }
 
         /// <summary>
         /// Конструктор аккаунта
         /// </summary>
         /// <param name="card">карта</param>
         /// <param name="deposit">депозит</param>
-        protected Account(Card card, IDeposit deposit)
+        protected Account(Card card, Deposit deposit)
         {
             Card = card;
             Deposit = deposit;
@@ -27,5 +27,15 @@ namespace BankingSystem.Models.Implementations.Accounts
             AccountLockout = default;
             AmountOfReplenishmentPerDay = default;
         }
+
+        public int AccountId { get; set; }
+        public Card Card { get; private set; }
+        public Deposit Deposit { get; private set; }
+        public bool AccountLockout { get; private set; }
+        public decimal AmountOfReplenishmentPerDay { get; private set; }
+        public bool HasDeposit => Deposit.DepositNumber != null;
+
+        public int ClientId { get; set; }
+        public Client Client { get; set; }
     }
 }

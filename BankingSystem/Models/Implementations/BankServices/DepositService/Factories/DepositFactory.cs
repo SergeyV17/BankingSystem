@@ -14,6 +14,6 @@ namespace BankingSystem.Models.Implementations.BankServices.DepositService.Facto
         /// <param name="depositCapitalization">капитализация</param>
         /// <param name="clientType">тип клиента</param>
         /// <returns>депозит</returns>
-        public abstract IDeposit CreateDeposit(decimal depositBalance, bool depositCapitalization, ClientType clientType);
+        public abstract Deposit CreateDeposit(decimal depositBalance, bool depositCapitalization, ClientType clientType);
     }
 }

@@ -6,7 +6,7 @@ namespace BankingSystem.Models.Implementations.Accounts.Factories
     /// <summary>
     /// Класс фабрики вип аккаунта
     /// </summary>
-    class VIPAccountFactory : AccountFactory
+    class VipAccountFactory : AccountFactory
     {
         /// <summary>
         /// Метод создания вип аккаунта
@@ -14,6 +14,6 @@ namespace BankingSystem.Models.Implementations.Accounts.Factories
         /// <param name="card">карта</param>
         /// <param name="deposit">депозит</param>
         /// <returns>вип аккаунт</returns>
-        public override Account CreateAccount(Card card, IDeposit deposit) => new VipAccount(card, deposit);
+        public override Account CreateAccount(Card card, Deposit deposit) => new VipAccount(card, deposit);
     }
 }

@@ -1,10 +1,18 @@
-﻿namespace BankingSystem.Models.Implementations.Requisites.ClientRequisites.ContactData
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace BankingSystem.Models.Implementations.Requisites.ClientRequisites.ContactData
 {
+    [Owned]
     /// <summary>
-    /// Структура контактных данных
+    /// Класс контактных данных
     /// </summary>
-    readonly struct Contact
+    class Contact
     {
+        /// <summary>
+        /// Конструктор по умолчанию для EF
+        /// </summary>
+        public Contact() { }
+
         /// <summary>
         /// Конструктор контактных данных
         /// </summary>
@@ -16,7 +24,7 @@
             Email = email;
         }
 
-        public PhoneNumber PhoneNumber { get; }
-        public string Email { get; }
+        public PhoneNumber PhoneNumber { get; private set; }
+        public string Email { get; private set; }
     }
 }

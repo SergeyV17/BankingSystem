@@ -9,6 +9,11 @@ namespace BankingSystem.Models.Implementations.Clients
     /// </summary>
     class Individual : Client
     {
+        public Individual()
+        {
+
+        }
+
         /// <summary>
         /// Конструктор физ. лца
         /// </summary>

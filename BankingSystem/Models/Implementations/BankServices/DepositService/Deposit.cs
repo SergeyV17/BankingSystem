@@ -1,4 +1,5 @@
 ﻿using System;
+using BankingSystem.Models.Implementations.Accounts;
 using BankingSystem.Models.Implementations.Requisites.DepositRequisites.Factories;
 
 namespace BankingSystem.Models.Implementations.BankServices.DepositService
@@ -6,14 +7,23 @@ namespace BankingSystem.Models.Implementations.BankServices.DepositService
     /// <summary>
     /// Класс депозита
     /// </summary>
-    class Deposit : IDeposit
+    abstract class Deposit
     {
-        public string DepositNumber { get; } 
-        public decimal DepositBalance { get; }
-        public DateTime DateOfDepositOpen { get; }
-        public DateTime DateOfDepositClose { get; }
-        public bool DepositCapitalization { get; }
+        /// <summary>
+        /// Конструктор по умолчанию для EF
+        /// </summary>
+        public Deposit() { }
+
+        public int DepositId { get; set; }
+        public string DepositNumber { get; private set; } 
+        public decimal DepositBalance { get; private set; }
+        public DateTime DateOfDepositOpen { get; private set; }
+        public DateTime DateOfDepositClose { get; private set; }
+        public bool DepositCapitalization { get; private set; }
         public decimal DepositRate { get; set; }
+
+        public int AccountId { get; set; }
+        public Account Account { get; set; }
 
         /// <summary>
         /// Конструктор депозита

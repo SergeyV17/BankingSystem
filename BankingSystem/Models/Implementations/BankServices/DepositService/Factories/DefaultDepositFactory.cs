@@ -14,7 +14,7 @@ namespace BankingSystem.Models.Implementations.BankServices.DepositService.Facto
         /// <param name="depositCapitalization">капитализация</param>
         /// <param name="clientType">тип клиента</param>
         /// <returns>депозит</returns>
-        public override IDeposit CreateDeposit(decimal depositBalance, bool depositCapitalization, ClientType clientType) => 
-            new Deposit(depositBalance, depositCapitalization, DepositRates.GetDepositRate(clientType));
+        public override Deposit CreateDeposit(decimal depositBalance, bool depositCapitalization, ClientType clientType) => 
+            new DefaultDeposit(depositBalance, depositCapitalization, DepositRates.GetDepositRate(clientType));
     }
 }

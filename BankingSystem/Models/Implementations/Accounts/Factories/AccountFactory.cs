@@ -14,6 +14,6 @@ namespace BankingSystem.Models.Implementations.Accounts.Factories
         /// <param name="card">карта</param>
         /// <param name="deposit">депозит</param>
         /// <returns>аккаунт</returns>
-        public abstract Account CreateAccount(Card card, IDeposit deposit);
+        public abstract Account CreateAccount(Card card, Deposit deposit);
     }
 }

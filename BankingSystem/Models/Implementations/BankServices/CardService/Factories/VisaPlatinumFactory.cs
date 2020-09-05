@@ -1,10 +1,15 @@
 ﻿namespace BankingSystem.Models.Implementations.BankServices.CardService.Factories
 {
+    /// <summary>
+    /// Класс фабрики "Visa platinum" карты
+    /// </summary>
     class VisaPlatinumFactory : CardFactory
     {
-        public override Card CreateCard(decimal cardBalance)
-        {
-            return new VisaPlatinum(cardBalance);
-        }
+        /// <summary>
+        /// Метод создания "Visa platinum" карты
+        /// </summary>
+        /// <param name="cardBalance">баланс</param>
+        /// <returns>"Visa platinum" карта</returns>
+        public override Card CreateCard(decimal cardBalance) => new VisaPlatinum(cardBalance);
     }
 }

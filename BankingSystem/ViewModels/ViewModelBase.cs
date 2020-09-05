@@ -3,6 +3,9 @@ using System.Runtime.CompilerServices;
 
 namespace BankingSystem.ViewModels
 {
+    /// <summary>
+    /// Класс основной модели представления
+    /// </summary>
     class ViewModelBase : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;

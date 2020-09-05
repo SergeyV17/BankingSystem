@@ -1,17 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace BankingSystem.Commands
 {
+    /// <summary>
+    /// Класс реализации команд
+    /// </summary>
     class RelayCommand : ICommand
     {
-        private Action<object> execute;
+        private readonly Action<object> execute;
 
-        private Func<object, bool> canExecute;
+        private readonly Func<object, bool> canExecute;
 
         // Событие вызывается при изменении условий, указывающих может ли команда выполняться
         public event EventHandler CanExecuteChanged
@@ -34,7 +33,7 @@ namespace BankingSystem.Commands
         /// <summary>
         /// Метож проверяющий возможность выполнения команды
         /// </summary>
-        /// <param name="parameter"></param>
+        /// <param name="parameter">параметр команды</param>
         /// <returns>булевое значение</returns>
         public bool CanExecute(object parameter)
         {

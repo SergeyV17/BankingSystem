@@ -3,6 +3,9 @@ using BankingSystem.Models.Implementations.Requisites.DepositRequisites.Factorie
 
 namespace BankingSystem.Models.Implementations.BankServices.DepositService
 {
+    /// <summary>
+    /// Класс депозита
+    /// </summary>
     class Deposit : IDeposit
     {
         public string DepositNumber { get; } 
@@ -12,6 +15,12 @@ namespace BankingSystem.Models.Implementations.BankServices.DepositService
         public bool DepositCapitalization { get; }
         public decimal DepositRate { get; set; }
 
+        /// <summary>
+        /// Конструктор депозита
+        /// </summary>
+        /// <param name="depositBalance">баланс</param>
+        /// <param name="depositCapitalization">капитализация</param>
+        /// <param name="depositRate">ставка</param>
         public Deposit(decimal depositBalance, bool depositCapitalization, decimal depositRate)
         {
             DepositNumber = DepositNumberFactory.CreateDepositNumber();

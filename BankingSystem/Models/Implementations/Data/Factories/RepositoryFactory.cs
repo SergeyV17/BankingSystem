@@ -14,31 +14,44 @@ using BankingSystem.Models.Implementations.Requisites.ClientRequisites.PassportD
 
 namespace BankingSystem.Models.Implementations.Data.Factories
 {
+    /// <summary>
+    /// Класс фабрики репозитория
+    /// </summary>
     class RepositoryFactory
     {
-        private  readonly Random random;
+        private readonly Random random;
 
-        private  readonly AccountFactory[] accountFactories;
-        private  readonly CardFactory[] individualsCardFactories;
+        // массивы с фабриками для возможности выбора рандомной фабрики
+        private readonly AccountFactory[] accountFactories;
+        private readonly CardFactory[] individualsCardFactories;
         private readonly CardFactory[] entitiesCardFactories;
+
+        /// <summary>
+        /// Конструктор репозитория
+        /// </summary>
         public RepositoryFactory()
         {
             random = new Random();
 
-            // массивы классов фабричного метода, для возможности выбора рандомной фабрики
             accountFactories = new AccountFactory[]
             {
-                new RegularAccountFactory(), new VIPAccountFactory() // классы фабричного метода аккаунта
+                new RegularAccountFactory(), new VIPAccountFactory()
             };
 
             individualsCardFactories = new CardFactory[]
             {
-                new VisaClassicFactory(), new VisaBlackFactory(), new VisaPlatinumFactory() // классы фабричного метода карты ( для физ лиц)
+                new VisaClassicFactory(), new VisaBlackFactory(), new VisaPlatinumFactory()
             };
 
-            entitiesCardFactories = new CardFactory[]{ new VisaCorporateFactory()}; // класс фабричного метода карты ( для юр лиц)
+            entitiesCardFactories = new CardFactory[]{ new VisaCorporateFactory()};
         }
 
+        /// <summary>
+        /// Метод создания репозитория
+        /// </summary>
+        /// <param name="dbContext">контекст данных</param>
+        /// <param name="quantity">кол-во клиентов</param>
+        /// <returns>репозиторий</returns>
         public  Repository CreateRepository(AppDbContext dbContext, int quantity)
         {
             var root = CreateRepositoryTree();
@@ -51,6 +64,10 @@ namespace BankingSystem.Models.Implementations.Data.Factories
             return Repository.GetRepository(root);
         }
 
+        /// <summary>
+        /// Метод создания дерева для репозитория
+        /// </summary>
+        /// <returns>корневой узел</returns>
         private Node CreateRepositoryTree()
         {
             var root = new Node("Банковская система");
@@ -72,6 +89,11 @@ namespace BankingSystem.Models.Implementations.Data.Factories
             return root;
         }
 
+        /// <summary>
+        /// Метод заполнения репозитория клиентами
+        /// </summary>
+        /// <param name="dbContext">контекст данных</param>
+        /// <param name="quantity">кол-во клиентов</param>
         private void FillRepository(AppDbContext dbContext, int quantity)
         {
             Parallel.For(0, quantity, (i) =>
@@ -90,33 +112,30 @@ namespace BankingSystem.Models.Implementations.Data.Factories
                 switch (random.Next(Enum.GetNames(typeof(ClientType)).Length))
                 {
                     case (int)ClientType.Individual:
-                        client = IndividualFactory.CreateIndividual(
-                           passport,
-                            ContactFactory.CreateContact(
-                                PhoneNumberFactory.CreateNumber(),
-                                $"Client@Email.ru_{i}"),
-                            accountFactories[random.Next(accountFactories.Length)].CreateAccount(
-                                individualsCardFactories[random.Next(individualsCardFactories.Length)]
-                                    .CreateCard(balance),
-                                new DefaultDepositFactory().CreateDeposit(balance, capitalization,
-                                    ClientType.Individual)
-                            ));
+
+                        var contact = ContactFactory.CreateContact(PhoneNumberFactory.CreateNumber(), $"Client@Email.ru_{i}");
+
+                        var individualAccount = accountFactories[random.Next(accountFactories.Length)].CreateAccount(
+                                individualsCardFactories[random.Next(individualsCardFactories.Length)].CreateCard(balance),
+                                new DefaultDepositFactory().CreateDeposit(balance, capitalization, ClientType.Individual));
+
+                        client = IndividualFactory.CreateIndividual(passport, contact, individualAccount);
                         break;
+
                     case (int)ClientType.Entity:
-                        client = EntityFactory.CreateEntity(
-                            passport,
-                            ContactFactory.CreateContact(
-                                PhoneNumberFactory.CreateNumber(),
-                                $"Company@Email.ru_{i}"),
-                            accountFactories[random.Next(accountFactories.Length)].CreateAccount(
-                                individualsCardFactories[random.Next(entitiesCardFactories.Length)].CreateCard(balance),
-                                new DefaultDepositFactory().CreateDeposit(balance, capitalization,
-                                    ClientType.Individual)),
-                            new Company(
-                                $"Company_{i}",
-                                $"Company.Website.ru_{i}")
-                        );
+
+                        contact = ContactFactory.CreateContact(PhoneNumberFactory.CreateNumber(),$"Client@Email.ru_{i}");
+
+                        var entityAccount = accountFactories[random.Next(accountFactories.Length)].CreateAccount(
+                                entitiesCardFactories[random.Next(entitiesCardFactories.Length)].CreateCard(balance),
+                                new DefaultDepositFactory().CreateDeposit(balance, capitalization, ClientType.Entity));
+
+                        var company = new Company($"Company_{i}", $"Company.Website.ru_{i}");
+
+                        client = EntityFactory.CreateEntity(passport, contact, entityAccount, company);
+
                         break;
+
                     default:
                         throw new ArgumentOutOfRangeException();
                 }

@@ -3,6 +3,9 @@ using System.Text.RegularExpressions;
 
 namespace BankingSystem.Models.Implementations.Requisites.ClientRequisites.PassportData.Factories
 {
+    /// <summary>
+    /// Класс фабрики ФИО
+    /// </summary>
     static class FullNameFactory
     {
         private static readonly Random _random;
@@ -15,6 +18,9 @@ namespace BankingSystem.Models.Implementations.Requisites.ClientRequisites.Passp
         private static readonly string[] _femaleLastNames;
         private static readonly string[] _femaleMiddleNames;
 
+        /// <summary>
+        /// Конструктор ФИО
+        /// </summary>
         static FullNameFactory()
         {
             _random = new Random();
@@ -65,9 +71,9 @@ namespace BankingSystem.Models.Implementations.Requisites.ClientRequisites.Passp
         }
 
         /// <summary>
-        /// Создание полного имени
+        /// Метод создания случайного ФИО
         /// </summary>
-        /// <returns>полное имя</returns>
+        /// <returns>ФИО</returns>
         public static FullName CreateFullName(Gender gender)
         {
             string lastName, firstName, middleName;
@@ -92,6 +98,13 @@ namespace BankingSystem.Models.Implementations.Requisites.ClientRequisites.Passp
             }
         }
 
+        /// <summary>
+        /// Метод создания ФИО
+        /// </summary>
+        /// <param name="lastName">фамилия</param>
+        /// <param name="firstName">имя</param>
+        /// <param name="middleName">отчество</param>
+        /// <returns>ФИО</returns>
         public static FullName CreateFullName(string lastName, string firstName, string middleName)
         {
             string pattern = @"^[a-zA-Z]+$";
@@ -100,7 +113,6 @@ namespace BankingSystem.Models.Implementations.Requisites.ClientRequisites.Passp
             {
                 throw new ArgumentException(
                     $"Передача недопустимых аргументов в параметры. Проверьте: {nameof(lastName)} {nameof(firstName)} {nameof(middleName)}");
-
             }
 
             return new FullName(lastName, firstName, middleName);

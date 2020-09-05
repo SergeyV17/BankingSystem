@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BankingSystem.ViewModels.OperationViewModels
+﻿namespace BankingSystem.ViewModels.OperationViewModels
 {
-    class ReplenishmentCardViewModel :ViewModelBase
+    /// <summary>
+    /// Класс модели представления для окна "Пополнить карту"
+    /// </summary>
+    class ReplenishmentCardViewModel : ViewModelBase
     {
     }
 }

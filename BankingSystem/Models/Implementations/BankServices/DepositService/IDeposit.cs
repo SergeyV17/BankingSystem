@@ -2,6 +2,9 @@
 
 namespace BankingSystem.Models.Implementations.BankServices.DepositService
 {
+    /// <summary>
+    /// Интерфейс определяющий депозит
+    /// </summary>
     interface IDeposit
     {
         string DepositNumber { get; }

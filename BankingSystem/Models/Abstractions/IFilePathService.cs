@@ -1,5 +1,8 @@
 ﻿namespace BankingSystem.Models.Abstractions
 {
+    /// <summary>
+    /// Интерфейс предоставляющий путь к файлу
+    /// </summary>
     interface IFilePathService
     {
         // путь к файлу

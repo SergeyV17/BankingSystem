@@ -1,13 +1,11 @@
 ﻿using BankingSystem.Commands;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace BankingSystem.ViewModels.EditPanelViewModels
 {
+    /// <summary>
+    /// Класс модели представления для окна "Добавить юр.лицо"
+    /// </summary>
     class AddEntityViewModel : ViewModelBase
     {
         private ICommand addEntity;

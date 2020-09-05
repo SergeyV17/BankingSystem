@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BankingSystem.ViewModels.OperationViewModels
+﻿namespace BankingSystem.ViewModels.OperationViewModels
 {
-    class TransferViewModel :ViewModelBase
+    /// <summary>
+    /// Класс модели представления для окна "Перевод"
+    /// </summary>
+    class TransferViewModel : ViewModelBase
     {
     }
 }

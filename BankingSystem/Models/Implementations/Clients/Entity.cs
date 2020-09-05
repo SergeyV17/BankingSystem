@@ -5,13 +5,23 @@ using BankingSystem.Models.Implementations.Requisites.ClientRequisites.PassportD
 
 namespace BankingSystem.Models.Implementations.Clients
 {
+    /// <summary>
+    /// Класс юр. лица
+    /// </summary>
     class Entity : Client
     {
-        public Company Company { get; }
-
+        /// <summary>
+        /// Конструктор юр. лица
+        /// </summary>
+        /// <param name="passport">пасспортные данные</param>
+        /// <param name="contact">контактные данные</param>
+        /// <param name="account">аккаунт</param>
+        /// <param name="company">данные о компании</param>
         public Entity(Passport passport, Contact contact, Account account, Company company) : base(passport, contact, account)
         {
             Company = company;
         }
+
+        public Company Company { get; }
     }
 }

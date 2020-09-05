@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BankingSystem.ViewModels.EditPanelViewModels
+﻿namespace BankingSystem.ViewModels.EditPanelViewModels
 {
+    /// <summary>
+    /// Класс модели представления для окна "Редактировать физ. лицо"
+    /// </summary>
     class EditIndividualViewModel : ViewModelBase
     {
     }

@@ -9,7 +9,6 @@ namespace BankingSystem.Models.Implementations
     /// </summary>
     class FilePathService : IFilePathService
     {
-        // путь к файлу
         public string FilePath { get; set; }
 
         /// <summary>

@@ -1,10 +1,17 @@
-﻿using System;
+﻿using BankingSystem.Models.Implementations.Clients;
+using System;
 using System.Collections.Generic;
 
 namespace BankingSystem.Models.Implementations.Requisites.CardRequisites.Factories
 {
+    /// <summary>
+    /// Класс фабрики наименования карты
+    /// </summary>
     static class CardNameFactory
     {
+        /// <summary>
+        /// Имена карты
+        /// </summary>
         private enum CardNames
         {
             VisaClassic,
@@ -16,6 +23,9 @@ namespace BankingSystem.Models.Implementations.Requisites.CardRequisites.Factori
         private static readonly Random _random;
         private static readonly Dictionary<CardNames, string> _cardNames;
 
+        /// <summary>
+        /// Конструктор фабрики наименования карты
+        /// </summary>
         static CardNameFactory()
         {
             _random = new Random();
@@ -30,12 +40,12 @@ namespace BankingSystem.Models.Implementations.Requisites.CardRequisites.Factori
         }
 
         /// <summary>
-        /// Создание карты
+        /// Метод создания карты
         /// </summary>
         /// <returns>наименование карты</returns>
-        public static string CreateCardName(bool isIndividual)
+        public static string CreateCardName(ClientType type)
         {
-            if (isIndividual)
+            if (type == ClientType.Individual)
             {
                 int percent = _random.Next(101);
 

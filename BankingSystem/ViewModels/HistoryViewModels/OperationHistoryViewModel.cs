@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BankingSystem.ViewModels.HistoryViewModels
+﻿namespace BankingSystem.ViewModels.HistoryViewModels
 {
+    /// <summary>
+    /// Класс модели представления для окна "История операций"
+    /// </summary>
     class OperationHistoryViewModel : ViewModelBase
     {
     }

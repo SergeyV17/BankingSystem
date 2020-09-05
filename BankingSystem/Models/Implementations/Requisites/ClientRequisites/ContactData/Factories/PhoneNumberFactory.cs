@@ -3,6 +3,9 @@ using BankingSystem.Models.Implementations.Requisites.ClientRequisites.ContactDa
 
 namespace BankingSystem.Models.Implementations.Requisites.ClientRequisites.Factories
 {
+    /// <summary>
+    /// Класс фабрики номера телефона
+    /// </summary>
     static class PhoneNumberFactory
     {
         private const int _countryCode = 7;
@@ -12,6 +15,9 @@ namespace BankingSystem.Models.Implementations.Requisites.ClientRequisites.Facto
         private static int _idNumber;
         private static int _regionNumberCount;
 
+        /// <summary>
+        /// Конструктор фабрики номера телефона
+        /// </summary>
         static PhoneNumberFactory()
         {
             _regionNumbers = new[] { 877, 387, 388, 416, 818, 851, 347, 472, 072, 483, 083, 301,
@@ -19,7 +25,7 @@ namespace BankingSystem.Models.Implementations.Requisites.ClientRequisites.Facto
         }
 
         /// <summary>
-        /// Создание номера телефона
+        /// Метод создание случайного номера телефона
         /// </summary>
         /// <returns>номер телефона</returns>
         public static PhoneNumber CreateNumber()
@@ -35,6 +41,11 @@ namespace BankingSystem.Models.Implementations.Requisites.ClientRequisites.Facto
             return new PhoneNumber($"+{_countryCode}{_regionNumbers[_regionNumberCount]}{_idNumber:D7}");
         }
 
+        /// <summary>
+        /// Метод создания номера телефона
+        /// </summary>
+        /// <param name="phoneNumber">номер телефона</param>
+        /// <returns>номер телефона</returns>
         public static PhoneNumber CreateNumber(string phoneNumber)
         {
             if (!int.TryParse(phoneNumber, out _))

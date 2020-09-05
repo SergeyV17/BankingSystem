@@ -3,6 +3,9 @@ using BankingSystem.Models.Implementations.BankServices.DepositService;
 
 namespace BankingSystem.Models.Implementations.Accounts
 {
+    /// <summary>
+    /// Класс аккаунта
+    /// </summary>
     abstract class Account
     {
         public Card Card { get; }
@@ -11,6 +14,11 @@ namespace BankingSystem.Models.Implementations.Accounts
         public decimal AmountOfReplenishmentPerDay { get; }
         public bool HasDeposit => Deposit.DepositNumber != null;
 
+        /// <summary>
+        /// Конструктор аккаунта
+        /// </summary>
+        /// <param name="card">карта</param>
+        /// <param name="deposit">депозит</param>
         protected Account(Card card, IDeposit deposit)
         {
             Card = card;

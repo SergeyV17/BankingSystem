@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BankingSystem.ViewModels.OperationViewModels
+﻿namespace BankingSystem.ViewModels.OperationViewModels
 {
+    /// <summary>
+    /// Класс модели представления для окна "Открыть депозит"
+    /// </summary>
     class OpenDeposiViewModel : ViewModelBase
     {
 

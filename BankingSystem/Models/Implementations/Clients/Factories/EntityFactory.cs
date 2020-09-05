@@ -6,11 +6,19 @@ using BankingSystem.Models.Implementations.Requisites.ClientRequisites.PassportD
 
 namespace BankingSystem.Models.Implementations.Clients.Factories
 {
+    /// <summary>
+    /// Фабрика юр. лиц
+    /// </summary>
     class EntityFactory
     {
-        public static Entity CreateEntity(Passport passport, Contact contact, Account account, Company company)
-        {
-            return new Entity(passport, contact, account, company);
-        }
+        /// <summary>
+        /// Метод создания юр. лица
+        /// </summary>
+        /// <param name="passport">пасспортные данные</param>
+        /// <param name="contact">контактные данные</param>
+        /// <param name="account">аккаунт</param>
+        /// <param name="company">данные о компании</param>
+        /// <returns>юр. лицо</returns>
+        public static Entity CreateEntity(Passport passport, Contact contact, Account account, Company company) => new Entity(passport, contact, account, company);
     }
 }

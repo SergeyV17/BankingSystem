@@ -4,8 +4,17 @@ using BankingSystem.Models.Implementations.Requisites.ClientRequisites.PassportD
 
 namespace BankingSystem.Models.Implementations.Clients
 {
+    /// <summary>
+    /// Класс физ. лица
+    /// </summary>
     class Individual : Client
     {
+        /// <summary>
+        /// Конструктор физ. лца
+        /// </summary>
+        /// <param name="passport">пасспортные данные</param>
+        /// <param name="contact">контактные данные</param>
+        /// <param name="account">аккаунт</param>
         public Individual(Passport passport, Contact contact, Account account) : base(passport, contact, account)
         {
         }

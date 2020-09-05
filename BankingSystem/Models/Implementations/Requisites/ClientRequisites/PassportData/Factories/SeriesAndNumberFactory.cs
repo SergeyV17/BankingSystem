@@ -1,5 +1,8 @@
 ﻿namespace BankingSystem.Models.Implementations.Requisites.ClientRequisites.PassportData.Factories
 {
+    /// <summary>
+    /// Класс фабрики серии и номера паспорта
+    /// </summary>
     static class SeriesAndNumberFactory
     {
         private const int StartNumber = 000000;
@@ -8,6 +11,9 @@
         private static int _uniqueSeries;
         private static int _uniqueNumber;
 
+        /// <summary>
+        /// Конструктор серии и номера паспорта
+        /// </summary>
         static SeriesAndNumberFactory()
         {
             _uniqueSeries = 0000;
@@ -15,9 +21,9 @@
         }
 
         /// <summary>
-        /// Создание паспорта
+        /// Метод создания серии и номера паспорта
         /// </summary>
-        /// <returns>паспорт</returns>
+        /// <returns>серия и номер паспорта</returns>
         public static SeriesAndNumber CreateSeriesAndNumber()
         {
             if (_uniqueNumber == MaxNumber)

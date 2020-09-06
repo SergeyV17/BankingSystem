@@ -27,7 +27,6 @@ namespace BankingSystem.ViewModels
         private readonly IFilePathService _filePathService;
         private readonly IMessageService _messageService;
 
-
         #endregion
 
         #region Свойства
@@ -50,40 +49,15 @@ namespace BankingSystem.ViewModels
         public IRepository Repository { get; private set; }
 
         public Node SelectedNode { get; private set; }
-        public ObservableCollection<Client> Clients { get; set; }
+        public ObservableCollection<Client> Clients { get; private set; }
 
         #region Visibility
 
-        #region ClientsLists
-        public bool IndividualsVisibility
-        {
-            get
-            {
-                if (SelectedNode != null)
-                    return SelectedNode.Type == NodeType.Individual || SelectedNode.Type == NodeType.VIPIndividual ? true : false;
-
-                return false;
-            }
-        }
-
-        public bool EntitiesVisibility
-        {
-            get
-            {
-                if (SelectedNode != null)
-                    return SelectedNode.Type == NodeType.Entity || SelectedNode.Type == NodeType.VIPEntity ? true : false;
-
-                return false;
-            }
-        }
-
+        public bool ClientsVisibility => SelectedNode != null ? SelectedNode.Type != NodeType.Intermediate ? true : false : false;
 
         #endregion
 
         #endregion
-
-        #endregion
-
 
         #region Конструктор
 
@@ -185,7 +159,6 @@ namespace BankingSystem.ViewModels
                         {
                             case NodeType.Individual:
                                 Clients = SelectClients.SelectIndividuals(); 
-
                                 break;
                             case NodeType.Entity:
                                 Clients = SelectClients.SelectEntities(); 
@@ -202,8 +175,7 @@ namespace BankingSystem.ViewModels
                         }
 
                         OnPropertyChanged(nameof(Clients));
-                        OnPropertyChanged(nameof(IndividualsVisibility));
-                        OnPropertyChanged(nameof(EntitiesVisibility));
+                        OnPropertyChanged(nameof(ClientsVisibility));
                     }
                     catch (Exception ex)
                     {

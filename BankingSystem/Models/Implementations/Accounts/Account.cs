@@ -28,14 +28,14 @@ namespace BankingSystem.Models.Implementations.Accounts
             AmountOfReplenishmentPerDay = default;
         }
 
-        public int AccountId { get; set; }
+        public int Id { get; set; }
         public Card Card { get; private set; }
         public Deposit Deposit { get; private set; }
         public bool AccountLockout { get; private set; }
         public decimal AmountOfReplenishmentPerDay { get; private set; }
         public bool HasDeposit => Deposit.DepositNumber != null;
 
-        //public int ClientId { get; set; }
-        //public Client Client { get; set; }
+        public int ClientId { get; set; }
+        public Client Client { get; set; }
     }
 }

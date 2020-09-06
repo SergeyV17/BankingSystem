@@ -21,7 +21,7 @@ namespace BankingSystem.Migrations
 
             modelBuilder.Entity("BankingSystem.Models.Implementations.Accounts.Account", b =>
                 {
-                    b.Property<int>("AccountId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -35,6 +35,9 @@ namespace BankingSystem.Migrations
                     b.Property<int?>("CardId")
                         .HasColumnType("int");
 
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("DepositId")
                         .HasColumnType("int");
 
@@ -42,9 +45,12 @@ namespace BankingSystem.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("AccountId");
+                    b.HasKey("Id");
 
                     b.HasIndex("CardId");
+
+                    b.HasIndex("ClientId")
+                        .IsUnique();
 
                     b.HasIndex("DepositId");
 
@@ -118,21 +124,16 @@ namespace BankingSystem.Migrations
 
             modelBuilder.Entity("BankingSystem.Models.Implementations.Clients.Client", b =>
                 {
-                    b.Property<int>("ClientId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("AccountId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Discriminator")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ClientId");
-
-                    b.HasIndex("AccountId");
+                    b.HasKey("Id");
 
                     b.ToTable("Clients");
 
@@ -146,11 +147,11 @@ namespace BankingSystem.Migrations
                     b.HasDiscriminator().HasValue("RegularAccount");
                 });
 
-            modelBuilder.Entity("BankingSystem.Models.Implementations.Accounts.VipAccount", b =>
+            modelBuilder.Entity("BankingSystem.Models.Implementations.Accounts.VIPAccount", b =>
                 {
                     b.HasBaseType("BankingSystem.Models.Implementations.Accounts.Account");
 
-                    b.HasDiscriminator().HasValue("VipAccount");
+                    b.HasDiscriminator().HasValue("VIPAccount");
                 });
 
             modelBuilder.Entity("BankingSystem.Models.Implementations.BankServices.CardService.VisaBlack", b =>
@@ -208,6 +209,12 @@ namespace BankingSystem.Migrations
                         .WithMany()
                         .HasForeignKey("CardId");
 
+                    b.HasOne("BankingSystem.Models.Implementations.Clients.Client", "Client")
+                        .WithOne("Account")
+                        .HasForeignKey("BankingSystem.Models.Implementations.Accounts.Account", "ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("BankingSystem.Models.Implementations.BankServices.DepositService.Deposit", "Deposit")
                         .WithMany()
                         .HasForeignKey("DepositId");
@@ -215,10 +222,6 @@ namespace BankingSystem.Migrations
 
             modelBuilder.Entity("BankingSystem.Models.Implementations.Clients.Client", b =>
                 {
-                    b.HasOne("BankingSystem.Models.Implementations.Accounts.Account", "Account")
-                        .WithMany()
-                        .HasForeignKey("AccountId");
-
                     b.OwnsOne("BankingSystem.Models.Implementations.Requisites.ClientRequisites.ContactData.Contact", "Contact", b1 =>
                         {
                             b1.Property<int>("ClientId")
@@ -323,7 +326,7 @@ namespace BankingSystem.Migrations
                 {
                     b.OwnsOne("BankingSystem.Models.Implementations.Requisites.ClientRequisites.CompanyData.Company", "Company", b1 =>
                         {
-                            b1.Property<int>("EntityClientId")
+                            b1.Property<int>("EntityId")
                                 .ValueGeneratedOnAdd()
                                 .HasColumnType("int")
                                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -334,12 +337,12 @@ namespace BankingSystem.Migrations
                             b1.Property<string>("Website")
                                 .HasColumnType("nvarchar(max)");
 
-                            b1.HasKey("EntityClientId");
+                            b1.HasKey("EntityId");
 
                             b1.ToTable("Clients");
 
                             b1.WithOwner()
-                                .HasForeignKey("EntityClientId");
+                                .HasForeignKey("EntityId");
                         });
                 });
 #pragma warning restore 612, 618

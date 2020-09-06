@@ -180,9 +180,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Migrations\20200906031532_InitialCreate.cs" />
-    <Compile Include="Migrations\20200906031532_InitialCreate.designer.cs">
-      <DependentUpon>20200906031532_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\20200906111302_InitialCreate.cs" />
+    <Compile Include="Migrations\20200906111302_InitialCreate.designer.cs">
+      <DependentUpon>20200906111302_InitialCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\AppDbContextModelSnapshot.cs" />
     <Compile Include="Models\Abstractions\IFilePathService.cs" />
@@ -248,6 +248,7 @@
     <Compile Include="ViewModels\OperationViewModels\ReplenishmentCardViewModel.cs" />
     <Compile Include="ViewModels\OperationViewModels\TransferViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
+    <Compile Include="Views\Converters\ColumnWidthConverter.cs" />
     <Compile Include="Views\Windows\EditClientPanel\AddEntityWindow.xaml.cs">
       <DependentUpon>AddEntityWindow.xaml</DependentUpon>
     </Compile>

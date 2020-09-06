@@ -27,7 +27,7 @@ namespace BankingSystem.Models.Implementations.Clients
             Account = account;
         }
 
-        public int ClientId { get; set; }
+        public int Id { get; set; }
         public Passport Passport { get; private set; }
         public Contact Contact { get; private set; }
         public Account Account { get; private set; }

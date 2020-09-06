@@ -1,6 +1,6 @@
 ﻿using BankingSystem.Models.Implementations.Accounts;
 using BankingSystem.Models.Implementations.Clients;
-using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
 using System.Linq;
 
@@ -19,12 +19,15 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction
         {
             using (AppDbContext context = new AppDbContext())
             {
-                IEnumerable<Client> list = from clients in context.Clients 
-                                           where clients is Individual && clients.Account is RegularAccount
-                                           orderby clients.ClientId 
-                                           select clients;
+                var clients = context.Clients.
+                    Where(c => c is Individual && c.Account is RegularAccount).
+                    OrderBy(c => c.Id)
+                    .Include(client => client.Account).
+                        ThenInclude(account => account.Card).
+                    Include(client => client.Account).
+                        ThenInclude(account => account.Deposit);
 
-                return new ObservableCollection<Client>(list);
+                return new ObservableCollection<Client>(clients);
             }
         }
 
@@ -36,12 +39,15 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction
         {
             using (AppDbContext context = new AppDbContext())
             {
-                IEnumerable<Client> list = from clients in context.Clients
-                                           where clients is Entity && clients.Account is RegularAccount
-                                           orderby clients.ClientId
-                                           select clients;
+                var clients = context.Clients.
+                    Where(c => c is Entity && c.Account is RegularAccount).
+                    OrderBy(c => c.Id)
+                    .Include(client => client.Account).
+                        ThenInclude(account => account.Card).
+                    Include(client => client.Account).
+                        ThenInclude(account => account.Deposit);
 
-                return new ObservableCollection<Client>(list);
+                return new ObservableCollection<Client>(clients);
             }
         }
 
@@ -53,12 +59,15 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction
         {
             using (AppDbContext context = new AppDbContext())
             {
-                IEnumerable<Client> list = from clients in context.Clients
-                                           where clients is Individual && clients.Account is VIPAccount
-                                           orderby clients.ClientId
-                                           select clients;
+                var clients = context.Clients.
+                    Where(c => c is Individual && c.Account is VIPAccount).
+                    OrderBy(c => c.Id)
+                    .Include(client => client.Account).
+                        ThenInclude(account => account.Card).
+                    Include(client => client.Account).
+                        ThenInclude(account => account.Deposit);
 
-                return new ObservableCollection<Client>(list);
+                return new ObservableCollection<Client>(clients);
             }
         }
 
@@ -70,12 +79,15 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction
         {
             using (AppDbContext context = new AppDbContext())
             {
-                IEnumerable<Client> list = from clients in context.Clients
-                                           where clients is Entity && clients.Account is VIPAccount
-                                           orderby clients.ClientId
-                                           select clients;
+                var clients = context.Clients.
+                    Where(c => c is Entity && c.Account is VIPAccount).
+                    OrderBy(c => c.Id)
+                    .Include(client => client.Account).
+                        ThenInclude(account => account.Card).
+                    Include(client => client.Account).
+                        ThenInclude(account => account.Deposit);
 
-                return new ObservableCollection<Client>(list);
+                return new ObservableCollection<Client>(clients);
             }
         }
     }

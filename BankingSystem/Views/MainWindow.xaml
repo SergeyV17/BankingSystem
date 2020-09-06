@@ -5,13 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:intr="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:local="clr-namespace:BankingSystem.Views.Converters"
         mc:Ignorable="d"
         Icon="Resources/Icons/Bank.png"
         Title ="BankingSystem"
         Height="800" MinHeight="700"
         Width="1400" MinWidth="1400" >
     <Window.Resources>
-            <BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter" />
+        <BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter" />
+        <local:ColumnWidthConverter x:Key="columnWidthConverter" />
     </Window.Resources>
     
     <intr:Interaction.Triggers>
@@ -118,10 +120,10 @@
                 </StackPanel>
                 <!--Выбранный список клиентов -->
                 <ListView 
-                    x:Name="ListOfIndividuals"
+                    x:Name="LisOfClients"
                     FontSize="14"
                     ItemsSource="{Binding Clients}"
-                    Visibility="{Binding Path=IndividualsVisibility, Converter={StaticResource booleanToVisibilityConverter}}">
+                    Visibility="{Binding Path=ClientsVisibility, Converter={StaticResource booleanToVisibilityConverter}}">
                     <ListView.Resources>
                         <Style TargetType="{x:Type GridViewColumnHeader}">
                             <Setter Property="HorizontalContentAlignment" Value="Left"/>
@@ -134,29 +136,14 @@
                             <GridViewColumn Header=" Паспорт" DisplayMemberBinding="{Binding Passport.SeriesAndNumber.FullSeriesAndNumber}" Width="130"/>
                             <GridViewColumn Header=" Номер телефона" DisplayMemberBinding="{Binding Contact.PhoneNumber.Number}" Width="140"/>
                             <GridViewColumn Header=" Email" DisplayMemberBinding = "{Binding Contact.Email}" Width="140"/>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-                <!--Выбранный список клиентов -->
-                <ListView 
-                    x:Name="ListOfEntities"
-                    FontSize="14"
-                    ItemsSource="{Binding Clients}"
-                    Visibility="{Binding Path=EntitiesVisibility, Converter={StaticResource booleanToVisibilityConverter}}">
-                    <ListView.Resources>
-                        <Style TargetType="{x:Type GridViewColumnHeader}">
-                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
-                        </Style>
-                    </ListView.Resources>
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header=" ФИО" DisplayMemberBinding="{Binding Passport.FullName.Name}" Width="240"/>
-                            <GridViewColumn Header=" Адрес" DisplayMemberBinding = "{Binding Passport.Address}" Width="120"/>
-                            <GridViewColumn Header=" Паспорт" DisplayMemberBinding="{Binding Passport.SeriesAndNumber.FullSeriesAndNumber}" Width="130"/>
-                            <GridViewColumn Header=" Номер телефона" DisplayMemberBinding="{Binding Contact.PhoneNumber.Number}" Width="140"/>
-                            <GridViewColumn Header=" Email" DisplayMemberBinding = "{Binding Contact.Email}" Width="140"/>
-                            <GridViewColumn Header=" Наименование компании" DisplayMemberBinding = "{Binding Company.Name}" Width="180"/>
-                            <GridViewColumn Header=" Вебсайт" DisplayMemberBinding = "{Binding Company.Website}" Width="180"/>
+                            <GridViewColumn 
+                                Header=" Наименование компании" 
+                                DisplayMemberBinding = "{Binding Company.Name}" 
+                                Width="{Binding ElementName=Tree, Path=SelectedItem, Converter={StaticResource columnWidthConverter}, ConverterParameter=180}"/>
+                            <GridViewColumn 
+                                Header=" Вебсайт" 
+                                DisplayMemberBinding = "{Binding Company.Website}"
+                                Width="{Binding ElementName=Tree, Path=SelectedItem, Converter={StaticResource columnWidthConverter}, ConverterParameter=180}"/>
                         </GridView>
                     </ListView.View>
                 </ListView>
@@ -238,7 +225,7 @@
                     <StackPanel Margin="5">
                         <!--Имя клиента-->
                         <TextBlock
-                            Text="Сергей"
+                            Text="{Binding ElementName=LisOfClients, Path=SelectedItem.Passport.FullName.Name}"
                             Style="{StaticResource BaseTextBlockStyle}"/>
                         <!--Карта-->
                         <StackPanel
@@ -247,12 +234,12 @@
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="Resources/Icons/CreditCardIcon.png"/>
                                     <TextBlock 
-                                        Text="Карта:" 
+                                        Text="Карта: " 
                                         Style="{StaticResource ButtonTextBlockStyle}"/>
                                 </StackPanel>
                             </Button>
                             <TextBlock
-                                Text="{Binding}"
+                                Text="{Binding ElementName=LisOfClients, Path=SelectedItem.Account.Card.CardName}"
                                 Style="{StaticResource BaseTextBlockStyle}"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
@@ -260,7 +247,7 @@
                                 Text="Баланс:"
                                 Style="{StaticResource BaseTextBlockStyle}"/>
                             <TextBlock
-                                Text="{Binding}"
+                                Text="{Binding ElementName=LisOfClients, Path=SelectedItem.Account.Card.CardBalance}"
                                 Style="{StaticResource BaseTextBlockStyle}"/>
                         </StackPanel>
 
@@ -275,7 +262,7 @@
                                 </StackPanel>
                             </Button>
                             <TextBlock
-                                Text="{Binding}"
+                                Text="{Binding ElementName=LisOfClients, Path=SelectedItem.Account.Deposit.DepositNumber}"
                                 Style="{StaticResource BaseTextBlockStyle}">
                             </TextBlock>
                         </StackPanel>
@@ -285,7 +272,7 @@
                                     Text="Баланс:"
                                     Style="{StaticResource BaseTextBlockStyle}"/>
                                 <TextBlock
-                                    Text="{Binding}"
+                                    Text="{Binding ElementName=LisOfClients, Path=SelectedItem.Account.Deposit.DepositBalance}"
                                     Style="{StaticResource BaseTextBlockStyle}"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
@@ -293,7 +280,7 @@
                                     Text="Капитализация:"
                                     Style="{StaticResource BaseTextBlockStyle}"/>
                                 <TextBlock
-                                    Text="{Binding}"
+                                    Text="{Binding ElementName=LisOfClients, Path=SelectedItem.Account.Deposit.DepositCapitalization}"
                                     Style="{StaticResource BaseTextBlockStyle}"/>
                             </StackPanel>
                         </StackPanel>
@@ -363,11 +350,11 @@
                         <StackPanel>
                             <!--Наименование-->
                             <TextBlock 
-                                Text="123123"
+                                Text="{Binding ElementName=LisOfClients, Path=SelectedItem.Account.Deposit.DepositNumber}"
                                 Style="{StaticResource BaseTextBlockStyle}"/>
                             <!--Баланс-->
                             <TextBlock
-                                Text="300 000"
+                                Text="{Binding ElementName=LisOfClients, Path=SelectedItem.Account.Deposit.DepositBalance}"
                                 Style="{StaticResource BaseTextBlockStyle}"/>
                             <!--Ставка-->
                             <StackPanel Orientation="Horizontal">
@@ -375,7 +362,7 @@
                                     Text="Ставка:"
                                     Style="{StaticResource BaseTextBlockStyle}"/>
                                 <TextBlock
-                                    Text="{Binding}"
+                                    Text="{Binding ElementName=LisOfClients, Path=SelectedItem.Account.Deposit.DepositRate}"
                                     Style="{StaticResource BaseTextBlockStyle}"/>
                             </StackPanel>
                             <!--Дата открытия-->
@@ -384,7 +371,7 @@
                                     Text="Дата открытия:"
                                     Style="{StaticResource BaseTextBlockStyle}"/>
                                 <TextBlock
-                                    Text="{Binding}"
+                                    Text="{Binding ElementName=LisOfClients, Path=SelectedItem.Account.Deposit.DateOfDepositOpen}"
                                     Style="{StaticResource BaseTextBlockStyle}"/>
                             </StackPanel>
                             <!--Дата закрытия-->
@@ -393,7 +380,7 @@
                                     Text="Дата закрытия:"
                                     Style="{StaticResource BaseTextBlockStyle}"/>
                                 <TextBlock
-                                    Text="{Binding}"
+                                    Text="{Binding ElementName=LisOfClients, Path=SelectedItem.Account.Deposit.DateOfDepositClose}"
                                     Style="{StaticResource BaseTextBlockStyle}">
                                 </TextBlock>
                             </StackPanel>

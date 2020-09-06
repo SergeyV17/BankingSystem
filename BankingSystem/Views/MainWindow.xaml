@@ -56,7 +56,10 @@
                     <Calendar SelectedDate="{x:Static sys:DateTime.Now}"/>
                 </Viewbox>
                 <!--Дерево-->
-                <TreeView x:Name="Tree" DockPanel.Dock="Top">
+                <TreeView 
+                    x:Name="Tree" 
+                    DockPanel.Dock="Top"
+                    ItemsSource="{Binding Children}">
                     <TreeView.ItemTemplate>
                         <HierarchicalDataTemplate 
                             ItemsSource="{Binding Path=Children}">

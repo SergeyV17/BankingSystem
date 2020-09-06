@@ -8,6 +8,9 @@ using BankingSystem.ViewModels.EditPanelViewModels;
 using BankingSystem.ViewModels.OperationViewModels;
 using BankingSystem.ViewModels.HistoryViewModels;
 using BankingSystem.Models.Implementations.Data;
+using BankingSystem.Models;
+using System.Linq;
+using BankingSystem.Models.Implementations.Data.Factories;
 
 namespace BankingSystem.ViewModels
 {
@@ -22,6 +25,8 @@ namespace BankingSystem.ViewModels
 
         private readonly IFilePathService _filePathService;
         private readonly IMessageService _messageService;
+
+        private Repository repository;
 
         #endregion
 
@@ -73,7 +78,7 @@ namespace BankingSystem.ViewModels
                 {
                     try
                     {
-                        
+                        repository = RepositoryFactory.CreateRepository(5);
                     }
                     catch (Exception ex)
                     {

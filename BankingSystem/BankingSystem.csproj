@@ -180,9 +180,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Migrations\20200905105137_InitialCreate.cs" />
-    <Compile Include="Migrations\20200905105137_InitialCreate.designer.cs">
-      <DependentUpon>20200905105137_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\20200906031532_InitialCreate.cs" />
+    <Compile Include="Migrations\20200906031532_InitialCreate.designer.cs">
+      <DependentUpon>20200906031532_InitialCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\AppDbContextModelSnapshot.cs" />
     <Compile Include="Models\Abstractions\IFilePathService.cs" />

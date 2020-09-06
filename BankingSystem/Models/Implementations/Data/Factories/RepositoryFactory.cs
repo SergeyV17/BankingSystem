@@ -20,6 +20,7 @@ namespace BankingSystem.Models.Implementations.Data.Factories
     class RepositoryFactory
     {
         private static readonly Random random;
+        private static object locker;
 
         // массивы с фабриками для возможности выбора рандомной фабрики
         private static readonly AccountFactory[] accountFactories;
@@ -32,6 +33,7 @@ namespace BankingSystem.Models.Implementations.Data.Factories
         static RepositoryFactory()
         {
             random = new Random();
+            locker = new object();
 
             accountFactories = new AccountFactory[]
             {
@@ -52,13 +54,14 @@ namespace BankingSystem.Models.Implementations.Data.Factories
         /// <param name="dbContext">контекст данных</param>
         /// <param name="quantity">кол-во клиентов</param>
         /// <returns>репозиторий</returns>
-        public static Repository CreateRepository(AppDbContext dbContext, int quantity)
+        public static Repository CreateRepository(int quantity)
         {
             var root = CreateRepositoryTree();
 
-            if (!dbContext.Clients.Any())
+            using (AppDbContext context = new AppDbContext())
             {
-                FillRepository(dbContext, quantity);
+                if (!context.Clients.Any())
+                    FillRepository(context, quantity);
             }
 
             return Repository.GetRepository(root);
@@ -98,49 +101,50 @@ namespace BankingSystem.Models.Implementations.Data.Factories
         {
             Parallel.For(0, quantity, (i) =>
             {
-                Client client = null;
-
-                decimal balance = random.Next(1, 10) * 10000;
-                bool capitalization = Convert.ToBoolean(random.Next(2));
-
-                var passport = PassportFactory.CreatePassport(
-                    FullNameFactory.CreateFullName(Gender.Female),
-                    SeriesAndNumberFactory.CreateSeriesAndNumber(),
-                    $"Address_{i}");
-
-
-                switch (random.Next(Enum.GetNames(typeof(ClientType)).Length))
+                lock (locker)
                 {
-                    case (int)ClientType.Individual:
+                    Client client = null;
 
-                        var contact = ContactFactory.CreateContact(PhoneNumberFactory.CreateNumber(), $"Client@Email.ru_{i}");
+                    decimal balance = random.Next(1, 10) * 10000;
+                    bool capitalization = Convert.ToBoolean(random.Next(2));
 
-                        var individualAccount = accountFactories[random.Next(accountFactories.Length)].CreateAccount(
-                                individualsCardFactories[random.Next(individualsCardFactories.Length)].CreateCard(balance),
-                                new DefaultDepositFactory().CreateDeposit(balance, capitalization, ClientType.Individual));
+                    var passport = PassportFactory.CreatePassport(
+                        FullNameFactory.CreateFullName(Gender.Female),
+                        SeriesAndNumberFactory.CreateSeriesAndNumber(),
+                        $"Address_{i}");
 
-                        client = IndividualFactory.CreateIndividual(passport, contact, individualAccount);
-                        break;
+                    switch (random.Next(Enum.GetNames(typeof(ClientType)).Length))
+                    {
+                        case (int)ClientType.Individual:
 
-                    case (int)ClientType.Entity:
+                            var contact = ContactFactory.CreateContact(PhoneNumberFactory.CreateNumber(), $"Client@Email.ru_{i}");
 
-                        contact = ContactFactory.CreateContact(PhoneNumberFactory.CreateNumber(),$"Client@Email.ru_{i}");
+                            var individualAccount = accountFactories[random.Next(accountFactories.Length)].CreateAccount(
+                                    individualsCardFactories[random.Next(individualsCardFactories.Length)].CreateCard(balance),
+                                    new DefaultDepositFactory().CreateDeposit(balance, capitalization, ClientType.Individual));
 
-                        var entityAccount = accountFactories[random.Next(accountFactories.Length)].CreateAccount(
-                                entitiesCardFactories[random.Next(entitiesCardFactories.Length)].CreateCard(balance),
-                                new DefaultDepositFactory().CreateDeposit(balance, capitalization, ClientType.Entity));
+                            client = IndividualFactory.CreateIndividual(passport, contact, individualAccount);
+                            break;
 
-                        var company = new Company($"Company_{i}", $"Company.Website.ru_{i}");
+                        case (int)ClientType.Entity:
 
-                        client = EntityFactory.CreateEntity(passport, contact, entityAccount, company);
+                            contact = ContactFactory.CreateContact(PhoneNumberFactory.CreateNumber(), $"Client@Email.ru_{i}");
 
-                        break;
+                            var entityAccount = accountFactories[random.Next(accountFactories.Length)].CreateAccount(
+                                    entitiesCardFactories[random.Next(entitiesCardFactories.Length)].CreateCard(balance),
+                                    new DefaultDepositFactory().CreateDeposit(balance, capitalization, ClientType.Entity));
 
-                    default:
-                        throw new ArgumentOutOfRangeException();
+                            var company = new Company($"Company_{i}", $"Company.Website.ru_{i}");
+
+                            client = EntityFactory.CreateEntity(passport, contact, entityAccount, company);
+                            break;
+
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+
+                    dbContext.Add(client);
                 }
-
-                dbContext.Add(client);
             });
 
             dbContext.SaveChanges();

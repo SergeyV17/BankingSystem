@@ -30,7 +30,7 @@ namespace BankingSystem.Models.Implementations.BankServices.CardService
         public string CardNumber { get; private set; }
         public decimal CardBalance { get; private set; }
 
-        public int AccountId { get; set; }
-        public Account Account { get; set; }
+        //public int AccountId { get; set; }
+        //public Account Account { get; set; }
     }
 }

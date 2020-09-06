@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BankingSystem.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20200905105137_InitialCreate")]
+    [Migration("20200906031532_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,7 +34,10 @@ namespace BankingSystem.Migrations
                     b.Property<decimal>("AmountOfReplenishmentPerDay")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("ClientId")
+                    b.Property<int?>("CardId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DepositId")
                         .HasColumnType("int");
 
                     b.Property<string>("Discriminator")
@@ -43,8 +46,9 @@ namespace BankingSystem.Migrations
 
                     b.HasKey("AccountId");
 
-                    b.HasIndex("ClientId")
-                        .IsUnique();
+                    b.HasIndex("CardId");
+
+                    b.HasIndex("DepositId");
 
                     b.ToTable("Accounts");
 
@@ -57,9 +61,6 @@ namespace BankingSystem.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("AccountId")
-                        .HasColumnType("int");
 
                     b.Property<decimal>("CardBalance")
                         .HasColumnType("decimal(18,2)");
@@ -76,9 +77,6 @@ namespace BankingSystem.Migrations
 
                     b.HasKey("CardId");
 
-                    b.HasIndex("AccountId")
-                        .IsUnique();
-
                     b.ToTable("Cards");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Card");
@@ -90,9 +88,6 @@ namespace BankingSystem.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("AccountId")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("DateOfDepositClose")
                         .HasColumnType("datetime2");
@@ -118,9 +113,6 @@ namespace BankingSystem.Migrations
 
                     b.HasKey("DepositId");
 
-                    b.HasIndex("AccountId")
-                        .IsUnique();
-
                     b.ToTable("Deposits");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Deposit");
@@ -133,11 +125,16 @@ namespace BankingSystem.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("AccountId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Discriminator")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ClientId");
+
+                    b.HasIndex("AccountId");
 
                     b.ToTable("Clients");
 
@@ -209,33 +206,21 @@ namespace BankingSystem.Migrations
 
             modelBuilder.Entity("BankingSystem.Models.Implementations.Accounts.Account", b =>
                 {
-                    b.HasOne("BankingSystem.Models.Implementations.Clients.Client", "Client")
-                        .WithOne("Account")
-                        .HasForeignKey("BankingSystem.Models.Implementations.Accounts.Account", "ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+                    b.HasOne("BankingSystem.Models.Implementations.BankServices.CardService.Card", "Card")
+                        .WithMany()
+                        .HasForeignKey("CardId");
 
-            modelBuilder.Entity("BankingSystem.Models.Implementations.BankServices.CardService.Card", b =>
-                {
-                    b.HasOne("BankingSystem.Models.Implementations.Accounts.Account", "Account")
-                        .WithOne("Card")
-                        .HasForeignKey("BankingSystem.Models.Implementations.BankServices.CardService.Card", "AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("BankingSystem.Models.Implementations.BankServices.DepositService.Deposit", b =>
-                {
-                    b.HasOne("BankingSystem.Models.Implementations.Accounts.Account", "Account")
-                        .WithOne("Deposit")
-                        .HasForeignKey("BankingSystem.Models.Implementations.BankServices.DepositService.Deposit", "AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("BankingSystem.Models.Implementations.BankServices.DepositService.Deposit", "Deposit")
+                        .WithMany()
+                        .HasForeignKey("DepositId");
                 });
 
             modelBuilder.Entity("BankingSystem.Models.Implementations.Clients.Client", b =>
                 {
+                    b.HasOne("BankingSystem.Models.Implementations.Accounts.Account", "Account")
+                        .WithMany()
+                        .HasForeignKey("AccountId");
+
                     b.OwnsOne("BankingSystem.Models.Implementations.Requisites.ClientRequisites.ContactData.Contact", "Contact", b1 =>
                         {
                             b1.Property<int>("ClientId")

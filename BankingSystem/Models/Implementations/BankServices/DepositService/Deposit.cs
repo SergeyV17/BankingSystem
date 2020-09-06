@@ -1,5 +1,4 @@
 ﻿using System;
-using BankingSystem.Models.Implementations.Accounts;
 using BankingSystem.Models.Implementations.Requisites.DepositRequisites.Factories;
 
 namespace BankingSystem.Models.Implementations.BankServices.DepositService
@@ -22,8 +21,8 @@ namespace BankingSystem.Models.Implementations.BankServices.DepositService
         public bool DepositCapitalization { get; private set; }
         public decimal DepositRate { get; set; }
 
-        public int AccountId { get; set; }
-        public Account Account { get; set; }
+        //public int AccountId { get; set; }
+        //public Account Account { get; set; }
 
         /// <summary>
         /// Конструктор депозита

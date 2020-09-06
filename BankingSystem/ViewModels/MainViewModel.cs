@@ -8,9 +8,10 @@ using BankingSystem.ViewModels.EditPanelViewModels;
 using BankingSystem.ViewModels.OperationViewModels;
 using BankingSystem.ViewModels.HistoryViewModels;
 using BankingSystem.Models.Implementations.Data;
-using BankingSystem.Models;
-using System.Linq;
 using BankingSystem.Models.Implementations.Data.Factories;
+using System.Collections.ObjectModel;
+using BankingSystem.Models.Implementations.Clients;
+using BankingSystem.Models.Implementations.Data.DbInteraction;
 
 namespace BankingSystem.ViewModels
 {
@@ -26,12 +27,12 @@ namespace BankingSystem.ViewModels
         private readonly IFilePathService _filePathService;
         private readonly IMessageService _messageService;
 
-        private Repository repository;
 
         #endregion
 
         #region Свойства
 
+        #region Модели представления
         public AddIndividualViewModel AddIndividuaViewModel { get; private set; }
         public AddEntityViewModel AddEntityViewModel { get; private set; }
         public EditIndividualViewModel EditIndividualViewModel { get; private set; }
@@ -43,6 +44,13 @@ namespace BankingSystem.ViewModels
 
         public ClientHistoryViewModel ClientHistoryViewModel { get; private set; }
         public OperationHistoryViewModel OperationHistoryViewModel { get; private set; }
+
+        #endregion
+
+        public IRepository Repository { get; private set; }
+
+        public Node SelectedNode { get; private set; }
+        public ObservableCollection<Client> Clients { get; set; }
 
         #endregion
 
@@ -78,7 +86,8 @@ namespace BankingSystem.ViewModels
                 {
                     try
                     {
-                        repository = RepositoryFactory.CreateRepository(5);
+                        Repository = RepositoryFactory.CreateRepository(5);
+                        OnPropertyChanged(nameof(Repository));
                     }
                     catch (Exception ex)
                     {
@@ -122,6 +131,48 @@ namespace BankingSystem.ViewModels
                 }));
             }
         }
+
+        #endregion
+
+        #region Команды главного окна
+
+        /// <summary>
+        /// Команда открытия файла информации
+        /// </summary>
+        private ICommand selectedItemChangedCommand;
+        public ICommand SelectedItemChangedCommand
+        {
+            get
+            {
+                return selectedItemChangedCommand ??
+                (selectedItemChangedCommand = new RelayCommand(obj =>
+                {
+                    try
+                    {
+                    SelectedNode = obj as Node;
+
+                        switch (SelectedNode.Name)
+                        {
+                            case "Физические лица":
+                                Clients = SelectClients.SelectAllClients();
+                                break;
+                            case "Юридические лица":
+                                Clients = SelectClients.SelectAllClients();
+                                break;
+                            default:
+                                break;
+                        }
+
+                        OnPropertyChanged(nameof(Clients));
+                    }
+                    catch (Exception ex)
+                    {
+                        _messageService.ShowErrorMessage(_mainWindow, ex.Message);
+                    }
+                }));
+            }
+        }
+        
 
         #endregion
 

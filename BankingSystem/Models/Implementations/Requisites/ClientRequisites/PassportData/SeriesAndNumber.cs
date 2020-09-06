@@ -19,6 +19,8 @@ namespace BankingSystem.Models.Implementations.Requisites.ClientRequisites.Passp
             this.Number = number;
         }
 
+        public string FullSeriesAndNumber => $"S: {Series} N: {Number}";
+
         public string Series { get; private set; }
         public string Number { get; private set; }
     }

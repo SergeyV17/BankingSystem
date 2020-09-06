@@ -21,8 +21,10 @@ namespace BankingSystem.Models.Implementations.Requisites.ClientRequisites.Passp
             this.MiddleName = middleName;
         }
 
+        public string Name => $"{LastName} {FirstName} {MiddleName}";
+
         public string LastName { get; private set; }
         public string FirstName { get; private set; }
-        public string MiddleName { get; private set; }
+        public string MiddleName { get; private set; }  
     }
 }

@@ -59,7 +59,19 @@
                 <TreeView 
                     x:Name="Tree" 
                     DockPanel.Dock="Top"
-                    ItemsSource="{Binding Children}">
+                    ItemsSource="{Binding Repository.Node.Children}">
+                    <intr:Interaction.Triggers>
+                        <intr:EventTrigger EventName="SelectedItemChanged">
+                            <intr:InvokeCommandAction 
+                                Command="{Binding SelectedItemChangedCommand}" 
+                                CommandParameter="{Binding ElementName=Tree, Path=SelectedItem}"/>
+                        </intr:EventTrigger>
+                    </intr:Interaction.Triggers>
+                    <TreeView.ItemContainerStyle>
+                        <Style TargetType="{x:Type TreeViewItem}">
+                            <Setter Property="IsExpanded" Value="True"/>
+                        </Style>
+                    </TreeView.ItemContainerStyle>
                     <TreeView.ItemTemplate>
                         <HierarchicalDataTemplate 
                             ItemsSource="{Binding Path=Children}">
@@ -103,7 +115,8 @@
                 <!--Выбранный список клиентов -->
                 <ListView 
                     x:Name="ListOfClients"
-                    FontSize="14">
+                    FontSize="14"
+                    ItemsSource="{Binding Clients}">
                     <ListView.Resources>
                         <Style TargetType="{x:Type GridViewColumnHeader}">
                             <Setter Property="HorizontalContentAlignment" Value="Left"/>
@@ -111,11 +124,11 @@
                     </ListView.Resources>
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header=" ФИО" DisplayMemberBinding="{Binding full_name}" Width="280"/>
-                            <GridViewColumn Header=" Адрес" DisplayMemberBinding = "{Binding address}" Width="150"/>
-                            <GridViewColumn Header=" Паспорт" DisplayMemberBinding="{Binding passport}" Width="150"/>
-                            <GridViewColumn Header=" Номер телефона" DisplayMemberBinding="{Binding phone_number}" Width="140"/>
-                            <GridViewColumn Header=" Email" DisplayMemberBinding = "{Binding email}" Width="180"/>
+                            <GridViewColumn Header=" ФИО" DisplayMemberBinding="{Binding Passport.FullName.Name}" Width="280"/>
+                            <GridViewColumn Header=" Адрес" DisplayMemberBinding = "{Binding Passport.Address}" Width="150"/>
+                            <GridViewColumn Header=" Паспорт" DisplayMemberBinding="{Binding Passport.SeriesAndNumber.FullSeriesAndNumber}" Width="150"/>
+                            <GridViewColumn Header=" Номер телефона" DisplayMemberBinding="{Binding Contact.PhoneNumber.Number}" Width="140"/>
+                            <GridViewColumn Header=" Email" DisplayMemberBinding = "{Binding Contact.Email}" Width="180"/>
                         </GridView>
                     </ListView.View>
                 </ListView>
@@ -180,6 +193,7 @@
                         </Button>
                     </StackPanel>
                 </Border>
+                
                 <!--Панель клиента-->
                 <Border
                     Grid.Column="1"
@@ -191,7 +205,8 @@
                 <Border
                     Grid.Row="1"
                     Grid.Column="1"
-                    Style="{StaticResource BaseBorderStyle}">
+                    Style="{StaticResource BaseBorderStyle}"
+                    Visibility="{Binding ElementName=ListOfClients, Path=SelectedItem}">
                     <StackPanel Margin="5">
                         <!--Имя клиента-->
                         <TextBlock

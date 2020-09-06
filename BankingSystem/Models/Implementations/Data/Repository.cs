@@ -5,7 +5,7 @@ namespace BankingSystem.Models.Implementations.Data
     /// <summary>
     /// Класс репозитория
     /// </summary>
-    class Repository
+    class Repository : IRepository
     {
         private static readonly Lazy<Repository> lazy =
             new Lazy<Repository>(() => new Repository());

@@ -73,15 +73,18 @@ namespace BankingSystem.Models.Implementations.Data.Factories
         /// <returns>корневой узел</returns>
         private static Node CreateRepositoryTree()
         {
-            var root = new Node("Банковская система");
+            var root = new Node("Корень");
+            var bankingSystem = new Node("Банковская система");
+
+            root.AddNode(bankingSystem);
 
             var individual = new Node("Физические лица");
             var entity = new Node("Юридические лица");
             var VIPClients = new Node("Вип клиенты");
 
-            root.AddNode(individual);
-            root.AddNode(entity);
-            root.AddNode(VIPClients);
+            bankingSystem.AddNode(individual);
+            bankingSystem.AddNode(entity);
+            bankingSystem.AddNode(VIPClients);
 
             var VIPIndividual = new Node("Физические лица");
             var VIPEntity = new Node("Юридические лица");
@@ -111,7 +114,7 @@ namespace BankingSystem.Models.Implementations.Data.Factories
                     var passport = PassportFactory.CreatePassport(
                         FullNameFactory.CreateFullName(Gender.Female),
                         SeriesAndNumberFactory.CreateSeriesAndNumber(),
-                        $"Address_{i}");
+                        $"Адрес_{i}");
 
                     switch (random.Next(Enum.GetNames(typeof(ClientType)).Length))
                     {
@@ -134,7 +137,7 @@ namespace BankingSystem.Models.Implementations.Data.Factories
                                     entitiesCardFactories[random.Next(entitiesCardFactories.Length)].CreateCard(balance),
                                     new DefaultDepositFactory().CreateDeposit(balance, capitalization, ClientType.Entity));
 
-                            var company = new Company($"Company_{i}", $"Company.Website.ru_{i}");
+                            var company = new Company($"Компания_{i}", $"Company.Website.ru_{i}");
 
                             client = EntityFactory.CreateEntity(passport, contact, entityAccount, company);
                             break;

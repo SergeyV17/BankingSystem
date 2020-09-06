@@ -52,6 +52,36 @@ namespace BankingSystem.ViewModels
         public Node SelectedNode { get; private set; }
         public ObservableCollection<Client> Clients { get; set; }
 
+        #region Visibility
+
+        #region ClientsLists
+        public bool IndividualsVisibility
+        {
+            get
+            {
+                if (SelectedNode != null)
+                    return SelectedNode.Type == NodeType.Individual || SelectedNode.Type == NodeType.VIPIndividual ? true : false;
+
+                return false;
+            }
+        }
+
+        public bool EntitiesVisibility
+        {
+            get
+            {
+                if (SelectedNode != null)
+                    return SelectedNode.Type == NodeType.Entity || SelectedNode.Type == NodeType.VIPEntity ? true : false;
+
+                return false;
+            }
+        }
+
+
+        #endregion
+
+        #endregion
+
         #endregion
 
 
@@ -74,7 +104,7 @@ namespace BankingSystem.ViewModels
         #region Команды
 
         /// <summary>
-        /// Команда открытия файла информации
+        /// Команда при запуске приложения
         /// </summary>
         private ICommand windowLoaded;
         public ICommand WindowLoaded
@@ -137,7 +167,7 @@ namespace BankingSystem.ViewModels
         #region Команды главного окна
 
         /// <summary>
-        /// Команда открытия файла информации
+        /// Команда биндинга выборки при выборе узла дерева
         /// </summary>
         private ICommand selectedItemChangedCommand;
         public ICommand SelectedItemChangedCommand
@@ -149,21 +179,31 @@ namespace BankingSystem.ViewModels
                 {
                     try
                     {
-                    SelectedNode = obj as Node;
+                        SelectedNode = obj as Node;
 
-                        switch (SelectedNode.Name)
+                        switch (SelectedNode.Type)
                         {
-                            case "Физические лица":
-                                Clients = SelectClients.SelectAllClients();
+                            case NodeType.Individual:
+                                Clients = SelectClients.SelectIndividuals(); 
+
                                 break;
-                            case "Юридические лица":
-                                Clients = SelectClients.SelectAllClients();
+                            case NodeType.Entity:
+                                Clients = SelectClients.SelectEntities(); 
+                                break;
+                            case NodeType.VIPIndividual:
+                                Clients = SelectClients.SelectVIPIndividuals();
+                                break;
+                            case NodeType.VIPEntity:
+                                Clients = SelectClients.SelectVIPEntities();
                                 break;
                             default:
+                                Clients = null;
                                 break;
                         }
 
                         OnPropertyChanged(nameof(Clients));
+                        OnPropertyChanged(nameof(IndividualsVisibility));
+                        OnPropertyChanged(nameof(EntitiesVisibility));
                     }
                     catch (Exception ex)
                     {
@@ -172,7 +212,6 @@ namespace BankingSystem.ViewModels
                 }));
             }
         }
-        
 
         #endregion
 

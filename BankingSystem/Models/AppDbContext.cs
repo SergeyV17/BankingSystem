@@ -13,7 +13,7 @@ namespace BankingSystem.Models
         public DbSet<Entity> Entities { get; set; }
         public DbSet<Account> Accounts { get; set; }
         public DbSet<RegularAccount> RegularAccounts { get; set; }
-        public DbSet<VipAccount> VipAccounts { get; set; }
+        public DbSet<VIPAccount> VipAccounts { get; set; }
 
         #region Cards
 

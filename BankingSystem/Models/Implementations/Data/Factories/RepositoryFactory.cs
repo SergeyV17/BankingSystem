@@ -73,21 +73,21 @@ namespace BankingSystem.Models.Implementations.Data.Factories
         /// <returns>корневой узел</returns>
         private static Node CreateRepositoryTree()
         {
-            var root = new Node("Корень");
-            var bankingSystem = new Node("Банковская система");
+            var root = new Node("Корень", NodeType.Intermediate);
+            var bankingSystem = new Node("Банковская система", NodeType.Intermediate);
 
             root.AddNode(bankingSystem);
 
-            var individual = new Node("Физические лица");
-            var entity = new Node("Юридические лица");
-            var VIPClients = new Node("Вип клиенты");
+            var individual = new Node("Физические лица", NodeType.Individual);
+            var entity = new Node("Юридические лица", NodeType.Entity);
+            var VIPClients = new Node("Вип клиенты", NodeType.Intermediate);
 
             bankingSystem.AddNode(individual);
             bankingSystem.AddNode(entity);
             bankingSystem.AddNode(VIPClients);
 
-            var VIPIndividual = new Node("Физические лица");
-            var VIPEntity = new Node("Юридические лица");
+            var VIPIndividual = new Node("Физические лица", NodeType.VIPIndividual);
+            var VIPEntity = new Node("Юридические лица", NodeType.VIPEntity);
 
             VIPClients.AddNode(VIPIndividual);
             VIPClients.AddNode(VIPEntity);

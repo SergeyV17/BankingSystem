@@ -10,6 +10,10 @@
         Title ="BankingSystem"
         Height="800" MinHeight="700"
         Width="1400" MinWidth="1400" >
+    <Window.Resources>
+            <BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter" />
+    </Window.Resources>
+    
     <intr:Interaction.Triggers>
         <intr:EventTrigger EventName="Loaded">
             <intr:InvokeCommandAction Command="{Binding WindowLoaded}"/>
@@ -114,9 +118,10 @@
                 </StackPanel>
                 <!--Выбранный список клиентов -->
                 <ListView 
-                    x:Name="ListOfClients"
+                    x:Name="ListOfIndividuals"
                     FontSize="14"
-                    ItemsSource="{Binding Clients}">
+                    ItemsSource="{Binding Clients}"
+                    Visibility="{Binding Path=IndividualsVisibility, Converter={StaticResource booleanToVisibilityConverter}}">
                     <ListView.Resources>
                         <Style TargetType="{x:Type GridViewColumnHeader}">
                             <Setter Property="HorizontalContentAlignment" Value="Left"/>
@@ -124,11 +129,34 @@
                     </ListView.Resources>
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header=" ФИО" DisplayMemberBinding="{Binding Passport.FullName.Name}" Width="280"/>
-                            <GridViewColumn Header=" Адрес" DisplayMemberBinding = "{Binding Passport.Address}" Width="150"/>
-                            <GridViewColumn Header=" Паспорт" DisplayMemberBinding="{Binding Passport.SeriesAndNumber.FullSeriesAndNumber}" Width="150"/>
+                            <GridViewColumn Header=" ФИО" DisplayMemberBinding="{Binding Passport.FullName.Name}" Width="240"/>
+                            <GridViewColumn Header=" Адрес" DisplayMemberBinding = "{Binding Passport.Address}" Width="120"/>
+                            <GridViewColumn Header=" Паспорт" DisplayMemberBinding="{Binding Passport.SeriesAndNumber.FullSeriesAndNumber}" Width="130"/>
                             <GridViewColumn Header=" Номер телефона" DisplayMemberBinding="{Binding Contact.PhoneNumber.Number}" Width="140"/>
-                            <GridViewColumn Header=" Email" DisplayMemberBinding = "{Binding Contact.Email}" Width="180"/>
+                            <GridViewColumn Header=" Email" DisplayMemberBinding = "{Binding Contact.Email}" Width="140"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                <!--Выбранный список клиентов -->
+                <ListView 
+                    x:Name="ListOfEntities"
+                    FontSize="14"
+                    ItemsSource="{Binding Clients}"
+                    Visibility="{Binding Path=EntitiesVisibility, Converter={StaticResource booleanToVisibilityConverter}}">
+                    <ListView.Resources>
+                        <Style TargetType="{x:Type GridViewColumnHeader}">
+                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                        </Style>
+                    </ListView.Resources>
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header=" ФИО" DisplayMemberBinding="{Binding Passport.FullName.Name}" Width="240"/>
+                            <GridViewColumn Header=" Адрес" DisplayMemberBinding = "{Binding Passport.Address}" Width="120"/>
+                            <GridViewColumn Header=" Паспорт" DisplayMemberBinding="{Binding Passport.SeriesAndNumber.FullSeriesAndNumber}" Width="130"/>
+                            <GridViewColumn Header=" Номер телефона" DisplayMemberBinding="{Binding Contact.PhoneNumber.Number}" Width="140"/>
+                            <GridViewColumn Header=" Email" DisplayMemberBinding = "{Binding Contact.Email}" Width="140"/>
+                            <GridViewColumn Header=" Наименование компании" DisplayMemberBinding = "{Binding Company.Name}" Width="180"/>
+                            <GridViewColumn Header=" Вебсайт" DisplayMemberBinding = "{Binding Company.Website}" Width="180"/>
                         </GridView>
                     </ListView.View>
                 </ListView>

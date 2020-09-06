@@ -6,21 +6,21 @@ namespace BankingSystem.Models.Implementations.Accounts
     /// <summary>
     /// Класс вип аккаунта
     /// </summary>
-    class VipAccount : Account
+    class VIPAccount : Account
     {
         private const int DepositRateIncrease = 2; // Повышение ставки депозита х2
 
         /// <summary>
         /// Конструктор по умолчанию для EF
         /// </summary>
-        public VipAccount() { }
+        public VIPAccount() { }
 
         /// <summary>
         /// Конструктор вип аккаута
         /// </summary>
         /// <param name="card">карта</param>
         /// <param name="deposit">депозит</param>
-        public VipAccount(Card card, Deposit deposit) : base(card, deposit)
+        public VIPAccount(Card card, Deposit deposit) : base(card, deposit)
         {
             Deposit.DepositRate *= DepositRateIncrease;
         }

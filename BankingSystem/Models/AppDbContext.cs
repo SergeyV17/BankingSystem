@@ -29,9 +29,9 @@ namespace BankingSystem.Models
 
         public DbSet<Deposit> Deposits { get; set; }
         public DbSet<DefaultDeposit> DefaultDeposits { get; set; }
+        public DbSet<NullDeposit> NullDeposits { get; set; }
 
         #endregion
-
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

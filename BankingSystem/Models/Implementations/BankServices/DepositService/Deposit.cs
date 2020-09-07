@@ -9,6 +9,8 @@ namespace BankingSystem.Models.Implementations.BankServices.DepositService
     /// </summary>
     abstract class Deposit
     {
+        private string depositNumber;
+
         /// <summary>
         /// Конструктор по умолчанию для EF
         /// </summary>
@@ -22,7 +24,7 @@ namespace BankingSystem.Models.Implementations.BankServices.DepositService
         /// <param name="depositRate">ставка</param>
         public Deposit(decimal depositBalance, bool depositCapitalization, decimal depositRate)
         {
-            DepositNumber = DepositNumberFactory.CreateDepositNumber();
+            DepositNumber = $"№{DepositNumberFactory.CreateDepositNumber()}";
             DepositBalance = depositBalance;
             DateOfDepositOpen = DateTime.Now;
             DateOfDepositClose = DateTime.Now.AddYears(1);
@@ -31,7 +33,8 @@ namespace BankingSystem.Models.Implementations.BankServices.DepositService
         }
 
         public int DepositId { get; set; }
-        public string DepositNumber { get; private set; } 
+        public bool HasDeposit => !IsNull();
+        public string DepositNumber { get => HasDeposit ? depositNumber : "Отсутствует"; private set { depositNumber = value; } }
         public decimal DepositBalance { get; private set; }
         public DateTime DateOfDepositOpen { get; private set; }
         public DateTime DateOfDepositClose { get; private set; }

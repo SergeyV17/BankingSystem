@@ -270,11 +270,14 @@
                                 </StackPanel>
                             </Button>
                             <TextBlock
-                                Text="{Binding ElementName=LisOfClients, Path=SelectedItem.Account.Deposit.DepositNumber, StringFormat={}№{0}}"
+                                Text="{Binding ElementName=LisOfClients, Path=SelectedItem.Account.Deposit.DepositNumber}"
                                 Style="{StaticResource BaseTextBlockStyle}">
                             </TextBlock>
                         </StackPanel>
-                        <StackPanel>
+                        <StackPanel Visibility="{Binding 
+                            ElementName=LisOfClients,
+                            Path=SelectedItem.Account.Deposit.HasDeposit,
+                            Converter={StaticResource booleanToVisibilityConverter}}">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock
                                     Text="Баланс:"

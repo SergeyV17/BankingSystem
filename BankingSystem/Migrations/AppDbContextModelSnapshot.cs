@@ -191,6 +191,13 @@ namespace BankingSystem.Migrations
                     b.HasDiscriminator().HasValue("DefaultDeposit");
                 });
 
+            modelBuilder.Entity("BankingSystem.Models.Implementations.BankServices.DepositService.NullDeposit", b =>
+                {
+                    b.HasBaseType("BankingSystem.Models.Implementations.BankServices.DepositService.Deposit");
+
+                    b.HasDiscriminator().HasValue("NullDeposit");
+                });
+
             modelBuilder.Entity("BankingSystem.Models.Implementations.Clients.Entity", b =>
                 {
                     b.HasBaseType("BankingSystem.Models.Implementations.Clients.Client");

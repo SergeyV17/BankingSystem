@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BankingSystem.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20200907110431_InitialCreate")]
+    [Migration("20200907115114_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -191,6 +191,13 @@ namespace BankingSystem.Migrations
                     b.HasBaseType("BankingSystem.Models.Implementations.BankServices.DepositService.Deposit");
 
                     b.HasDiscriminator().HasValue("DefaultDeposit");
+                });
+
+            modelBuilder.Entity("BankingSystem.Models.Implementations.BankServices.DepositService.NullDeposit", b =>
+                {
+                    b.HasBaseType("BankingSystem.Models.Implementations.BankServices.DepositService.Deposit");
+
+                    b.HasDiscriminator().HasValue("NullDeposit");
                 });
 
             modelBuilder.Entity("BankingSystem.Models.Implementations.Clients.Entity", b =>

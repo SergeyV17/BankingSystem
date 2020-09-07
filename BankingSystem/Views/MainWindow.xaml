@@ -72,7 +72,7 @@
                     <intr:Interaction.Triggers>
                         <intr:EventTrigger EventName="SelectedItemChanged">
                             <intr:InvokeCommandAction 
-                                Command="{Binding SelectedItemChangedCommand}" 
+                                Command="{Binding SelectedTreeItemChangedCommand}" 
                                 CommandParameter="{Binding ElementName=Tree, Path=SelectedItem}"/>
                         </intr:EventTrigger>
                     </intr:Interaction.Triggers>
@@ -126,6 +126,7 @@
                     x:Name="LisOfClients"
                     FontSize="14"
                     ItemsSource="{Binding Clients}"
+                    SelectedItem="{Binding SelectedClient, Mode=TwoWay}"
                     Visibility="{Binding Path=ClientsVisibility, Converter={StaticResource booleanToVisibilityConverter}}">
                     <ListView.Resources>
                         <Style TargetType="{x:Type GridViewColumnHeader}">
@@ -224,7 +225,7 @@
                     Grid.Row="1"
                     Grid.Column="1"
                     Style="{StaticResource BaseBorderStyle}"
-                    Visibility="{Binding ElementName=ListOfClients, Path=SelectedItem}">
+                    Visibility="{Binding ClientPanelVisibility, Converter={StaticResource booleanToVisibilityConverter}}">
                     <StackPanel Margin="5">
                         <!--Имя клиента-->
                         <TextBlock

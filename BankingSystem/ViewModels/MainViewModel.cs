@@ -27,6 +27,8 @@ namespace BankingSystem.ViewModels
         private readonly IFilePathService _filePathService;
         private readonly IMessageService _messageService;
 
+        private Client selectedClient;
+
         #endregion
 
         #region Свойства
@@ -50,11 +52,19 @@ namespace BankingSystem.ViewModels
 
         public Node SelectedNode { get; private set; }
         public ObservableCollection<Client> Clients { get; private set; }
-
+        public Client SelectedClient
+        {
+            get => selectedClient;
+            set
+            {
+                selectedClient = value;
+                OnPropertyChanged(nameof(ClientPanelVisibility));
+            }
+        }
         #region Visibility
 
         public bool ClientsVisibility => SelectedNode != null ? SelectedNode.Type != NodeType.Intermediate ? true : false : false;
-        public bool ClientPanelVisibility { get; private set; }
+        public bool ClientPanelVisibility => SelectedClient != null ? true : false;
 
         #endregion
 
@@ -144,13 +154,13 @@ namespace BankingSystem.ViewModels
         /// <summary>
         /// Команда биндинга выборки при выборе узла дерева
         /// </summary>
-        private ICommand selectedItemChangedCommand;
-        public ICommand SelectedItemChangedCommand
+        private ICommand selectedTreeItemChangedCommand;
+        public ICommand SelectedTreeItemChangedCommand
         {
             get
             {
-                return selectedItemChangedCommand ??
-                (selectedItemChangedCommand = new RelayCommand(obj =>
+                return selectedTreeItemChangedCommand ??
+                (selectedTreeItemChangedCommand = new RelayCommand(obj =>
                 {
                     try
                     {

@@ -35,6 +35,7 @@ namespace BankingSystem.Models.Implementations.Accounts
         public decimal AmountOfReplenishmentPerDay { get; private set; }
         public bool HasDeposit => Deposit.DepositNumber != null;
 
+        //Свойства для БД
         public int ClientId { get; set; }
         public Client Client { get; set; }
     }

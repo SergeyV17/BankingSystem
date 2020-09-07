@@ -103,7 +103,7 @@ namespace BankingSystem.Models.Implementations.Data.Factories
         /// <param name="quantity">кол-во клиентов</param>
         private static void FillRepository(AppDbContext dbContext, int quantity)
         {
-            Parallel.For(0, quantity, (i) =>
+            Parallel.For(1, quantity + 1, (i) =>
             {
                 lock (locker)
                 {

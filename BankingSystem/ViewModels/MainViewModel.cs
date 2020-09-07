@@ -91,7 +91,7 @@ namespace BankingSystem.ViewModels
                 {
                     try
                     {
-                        Repository = RepositoryFactory.CreateRepository(5);
+                        Repository = RepositoryFactory.CreateRepository(20);
                         OnPropertyChanged(nameof(Repository));
                     }
                     catch (Exception ex)

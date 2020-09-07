@@ -54,6 +54,7 @@ namespace BankingSystem.ViewModels
         #region Visibility
 
         public bool ClientsVisibility => SelectedNode != null ? SelectedNode.Type != NodeType.Intermediate ? true : false : false;
+        public bool ClientPanelVisibility { get; private set; }
 
         #endregion
 

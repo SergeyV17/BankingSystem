@@ -209,6 +209,7 @@
     <Compile Include="Models\Implementations\BankServices\DepositService\Factories\DepositFactory.cs" />
     <Compile Include="Models\Implementations\BankServices\DepositService\DefaultDeposit.cs" />
     <Compile Include="Models\Implementations\BankServices\DepositService\Factories\DefaultDepositFactory.cs" />
+    <Compile Include="Models\Implementations\BankServices\DepositService\NullDeposit.cs" />
     <Compile Include="Models\Implementations\Clients\ClientType.cs" />
     <Compile Include="Models\Implementations\Clients\Client.cs" />
     <Compile Include="Models\Implementations\Clients\Factories\EntityFactory.cs" />

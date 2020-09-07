@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BankingSystem.Models.Implementations.Accounts.Factories;
 using BankingSystem.Models.Implementations.BankServices.CardService.Factories;
+using BankingSystem.Models.Implementations.BankServices.DepositService;
 using BankingSystem.Models.Implementations.BankServices.DepositService.Factories;
 using BankingSystem.Models.Implementations.Clients;
 using BankingSystem.Models.Implementations.Clients.Factories;
@@ -124,7 +125,7 @@ namespace BankingSystem.Models.Implementations.Data.Factories
 
                             var individualAccount = accountFactories[random.Next(accountFactories.Length)].CreateAccount(
                                     individualsCardFactories[random.Next(individualsCardFactories.Length)].CreateCard(balance),
-                                    new DefaultDepositFactory().CreateDeposit(balance, capitalization, ClientType.Individual));
+                                    random.Next(2) == 0 ? new DefaultDepositFactory().CreateDeposit(balance, capitalization, ClientType.Individual) : new NullDeposit());
 
                             client = IndividualFactory.CreateIndividual(passport, contact, individualAccount);
                             break;
@@ -135,7 +136,7 @@ namespace BankingSystem.Models.Implementations.Data.Factories
 
                             var entityAccount = accountFactories[random.Next(accountFactories.Length)].CreateAccount(
                                     entitiesCardFactories[random.Next(entitiesCardFactories.Length)].CreateCard(balance),
-                                    new DefaultDepositFactory().CreateDeposit(balance, capitalization, ClientType.Entity));
+                                    random.Next(2) == 0 ? new DefaultDepositFactory().CreateDeposit(balance, capitalization, ClientType.Entity) : new NullDeposit());
 
                             var company = new Company($"Компания_{i}", $"Company.Website.ru_{i}");
 

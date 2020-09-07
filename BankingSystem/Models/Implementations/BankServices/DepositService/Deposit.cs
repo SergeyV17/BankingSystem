@@ -13,17 +13,6 @@ namespace BankingSystem.Models.Implementations.BankServices.DepositService
         /// </summary>
         public Deposit() { }
 
-        public int DepositId { get; set; }
-        public string DepositNumber { get; private set; } 
-        public decimal DepositBalance { get; private set; }
-        public DateTime DateOfDepositOpen { get; private set; }
-        public DateTime DateOfDepositClose { get; private set; }
-        public bool DepositCapitalization { get; private set; }
-        public decimal DepositRate { get; set; }
-
-        //public int AccountId { get; set; }
-        //public Account Account { get; set; }
-
         /// <summary>
         /// Конструктор депозита
         /// </summary>
@@ -39,5 +28,22 @@ namespace BankingSystem.Models.Implementations.BankServices.DepositService
             DepositCapitalization = depositCapitalization;
             DepositRate = depositRate;
         }
+
+        public int DepositId { get; set; }
+        public string DepositNumber { get; private set; } 
+        public decimal DepositBalance { get; private set; }
+        public DateTime DateOfDepositOpen { get; private set; }
+        public DateTime DateOfDepositClose { get; private set; }
+        public bool DepositCapitalization { get; private set; }
+        public decimal DepositRate { get; set; }
+
+        //public int AccountId { get; set; }
+        //public Account Account { get; set; }
+
+        /// <summary>
+        /// Метод возвращаюший состояние объекта
+        /// </summary>
+        /// <returns>булевая переменная</returns>
+        public abstract bool IsNull();
     }
 }

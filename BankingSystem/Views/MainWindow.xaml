@@ -310,7 +310,7 @@
                     Grid.Row="1"
                     Grid.Column="2"
                     Style="{StaticResource BaseBorderStyle}"
-                    Visibility="Visible">
+                    Visibility="Hidden">
                     <StackPanel Margin="5">
                         <!--Наименование-->
                         <TextBlock
@@ -349,7 +349,7 @@
                     Grid.Row="1"
                     Grid.Column="2"
                     Style="{StaticResource BaseBorderStyle}"
-                    Visibility="Hidden">
+                    Visibility="Visible">
                     <StackPanel Margin="5">
                         <!--Кнопка открыть вклад-->
                         <Button  Style="{StaticResource EditPanelButtonStyle}" Visibility="Collapsed" >

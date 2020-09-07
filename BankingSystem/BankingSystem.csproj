@@ -248,6 +248,7 @@
     <Compile Include="ViewModels\OperationViewModels\ReplenishmentCardViewModel.cs" />
     <Compile Include="ViewModels\OperationViewModels\TransferViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
+    <Compile Include="Views\Converters\CapitalizationConverter.cs" />
     <Compile Include="Views\Converters\ColumnWidthConverter.cs" />
     <Compile Include="Views\Windows\EditClientPanel\AddEntityWindow.xaml.cs">
       <DependentUpon>AddEntityWindow.xaml</DependentUpon>

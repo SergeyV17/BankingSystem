@@ -19,6 +19,7 @@
     <!--Button text block-->
     <Style TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}" x:Key="ButtonTextBlockStyle">
         <Setter Property="Margin" Value="0"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
     </Style>
     
     <!--Dialog title text block-->

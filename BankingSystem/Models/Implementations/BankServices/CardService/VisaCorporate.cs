@@ -11,6 +11,6 @@ namespace BankingSystem.Models.Implementations.BankServices.CardService
         /// Конструктор "Visa corporate" карты
         /// </summary>
         /// <param name="cardBalance">баланс</param>
-        public VisaCorporate(decimal cardBalance) : base("Visa corporate", CardNumberFactory.CreateCardNumber(), cardBalance) { }
+        public VisaCorporate(decimal cardBalance) : base("VISA CORPORATE", CardNumberFactory.CreateCardNumber(), cardBalance) { }
     }
 }

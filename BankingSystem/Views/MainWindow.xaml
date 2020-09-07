@@ -14,6 +14,7 @@
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter" />
         <local:ColumnWidthConverter x:Key="columnWidthConverter" />
+        <local:CapitalizationConverter x:Key="capitalizationConverter" />
     </Window.Resources>
     
     <intr:Interaction.Triggers>
@@ -59,7 +60,9 @@
             <DockPanel>
                 <!--Календарь-->
                 <Viewbox DockPanel.Dock="Bottom">
-                    <Calendar SelectedDate="{x:Static sys:DateTime.Now}"/>
+                    <Calendar
+                        x:Name="DepositCalendar"
+                        SelectedDate="{x:Static sys:DateTime.Now}"/>
                 </Viewbox>
                 <!--Дерево-->
                 <TreeView 
@@ -238,16 +241,21 @@
                                         Style="{StaticResource ButtonTextBlockStyle}"/>
                                 </StackPanel>
                             </Button>
-                            <TextBlock
-                                Text="{Binding ElementName=LisOfClients, Path=SelectedItem.Account.Card.CardName}"
-                                Style="{StaticResource BaseTextBlockStyle}"/>
+                            <TextBlock Style="{StaticResource BaseTextBlockStyle}">
+                                <TextBlock.Text>
+                                    <MultiBinding StringFormat="{}{0} {1}">
+                                        <Binding ElementName="LisOfClients" Path="SelectedItem.Account.Card.CardName"/>
+                                        <Binding ElementName="LisOfClients" Path="SelectedItem.Account.Card.CardNumber"/>
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock
                                 Text="Баланс:"
                                 Style="{StaticResource BaseTextBlockStyle}"/>
                             <TextBlock
-                                Text="{Binding ElementName=LisOfClients, Path=SelectedItem.Account.Card.CardBalance}"
+                                Text="{Binding ElementName=LisOfClients, Path=SelectedItem.Account.Card.CardBalance, StringFormat={}{0:C}}"
                                 Style="{StaticResource BaseTextBlockStyle}"/>
                         </StackPanel>
 
@@ -257,12 +265,12 @@
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="Resources/Icons/ContributionIcon.png"/>
                                     <TextBlock 
-                                        Text="Вклад:" 
+                                        Text="Вклад: " 
                                         Style="{StaticResource ButtonTextBlockStyle}"/>
                                 </StackPanel>
                             </Button>
                             <TextBlock
-                                Text="{Binding ElementName=LisOfClients, Path=SelectedItem.Account.Deposit.DepositNumber}"
+                                Text="{Binding ElementName=LisOfClients, Path=SelectedItem.Account.Deposit.DepositNumber, StringFormat={}№{0}}"
                                 Style="{StaticResource BaseTextBlockStyle}">
                             </TextBlock>
                         </StackPanel>
@@ -272,7 +280,7 @@
                                     Text="Баланс:"
                                     Style="{StaticResource BaseTextBlockStyle}"/>
                                 <TextBlock
-                                    Text="{Binding ElementName=LisOfClients, Path=SelectedItem.Account.Deposit.DepositBalance}"
+                                    Text="{Binding ElementName=LisOfClients, Path=SelectedItem.Account.Deposit.DepositBalance, StringFormat={}{0:C}}"
                                     Style="{StaticResource BaseTextBlockStyle}"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
@@ -280,7 +288,10 @@
                                     Text="Капитализация:"
                                     Style="{StaticResource BaseTextBlockStyle}"/>
                                 <TextBlock
-                                    Text="{Binding ElementName=LisOfClients, Path=SelectedItem.Account.Deposit.DepositCapitalization}"
+                                    Text="{Binding 
+                                    ElementName=LisOfClients, 
+                                    Path=SelectedItem.Account.Deposit.DepositCapitalization, 
+                                    Converter = {StaticResource capitalizationConverter}}"
                                     Style="{StaticResource BaseTextBlockStyle}"/>
                             </StackPanel>
                         </StackPanel>
@@ -294,24 +305,24 @@
                         Text="Операции"
                         Style="{StaticResource TitleTextBlockStyle}"/>
                 </Border>
+                <!--Панель операций для карты-->
                 <Border
                     Grid.Row="1"
                     Grid.Column="2"
                     Style="{StaticResource BaseBorderStyle}"
-                    Visibility="Hidden">
-                    <!--Панель операций для карты-->
-                    <StackPanel HorizontalAlignment="Left" Margin="5">
+                    Visibility="Visible">
+                    <StackPanel Margin="5">
                         <!--Наименование-->
                         <TextBlock
-                            Text="4276 7000"
+                            Text="{Binding ElementName= LisOfClients, Path=SelectedItem.Account.Card.CardName}"
                             Style="{StaticResource BaseTextBlockStyle}"/>
                         <!--Номер-->
                         <TextBlock
-                            Text="397563"
+                            Text="{Binding ElementName= LisOfClients, Path=SelectedItem.Account.Card.CardNumber}"
                             Style="{StaticResource BaseTextBlockStyle}"/>
                         <!--Баланс-->
                         <TextBlock
-                            Text="{Binding}"
+                            Text="{Binding ElementName= LisOfClients, Path=SelectedItem.Account.Card.CardBalance, StringFormat={}{0:C}}"
                             Style="{StaticResource BaseTextBlockStyle}"/>
                         <!--Кнопка пополнить карту-->
                         <Button Style="{StaticResource EditPanelButtonStyle}">
@@ -328,33 +339,35 @@
                                 <Image Source="Resources/Icons/TransferIcon.png"/>
                                 <TextBlock
                                     Text="Перевод"
-                                    Style="{StaticResource BaseTextBlockStyle}"/>
+                                    Style="{StaticResource ButtonTextBlockStyle}"/>
                             </StackPanel>
                         </Button>
                     </StackPanel>
                 </Border>
+                <!--Панель операций для вклада-->
                 <Border
                     Grid.Row="1"
                     Grid.Column="2"
-                    Style="{StaticResource BaseBorderStyle}">
-                    <StackPanel HorizontalAlignment="Left" Margin="5">
+                    Style="{StaticResource BaseBorderStyle}"
+                    Visibility="Hidden">
+                    <StackPanel Margin="5">
                         <!--Кнопка открыть вклад-->
-                        <Button Style="{StaticResource EditPanelButtonStyle}" Visibility="Collapsed">
+                        <Button  Style="{StaticResource EditPanelButtonStyle}" Visibility="Collapsed" >
                             <StackPanel Orientation="Horizontal">
                                 <Image Source="Resources/Icons/ReplenishmentIcon.png" />
-                                <TextBlock 
+                                <TextBlock
                                     Text="Открыть вклад"
-                                    Style="{StaticResource BaseTextBlockStyle}"/>
+                                    Style="{StaticResource ButtonTextBlockStyle}"/>
                             </StackPanel>
                         </Button>
                         <StackPanel>
                             <!--Наименование-->
                             <TextBlock 
-                                Text="{Binding ElementName=LisOfClients, Path=SelectedItem.Account.Deposit.DepositNumber}"
+                                Text="{Binding ElementName=LisOfClients, Path=SelectedItem.Account.Deposit.DepositNumber, StringFormat={}№{0}}"
                                 Style="{StaticResource BaseTextBlockStyle}"/>
                             <!--Баланс-->
                             <TextBlock
-                                Text="{Binding ElementName=LisOfClients, Path=SelectedItem.Account.Deposit.DepositBalance}"
+                                Text="{Binding ElementName=LisOfClients, Path=SelectedItem.Account.Deposit.DepositBalance, StringFormat={}{0:C}}"
                                 Style="{StaticResource BaseTextBlockStyle}"/>
                             <!--Ставка-->
                             <StackPanel Orientation="Horizontal">
@@ -362,7 +375,7 @@
                                     Text="Ставка:"
                                     Style="{StaticResource BaseTextBlockStyle}"/>
                                 <TextBlock
-                                    Text="{Binding ElementName=LisOfClients, Path=SelectedItem.Account.Deposit.DepositRate}"
+                                    Text="{Binding ElementName=LisOfClients, Path=SelectedItem.Account.Deposit.DepositRate, StringFormat={}{0:P}}"
                                     Style="{StaticResource BaseTextBlockStyle}"/>
                             </StackPanel>
                             <!--Дата открытия-->
@@ -371,7 +384,9 @@
                                     Text="Дата открытия:"
                                     Style="{StaticResource BaseTextBlockStyle}"/>
                                 <TextBlock
-                                    Text="{Binding ElementName=LisOfClients, Path=SelectedItem.Account.Deposit.DateOfDepositOpen}"
+                                    Text="{Binding ElementName=LisOfClients, 
+                                    Path=SelectedItem.Account.Deposit.DateOfDepositOpen, 
+                                    StringFormat={}{0:dd.MM.yyyy}}"
                                     Style="{StaticResource BaseTextBlockStyle}"/>
                             </StackPanel>
                             <!--Дата закрытия-->
@@ -380,13 +395,14 @@
                                     Text="Дата закрытия:"
                                     Style="{StaticResource BaseTextBlockStyle}"/>
                                 <TextBlock
-                                    Text="{Binding ElementName=LisOfClients, Path=SelectedItem.Account.Deposit.DateOfDepositClose}"
+                                    Text="{Binding ElementName=LisOfClients, 
+                                    Path=SelectedItem.Account.Deposit.DateOfDepositClose, 
+                                    StringFormat={}{0:dd.MM.yyyy}}"
                                     Style="{StaticResource BaseTextBlockStyle}">
                                 </TextBlock>
                             </StackPanel>
                             <!--Закрыть вклад-->
-                            <Button
-                                Style="{StaticResource EditPanelButtonStyle}">
+                            <Button Style="{StaticResource EditPanelButtonStyle}">
                                 <StackPanel 
                                     Orientation="Horizontal">
                                     <Image Source="Resources/Icons/CloseDepositIcon.png"/>
@@ -410,12 +426,22 @@
                     Grid.Row="1"
                     Grid.Column="3"
                     Style="{StaticResource BaseBorderStyle}">
-                    <StackPanel>
+                    <StackPanel Margin="5">
                         <TextBlock
-                            Text="123"
+                            Text="{Binding ElementName=DepositCalendar, Path=SelectedDate, StringFormat={}Выбранная дата: {0:dd.MM.yyyy}}"
                             Style="{StaticResource BaseTextBlockStyle}"/>
                         <TextBlock
-                            Text="123"
+                            Text="{Binding ElementName=LisOfClients, 
+                            Path=SelectedItem.Account.Deposit.DepositRate, 
+                            StringFormat={}Текущая ставка по депозиту: {0:P}}"
+                            Style="{StaticResource BaseTextBlockStyle}"/>
+                        <TextBlock
+                            Text="{Binding ElementName=LisOfClients, 
+                            Path=SelectedItem.Account.Deposit.DepositBalance, 
+                            StringFormat={}Доходность составит: {0:C}}"
+                            Style="{StaticResource BaseTextBlockStyle}"/>
+                        <TextBlock
+                            Text="{Binding ElementName=LisOfClients, Path=SelectedItem.Account.Deposit.DepositBalance, StringFormat={}Баланс с учётом доходности: {0:C}}"
                             Style="{StaticResource BaseTextBlockStyle}"/>
                     </StackPanel>
                 </Border>

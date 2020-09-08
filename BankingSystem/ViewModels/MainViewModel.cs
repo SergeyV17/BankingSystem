@@ -12,6 +12,7 @@ using BankingSystem.Models.Implementations.Data.Factories;
 using System.Collections.ObjectModel;
 using BankingSystem.Models.Implementations.Clients;
 using BankingSystem.Models.Implementations.Data.DbInteraction;
+using BankingSystem.Models;
 
 namespace BankingSystem.ViewModels
 {
@@ -22,10 +23,10 @@ namespace BankingSystem.ViewModels
     {
         #region Поля
 
-        private readonly MainWindow _mainWindow;
+        private readonly MainWindow mainWindow;
 
-        private readonly IFilePathService _filePathService;
-        private readonly IMessageService _messageService;
+        private readonly IFilePathService filePathService;
+        private readonly IMessageService messageService;
 
         private Client selectedClient;
         private bool cardPanelVisibility;
@@ -65,6 +66,8 @@ namespace BankingSystem.ViewModels
         }
         #region Visibility
 
+        public bool LoadingPanelVisibility { get; private set; } // в разработке (требуется многопоточность)
+
         public bool ClientsVisibility => SelectedNode != null ? SelectedNode.Type != NodeType.Intermediate ? true : false : false;
         public bool ClientPanelVisibility => SelectedClient != null ? true : false;
 
@@ -103,10 +106,10 @@ namespace BankingSystem.ViewModels
         /// <param name="dialogService"><сервис диалоговых окон/param>
         public MainViewModel(MainWindow mainWindow, IFilePathService filePathService, IMessageService messageService)
         {
-            _mainWindow = mainWindow;
+            this.mainWindow = mainWindow;
 
-            _filePathService = filePathService;
-            _messageService = messageService;
+            this.filePathService = filePathService;
+            this.messageService = messageService;
         }
 
         #endregion
@@ -131,7 +134,7 @@ namespace BankingSystem.ViewModels
                     }
                     catch (Exception ex)
                     {
-                        _messageService.ShowErrorMessage(_mainWindow, ex.Message);
+                        messageService.ShowErrorMessage(mainWindow, ex.Message);
                     }
                 }));
             }
@@ -145,7 +148,7 @@ namespace BankingSystem.ViewModels
         private ICommand exitCommand;
         public ICommand ExitCommand
         {
-            get { return exitCommand ?? (exitCommand = new RelayCommand(obj => { _mainWindow.Close(); })); }
+            get { return exitCommand ?? (exitCommand = new RelayCommand(obj => { mainWindow.Close(); })); }
         }
 
         /// <summary>
@@ -161,12 +164,12 @@ namespace BankingSystem.ViewModels
                 {
                     try
                     {
-                        _filePathService.GetPath(@"Views\Resources\Text\InformationSheet.txt");
-                        _messageService.ShowMessageFromFile(_mainWindow, _filePathService.FilePath);
+                        filePathService.GetPath(@"Views\Resources\Text\InformationSheet.txt");
+                        messageService.ShowMessageFromFile(mainWindow, filePathService.FilePath);
                     }
                     catch (Exception ex)
                     {
-                        _messageService.ShowErrorMessage(_mainWindow, ex.Message);
+                        messageService.ShowErrorMessage(mainWindow, ex.Message);
                     }
                 }));
             }
@@ -218,7 +221,7 @@ namespace BankingSystem.ViewModels
                     }
                     catch (Exception ex)
                     {
-                        _messageService.ShowErrorMessage(_mainWindow, ex.Message);
+                        messageService.ShowErrorMessage(mainWindow, ex.Message);
                     }
                 }));
             }
@@ -242,7 +245,7 @@ namespace BankingSystem.ViewModels
                     }
                     catch (Exception ex)
                     {
-                        _messageService.ShowErrorMessage(_mainWindow, ex.Message);
+                        messageService.ShowErrorMessage(mainWindow, ex.Message);
                     }
                 }));
             }
@@ -260,7 +263,7 @@ namespace BankingSystem.ViewModels
                 return addClientCommand ??
                     (addClientCommand = new RelayCommand(obj =>
                     {
-                        var addIndividualWindow = new AddIndividualWindow() { Owner = _mainWindow, DataContext = AddIndividuaViewModel };
+                        var addIndividualWindow = new AddIndividualWindow() { Owner = mainWindow, DataContext = AddIndividuaViewModel };
 
                         addIndividualWindow.ShowDialog();
                     }));
@@ -275,21 +278,48 @@ namespace BankingSystem.ViewModels
                 return editClientCommand ??
                     (editClientCommand = new RelayCommand(obj =>
                     {
-                        var addEntityWindow = new AddEntityWindow() { Owner = _mainWindow, DataContext = EditEntityViewModel };
-
-                        addEntityWindow.ShowDialog();
+                        if (SelectedClient != null)
+                        {
+                            var addEntityWindow = new AddEntityWindow() { Owner = mainWindow, DataContext = EditEntityViewModel };
+                        }
+                        else
+                        {
+                            messageService.ShowErrorMessage(mainWindow, "Необходимо выбрать клиента.");
+                        }
                     }));
             }
         }
 
-        private ICommand deleteClientCommand;
-        public ICommand DeleteClientCommand
+        private ICommand removeClientCommand;
+        public ICommand RemoveClientCommand
         {
             get
             {
-                return deleteClientCommand ??
-                    (deleteClientCommand = new RelayCommand(obj =>
+                return removeClientCommand ??
+                    (removeClientCommand = new RelayCommand(obj =>
                     {
+                        try
+                        {
+                            if (SelectedClient != null)
+                            {
+                                using (AppDbContext context = new AppDbContext())
+                                {
+                                    context.Clients.Remove(SelectedClient);
+                                    context.SaveChanges();
+                                }
+
+                                messageService.ShowInfoMessage(mainWindow, $"Клиент: {SelectedClient.Passport.FullName.Name} успешно удален.");
+                                Clients.Remove(SelectedClient);
+                            }
+                            else
+                            {
+                                messageService.ShowErrorMessage(mainWindow, "Необходимо выбрать клиента.");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            messageService.ShowErrorMessage(mainWindow, ex.Message);
+                        }
                     }));
             }
         }

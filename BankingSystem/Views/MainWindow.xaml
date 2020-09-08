@@ -53,6 +53,22 @@
                 Command="{Binding ShowInfoCommand}"/>
         </Menu>
 
+        <!--Панель загрузки-->
+        <Border
+            Grid.Row="2"
+            Grid.RowSpan="1"
+            Grid.Column="1"
+            Style="{StaticResource BaseBorderStyle}">
+                <StackPanel
+                    Style="{StaticResource LoadingPanelStyle}"
+                    Visibility="{Binding LoadingPanelVisibility, Converter={StaticResource booleanToVisibilityConverter}}">
+                    <TextBlock 
+                        Text="Загрузка"
+                        HorizontalAlignment="Center"/>
+                    <ProgressBar Style="{StaticResource LoadingProgressBarStyle}"/>
+                </StackPanel>
+        </Border>
+        
         <Border
             Grid.Row="1"
             Grid.RowSpan="2"
@@ -111,52 +127,40 @@
             Grid.RowSpan="2"
             Grid.Column="1"
             Style="{StaticResource BaseBorderStyle}">
-            <StackPanel>
-                <!--Панель загрузки-->
-                <StackPanel
-                    Style="{StaticResource LoadingPanelStyle}"
-                    Visibility="Collapsed">
-                    <TextBlock 
-                        Text="Загрузка"
-                        HorizontalAlignment="Center"/>
-                    <ProgressBar Style="{StaticResource LoadingProgressBarStyle}"/>
-                </StackPanel>
-                <!--Выбранный список клиентов -->
-                <ListView 
-                    x:Name="LisOfClients"
-                    FontSize="14"
-                    ItemsSource="{Binding Clients}"
-                    SelectedItem="{Binding SelectedClient, Mode=TwoWay}"
-                    Visibility="{Binding Path=ClientsVisibility, Converter={StaticResource booleanToVisibilityConverter}}">
-                    <ListView.Resources>
-                        <Style TargetType="{x:Type GridViewColumnHeader}">
-                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
-                        </Style>
-                    </ListView.Resources>
-                    <intr:Interaction.Triggers>
-                        <intr:EventTrigger EventName="SelectionChanged">
-                            <intr:InvokeCommandAction Command="{Binding SelectedClientChangedCommand}"/>
-                        </intr:EventTrigger>
-                    </intr:Interaction.Triggers>
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header=" ФИО" DisplayMemberBinding="{Binding Passport.FullName.Name}" Width="240"/>
-                            <GridViewColumn Header=" Адрес" DisplayMemberBinding = "{Binding Passport.Address}" Width="120"/>
-                            <GridViewColumn Header=" Паспорт" DisplayMemberBinding="{Binding Passport.SeriesAndNumber.FullSeriesAndNumber}" Width="130"/>
-                            <GridViewColumn Header=" Номер телефона" DisplayMemberBinding="{Binding Contact.PhoneNumber.Number}" Width="140"/>
-                            <GridViewColumn Header=" Email" DisplayMemberBinding = "{Binding Contact.Email}" Width="140"/>
-                            <GridViewColumn 
-                                Header=" Наименование компании" 
-                                DisplayMemberBinding = "{Binding Company.Name}" 
-                                Width="{Binding ElementName=Tree, Path=SelectedItem, Converter={StaticResource columnWidthConverter}, ConverterParameter=180}"/>
-                            <GridViewColumn 
-                                Header=" Вебсайт" 
-                                DisplayMemberBinding = "{Binding Company.Website}"
-                                Width="{Binding ElementName=Tree, Path=SelectedItem, Converter={StaticResource columnWidthConverter}, ConverterParameter=180}"/>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-            </StackPanel>
+            <ListView 
+                x:Name="LisOfClients"
+                FontSize="14"
+                ItemsSource="{Binding Clients}"
+                SelectedItem="{Binding SelectedClient}"
+                Visibility="{Binding Path=ClientsVisibility, Converter={StaticResource booleanToVisibilityConverter}}">
+                <ListView.Resources>
+                    <Style TargetType="{x:Type GridViewColumnHeader}">
+                        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                    </Style>
+                </ListView.Resources>
+                <intr:Interaction.Triggers>
+                    <intr:EventTrigger EventName="SelectionChanged">
+                        <intr:InvokeCommandAction Command="{Binding SelectedClientChangedCommand}"/>
+                    </intr:EventTrigger>
+                </intr:Interaction.Triggers>
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header=" ФИО" DisplayMemberBinding="{Binding Passport.FullName.Name}" Width="240"/>
+                        <GridViewColumn Header=" Адрес" DisplayMemberBinding = "{Binding Passport.Address}" Width="120"/>
+                        <GridViewColumn Header=" Паспорт" DisplayMemberBinding="{Binding Passport.SeriesAndNumber.FullSeriesAndNumber}" Width="130"/>
+                        <GridViewColumn Header=" Номер телефона" DisplayMemberBinding="{Binding Contact.PhoneNumber.Number}" Width="140"/>
+                        <GridViewColumn Header=" Email" DisplayMemberBinding = "{Binding Contact.Email}" Width="140"/>
+                        <GridViewColumn 
+                            Header=" Наименование компании" 
+                            DisplayMemberBinding = "{Binding Company.Name}" 
+                            Width="{Binding ElementName=Tree, Path=SelectedItem, Converter={StaticResource columnWidthConverter}, ConverterParameter=180}"/>
+                        <GridViewColumn 
+                            Header=" Вебсайт" 
+                            DisplayMemberBinding = "{Binding Company.Website}"
+                            Width="{Binding ElementName=Tree, Path=SelectedItem, Converter={StaticResource columnWidthConverter}, ConverterParameter=180}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
         </Border>
 
         <!--Главная панель-->
@@ -189,7 +193,7 @@
                         <!--Кнопка добавить клиента-->           
                         <Button 
                             Style="{StaticResource EditPanelButtonStyle}"
-                            Command="{Binding OpenAddIndividualWindowCommand}">
+                            Command="{Binding AddClientCommand}">
                             <StackPanel Orientation="Horizontal">
                                 <Image Source="Resources/Icons/AddIcon.png"/>
                                 <TextBlock 
@@ -198,7 +202,9 @@
                             </StackPanel>
                         </Button>
                         <!--Кнопка редактировать клиента-->
-                        <Button Style="{StaticResource EditPanelButtonStyle}">
+                        <Button 
+                            Style="{StaticResource EditPanelButtonStyle}"
+                            Command="{Binding EditClientCommand}">
                             <StackPanel Orientation="Horizontal">
                                 <Image Source="Resources/Icons/EditIcon.png"/>
                                 <TextBlock 
@@ -207,7 +213,9 @@
                             </StackPanel>
                         </Button>
                         <!--Кнопка удалить клиента-->
-                        <Button Style="{StaticResource EditPanelButtonStyle}">
+                        <Button 
+                            Style="{StaticResource EditPanelButtonStyle}"
+                            Command="{Binding RemoveClientCommand}">
                             <StackPanel Orientation="Horizontal">
                                 <Image Source="Resources/Icons/DeleteIcon.png"/>
                                 <TextBlock 
@@ -444,23 +452,27 @@
                     Grid.Row="1"
                     Grid.Column="3"
                     Style="{StaticResource BaseBorderStyle}">
-                    <StackPanel Margin="5">
-                        <TextBlock
+                    <StackPanel 
+                        Margin="5"
+                        Visibility="{Binding DepositPanelVisibility, Converter={StaticResource booleanToVisibilityConverter}}">
+                        <StackPanel Visibility="{Binding DepositInfoVisibility, Converter={StaticResource booleanToVisibilityConverter}}">
+                            <TextBlock
                             Text="{Binding ElementName=DepositCalendar, Path=SelectedDate, StringFormat={}Выбранная дата: {0:dd.MM.yyyy}}"
                             Style="{StaticResource BaseTextBlockStyle}"/>
-                        <TextBlock
+                            <TextBlock
                             Text="{Binding ElementName=LisOfClients, 
                             Path=SelectedItem.Account.Deposit.DepositRate, 
                             StringFormat={}Текущая ставка по депозиту: {0:P}}"
                             Style="{StaticResource BaseTextBlockStyle}"/>
-                        <TextBlock
+                            <TextBlock
                             Text="{Binding ElementName=LisOfClients, 
                             Path=SelectedItem.Account.Deposit.DepositBalance, 
                             StringFormat={}Доходность составит: {0:C}}"
                             Style="{StaticResource BaseTextBlockStyle}"/>
-                        <TextBlock
+                            <TextBlock
                             Text="{Binding ElementName=LisOfClients, Path=SelectedItem.Account.Deposit.DepositBalance, StringFormat={}Баланс с учётом доходности: {0:C}}"
                             Style="{StaticResource BaseTextBlockStyle}"/>
+                        </StackPanel>
                     </StackPanel>
                 </Border>
             </Grid>

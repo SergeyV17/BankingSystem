@@ -28,6 +28,8 @@ namespace BankingSystem.ViewModels
         private readonly IMessageService _messageService;
 
         private Client selectedClient;
+        private bool cardPanelVisibility;
+        private bool depositPanelVisibility;
 
         #endregion
 
@@ -65,6 +67,29 @@ namespace BankingSystem.ViewModels
 
         public bool ClientsVisibility => SelectedNode != null ? SelectedNode.Type != NodeType.Intermediate ? true : false : false;
         public bool ClientPanelVisibility => SelectedClient != null ? true : false;
+
+        public bool CardPanelVisibility 
+        { 
+            get => cardPanelVisibility; 
+            private set 
+            { 
+                cardPanelVisibility = value; 
+                OnPropertyChanged(nameof(CardPanelVisibility)); 
+            } 
+        }
+
+        public bool DepositPanelVisibility
+        {
+            get => depositPanelVisibility;
+            private set
+            {
+                depositPanelVisibility = value;
+                OnPropertyChanged(nameof(DepositPanelVisibility));
+            }
+        }
+
+        public bool OpenDepositBtnVisibility => SelectedClient != null ? SelectedClient.Account.Deposit.HasDeposit ? false : true : false;
+        public bool DepositInfoVisibility => SelectedClient != null ? SelectedClient.Account.Deposit.HasDeposit ? true : false : false;
 
         #endregion
 
@@ -185,8 +210,35 @@ namespace BankingSystem.ViewModels
                                 break;
                         }
 
+                        CardPanelVisibility = false;
+                        DepositPanelVisibility = false;
+
                         OnPropertyChanged(nameof(Clients));
                         OnPropertyChanged(nameof(ClientsVisibility));
+                    }
+                    catch (Exception ex)
+                    {
+                        _messageService.ShowErrorMessage(_mainWindow, ex.Message);
+                    }
+                }));
+            }
+        }
+
+        /// <summary>
+        /// Команда обработки при выборе клиента
+        /// </summary>
+        private ICommand selectedClientChangedCommand;
+        public ICommand SelectedClientChangedCommand
+        {
+            get
+            {
+                return selectedClientChangedCommand ??
+                (selectedClientChangedCommand = new RelayCommand(obj =>
+                {
+                    try
+                    {
+                        OnPropertyChanged(nameof(OpenDepositBtnVisibility));
+                        OnPropertyChanged(nameof(DepositInfoVisibility));
                     }
                     catch (Exception ex)
                     {
@@ -254,6 +306,8 @@ namespace BankingSystem.ViewModels
                 return showCardCommand ??
                     (showCardCommand = new RelayCommand(obj =>
                     {
+                        CardPanelVisibility = true;
+                        DepositPanelVisibility = false;
                     }));
             }
         }
@@ -266,6 +320,8 @@ namespace BankingSystem.ViewModels
                 return showDepositCommand ??
                     (showDepositCommand = new RelayCommand(obj =>
                     {
+                        DepositPanelVisibility = true;
+                        CardPanelVisibility = false;
                     }));
             }
         }

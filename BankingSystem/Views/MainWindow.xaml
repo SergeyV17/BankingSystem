@@ -133,6 +133,11 @@
                             <Setter Property="HorizontalContentAlignment" Value="Left"/>
                         </Style>
                     </ListView.Resources>
+                    <intr:Interaction.Triggers>
+                        <intr:EventTrigger EventName="SelectionChanged">
+                            <intr:InvokeCommandAction Command="{Binding SelectedClientChangedCommand}"/>
+                        </intr:EventTrigger>
+                    </intr:Interaction.Triggers>
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header=" ФИО" DisplayMemberBinding="{Binding Passport.FullName.Name}" Width="240"/>
@@ -224,9 +229,10 @@
                 <Border
                     Grid.Row="1"
                     Grid.Column="1"
-                    Style="{StaticResource BaseBorderStyle}"
-                    Visibility="{Binding ClientPanelVisibility, Converter={StaticResource booleanToVisibilityConverter}}">
-                    <StackPanel Margin="5">
+                    Style="{StaticResource BaseBorderStyle}">
+                    <StackPanel
+                        Margin="5"
+                        Visibility="{Binding ClientPanelVisibility, Converter={StaticResource booleanToVisibilityConverter}}">
                         <!--Имя клиента-->
                         <TextBlock
                             Text="{Binding ElementName=LisOfClients, Path=SelectedItem.Passport.FullName.Name}"
@@ -234,7 +240,9 @@
                         <!--Карта-->
                         <StackPanel
                                 Orientation="Horizontal">
-                            <Button Style="{StaticResource ClientPanelButtonStyle}">
+                            <Button 
+                                Style="{StaticResource ClientPanelButtonStyle}"
+                                Command="{Binding ShowCardCommand}">
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="Resources/Icons/CreditCardIcon.png"/>
                                     <TextBlock 
@@ -262,7 +270,9 @@
 
                         <!--Вклад-->
                         <StackPanel Orientation="Horizontal">
-                            <Button Style="{StaticResource ClientPanelButtonStyle}">
+                            <Button
+                                Style="{StaticResource ClientPanelButtonStyle}"
+                                Command="{Binding ShowDepositCommand}">
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="Resources/Icons/ContributionIcon.png"/>
                                     <TextBlock 
@@ -313,9 +323,10 @@
                 <Border
                     Grid.Row="1"
                     Grid.Column="2"
-                    Style="{StaticResource BaseBorderStyle}"
-                    Visibility="Hidden">
-                    <StackPanel Margin="5">
+                    Style="{StaticResource BaseBorderStyle}">
+                    <StackPanel 
+                        Margin="5"
+                        Visibility="{Binding CardPanelVisibility, Converter={StaticResource booleanToVisibilityConverter}}">
                         <!--Наименование-->
                         <TextBlock
                             Text="{Binding ElementName= LisOfClients, Path=SelectedItem.Account.Card.CardName}"
@@ -352,11 +363,14 @@
                 <Border
                     Grid.Row="1"
                     Grid.Column="2"
-                    Style="{StaticResource BaseBorderStyle}"
-                    Visibility="Visible">
-                    <StackPanel Margin="5">
+                    Style="{StaticResource BaseBorderStyle}">
+                    <StackPanel 
+                        Margin="5"
+                        Visibility="{Binding DepositPanelVisibility, Converter={StaticResource booleanToVisibilityConverter}}">
                         <!--Кнопка открыть вклад-->
-                        <Button  Style="{StaticResource EditPanelButtonStyle}" Visibility="Collapsed" >
+                        <Button  
+                            Style="{StaticResource EditPanelButtonStyle}" 
+                            Visibility="{Binding OpenDepositBtnVisibility, Converter={StaticResource booleanToVisibilityConverter}}">
                             <StackPanel Orientation="Horizontal">
                                 <Image Source="Resources/Icons/ReplenishmentIcon.png" />
                                 <TextBlock
@@ -364,7 +378,7 @@
                                     Style="{StaticResource ButtonTextBlockStyle}"/>
                             </StackPanel>
                         </Button>
-                        <StackPanel>
+                        <StackPanel Visibility="{Binding DepositInfoVisibility, Converter={StaticResource booleanToVisibilityConverter}}">
                             <!--Наименование-->
                             <TextBlock 
                                 Text="{Binding ElementName=LisOfClients, Path=SelectedItem.Account.Deposit.DepositNumber, StringFormat={}№{0}}"

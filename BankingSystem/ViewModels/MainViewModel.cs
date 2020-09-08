@@ -13,6 +13,7 @@ using System.Collections.ObjectModel;
 using BankingSystem.Models.Implementations.Clients;
 using BankingSystem.Models.Implementations.Data.DbInteraction;
 using BankingSystem.Models;
+using BankingSystem.Models.Implementations.Accounts;
 
 namespace BankingSystem.ViewModels
 {
@@ -37,8 +38,6 @@ namespace BankingSystem.ViewModels
         #region Свойства
 
         #region Модели представления
-        public AddIndividualViewModel AddIndividuaViewModel { get; private set; }
-        public AddEntityViewModel AddEntityViewModel { get; private set; }
         public EditIndividualViewModel EditIndividualViewModel { get; private set; }
         public EditEntityViewModel EditEntityViewModel { get; private set; }
 
@@ -263,9 +262,37 @@ namespace BankingSystem.ViewModels
                 return addClientCommand ??
                     (addClientCommand = new RelayCommand(obj =>
                     {
-                        var addIndividualWindow = new AddIndividualWindow() { Owner = mainWindow, DataContext = AddIndividuaViewModel };
+                        if (SelectedNode == null || SelectedNode.Type == NodeType.Intermediate)
+                        {
+                            messageService.ShowErrorMessage(mainWindow, "Необходимо выбрать раздел с клиентами.");
+                            return;
+                        }
 
-                        addIndividualWindow.ShowDialog();
+                        switch (SelectedNode.Type)
+                        {
+                            case NodeType.Individual:
+                            case NodeType.VIPIndividual:
+
+                                var addIndividualWindow = new AddIndividualWindow() 
+                                { 
+                                    Owner = mainWindow,
+                                    DataContext = new AddIndividualViewModel(SelectedNode.Type == NodeType.Individual ? AccountType.Regular : AccountType.VIP)
+                                };
+
+                                addIndividualWindow.ShowDialog();
+                                break;
+                            case NodeType.Entity:
+                            case NodeType.VIPEntity:
+
+                                var addEntityWindow = new AddEntityWindow() 
+                                { 
+                                    Owner = mainWindow,
+                                    DataContext = new AddEntityViewModel(SelectedNode.Type == NodeType.Entity ? AccountType.Regular : AccountType.VIP)
+                                };
+
+                                addEntityWindow.ShowDialog();
+                                break;
+                        }
                     }));
             }
         }
@@ -278,14 +305,13 @@ namespace BankingSystem.ViewModels
                 return editClientCommand ??
                     (editClientCommand = new RelayCommand(obj =>
                     {
-                        if (SelectedClient != null)
-                        {
-                            var addEntityWindow = new AddEntityWindow() { Owner = mainWindow, DataContext = EditEntityViewModel };
-                        }
-                        else
+                        if (SelectedClient == null)
                         {
                             messageService.ShowErrorMessage(mainWindow, "Необходимо выбрать клиента.");
+                            return;
                         }
+
+                        var addEntityWindow = new AddEntityWindow() { Owner = mainWindow, DataContext = EditEntityViewModel };
                     }));
             }
         }
@@ -300,21 +326,20 @@ namespace BankingSystem.ViewModels
                     {
                         try
                         {
-                            if (SelectedClient != null)
-                            {
-                                using (AppDbContext context = new AppDbContext())
-                                {
-                                    context.Clients.Remove(SelectedClient);
-                                    context.SaveChanges();
-                                }
-
-                                messageService.ShowInfoMessage(mainWindow, $"Клиент: {SelectedClient.Passport.FullName.Name} успешно удален.");
-                                Clients.Remove(SelectedClient);
-                            }
-                            else
+                            if (SelectedClient == null)
                             {
                                 messageService.ShowErrorMessage(mainWindow, "Необходимо выбрать клиента.");
+                                return;
                             }
+
+                            using (AppDbContext context = new AppDbContext())
+                            {
+                                context.Clients.Remove(SelectedClient);
+                                context.SaveChanges();
+                            }
+
+                            messageService.ShowInfoMessage(mainWindow, $"Клиент: {SelectedClient.Passport.FullName.Name} успешно удален.");
+                            Clients.Remove(SelectedClient);
                         }
                         catch (Exception ex)
                         {

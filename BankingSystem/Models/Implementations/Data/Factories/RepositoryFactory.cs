@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using BankingSystem.Models.Implementations.Accounts.Factories;
-using BankingSystem.Models.Implementations.BankServices.CardService.Factories;
 using BankingSystem.Models.Implementations.BankServices.DepositService;
 using BankingSystem.Models.Implementations.BankServices.DepositService.Factories;
 using BankingSystem.Models.Implementations.Clients;
@@ -12,6 +10,7 @@ using BankingSystem.Models.Implementations.Requisites.ClientRequisites.ContactDa
 using BankingSystem.Models.Implementations.Requisites.ClientRequisites.Factories;
 using BankingSystem.Models.Implementations.Requisites.ClientRequisites.PassportData;
 using BankingSystem.Models.Implementations.Requisites.ClientRequisites.PassportData.Factories;
+using static BankingSystem.Models.Implementations.Data.Factories.AppFactories;
 
 namespace BankingSystem.Models.Implementations.Data.Factories
 {
@@ -23,11 +22,6 @@ namespace BankingSystem.Models.Implementations.Data.Factories
         private static readonly Random random;
         private static object locker;
 
-        // массивы с фабриками для возможности выбора рандомной фабрики
-        private static readonly AccountFactory[] accountFactories;
-        private static readonly CardFactory[] individualsCardFactories;
-        private static readonly CardFactory[] entitiesCardFactories;
-
         /// <summary>
         /// Конструктор репозитория
         /// </summary>
@@ -35,18 +29,6 @@ namespace BankingSystem.Models.Implementations.Data.Factories
         {
             random = new Random();
             locker = new object();
-
-            accountFactories = new AccountFactory[]
-            {
-                new RegularAccountFactory(), new VipAccountFactory()
-            };
-
-            individualsCardFactories = new CardFactory[]
-            {
-                new VisaClassicFactory(), new VisaBlackFactory(), new VisaPlatinumFactory()
-            };
-
-            entitiesCardFactories = new CardFactory[]{ new VisaCorporateFactory()};
         }
 
         /// <summary>
@@ -123,8 +105,8 @@ namespace BankingSystem.Models.Implementations.Data.Factories
 
                             var contact = ContactFactory.CreateContact(PhoneNumberFactory.CreateNumber(), $"Client@Email.ru_{i}");
 
-                            var individualAccount = accountFactories[random.Next(accountFactories.Length)].CreateAccount(
-                                    individualsCardFactories[random.Next(individualsCardFactories.Length)].CreateCard(balance),
+                            var individualAccount = AppFactories.AccountFactories[random.Next(AccountFactories.Length)].CreateAccount(
+                                    IndividualsCardFactories[random.Next(IndividualsCardFactories.Length)].CreateCard(balance),
                                     random.Next(2) == 0 ? new DefaultDepositFactory().CreateDeposit(balance, capitalization, ClientType.Individual) : new NullDeposit());
 
                             client = IndividualFactory.CreateIndividual(passport, contact, individualAccount);
@@ -134,8 +116,8 @@ namespace BankingSystem.Models.Implementations.Data.Factories
 
                             contact = ContactFactory.CreateContact(PhoneNumberFactory.CreateNumber(), $"Client@Email.ru_{i}");
 
-                            var entityAccount = accountFactories[random.Next(accountFactories.Length)].CreateAccount(
-                                    entitiesCardFactories[random.Next(entitiesCardFactories.Length)].CreateCard(balance),
+                            var entityAccount = AccountFactories[random.Next(AccountFactories.Length)].CreateAccount(
+                                    EntitiesCardFactories[random.Next(EntitiesCardFactories.Length)].CreateCard(balance),
                                     random.Next(2) == 0 ? new DefaultDepositFactory().CreateDeposit(balance, capitalization, ClientType.Entity) : new NullDeposit());
 
                             var company = new Company($"Компания_{i}", $"Company.Website.ru_{i}");

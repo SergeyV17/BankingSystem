@@ -4,8 +4,8 @@
     <Style TargetType="TextBox" x:Key="BaseTextBoxStyle">
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
-        <Setter Property="Margin" Value="10 5 0 5"/>
-        <Setter Property="Width" Value="140"/>
+        <Setter Property="Margin" Value="10 5 0 15"/>
+        <Setter Property="Width" Value="150"/>
         <Setter Property="BorderBrush" Value="LightGray"/>
         <Setter Property="BorderThickness" Value="1"/>
     </Style>
@@ -14,21 +14,23 @@
     <Style TargetType="TextBox" x:Key="PhoneNumberTextBoxStyle">
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
-        <Setter Property="Margin" Value="10 5 0 5"/>
-        <Setter Property="Width" Value="110"/>
+        <Setter Property="Margin" Value="5 5 0 15"/>
+        <Setter Property="Width" Value="128"/>
         <Setter Property="MaxLength" Value="10"/>
         <Setter Property="BorderBrush" Value="LightGray"/>
         <Setter Property="BorderThickness" Value="1"/>
     </Style>
 
-    <!--Стиль для номера серии паспорта-->
+    <!--Стиль для серии паспорта-->
     <Style TargetType="TextBox" BasedOn="{StaticResource PhoneNumberTextBoxStyle}" x:Key="PasSeriesTextBoxStyle">
-        <Setter Property="Width" Value="40"/>
+        <Setter Property="Margin" Value="5 5 0 15"/>
+        <Setter Property="Width" Value="45"/>
         <Setter Property="MaxLength" Value="4"/>
     </Style>
 
-    <!--Стиль для номера серии паспорта-->
+    <!--Стиль для номера паспорта-->
     <Style TargetType="TextBox" BasedOn="{StaticResource PhoneNumberTextBoxStyle}" x:Key="PasNumberTextBoxStyle">
+        <Setter Property="Margin" Value="5 5 0 15"/>
         <Setter Property="Width" Value="60"/>
         <Setter Property="MaxLength" Value="6"/>
     </Style>

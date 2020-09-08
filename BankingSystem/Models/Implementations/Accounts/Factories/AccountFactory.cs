@@ -1,5 +1,6 @@
 ﻿using BankingSystem.Models.Implementations.BankServices.CardService;
 using BankingSystem.Models.Implementations.BankServices.DepositService;
+using System;
 
 namespace BankingSystem.Models.Implementations.Accounts.Factories
 {
@@ -15,5 +16,30 @@ namespace BankingSystem.Models.Implementations.Accounts.Factories
         /// <param name="deposit">депозит</param>
         /// <returns>аккаунт</returns>
         public abstract Account CreateAccount(Card card, Deposit deposit);
+
+        /// <summary>
+        /// Метод создания аккаунта по типу
+        /// </summary>
+        /// <param name="type">тип аккаунта</param>
+        /// <param name="card">карта</param>
+        /// <param name="deposit">депозит</param>
+        /// <returns>аккаунт</returns>
+        public static Account CreateAccount(AccountType type, Card card, Deposit deposit)
+        {
+            Account account;
+            switch (type)
+            {
+                case AccountType.Regular:
+                    account = new RegularAccountFactory().CreateAccount(card, deposit);
+                    break;
+                case AccountType.VIP:
+                    account = new VipAccountFactory().CreateAccount(card, deposit);
+                    break;
+                default:
+                    throw new ArgumentException($"Передача недопустимого аргумента в параметры. Проверьте:{nameof(type)}", nameof(type));
+            }
+
+            return account;
+        }
     }
 }

@@ -15,6 +15,7 @@
                 <ResourceDictionary Source="Views/ResourceDictionaries/ComboBoxDictionary.xaml"/>
                 <ResourceDictionary Source="Views/ResourceDictionaries/ImageDictionary.xaml"/>
                 <ResourceDictionary Source="Views/ResourceDictionaries/ListBoxItemDictionary.xaml"/>
+                <ResourceDictionary Source="Views/ResourceDictionaries/ValidationTemplates.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

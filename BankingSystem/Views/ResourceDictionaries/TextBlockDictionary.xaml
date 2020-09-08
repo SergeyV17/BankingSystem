@@ -40,6 +40,6 @@
     <Style TargetType="TextBlock" BasedOn="{StaticResource BaseDialogTextBlockStyle}" x:Key="ExtendDialogTextBlockStyle">
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="Margin" Value="10 0 0 0"/>
+        <Setter Property="Margin" Value="10 0 0 10"/>
     </Style>
 </ResourceDictionary>

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using BankingSystem.Models.Implementations.Requisites.ClientRequisites.ContactData;
 
 namespace BankingSystem.Models.Implementations.Requisites.ClientRequisites.Factories
@@ -9,7 +8,7 @@ namespace BankingSystem.Models.Implementations.Requisites.ClientRequisites.Facto
     /// </summary>
     static class PhoneNumberFactory
     {
-        private const int countryCode = 7;
+        public const string countryCode = "+7";
         private const int maxIdNumber = 9999999;
 
         private static readonly int[] regionNumbers;
@@ -39,7 +38,7 @@ namespace BankingSystem.Models.Implementations.Requisites.ClientRequisites.Facto
 
             idNumber++;
 
-            return new PhoneNumber($"+{countryCode}{regionNumbers[regionNumberCount]}{idNumber:D7}");
+            return new PhoneNumber($"{countryCode}{regionNumbers[regionNumberCount]}{idNumber:D7}");
         }
 
         /// <summary>
@@ -52,7 +51,7 @@ namespace BankingSystem.Models.Implementations.Requisites.ClientRequisites.Facto
             if (!long.TryParse(phoneNumber, out _))
                 throw new ArgumentException($"Передача недопустимого аргумента в параметры. Проверьте: {nameof(phoneNumber)}", phoneNumber);
 
-            return new PhoneNumber($"+{countryCode}{phoneNumber}");
+            return new PhoneNumber($"{countryCode}{phoneNumber}");
         }
     }
 }

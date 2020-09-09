@@ -56,7 +56,7 @@ namespace BankingSystem.Migrations
                 name: "Cards",
                 columns: table => new
                 {
-                    CardId = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CardName = table.Column<string>(nullable: true),
                     CardNumber = table.Column<string>(nullable: true),
@@ -66,7 +66,7 @@ namespace BankingSystem.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Cards", x => x.CardId);
+                    table.PrimaryKey("PK_Cards", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Cards_Accounts_AccountId",
                         column: x => x.AccountId,
@@ -79,7 +79,7 @@ namespace BankingSystem.Migrations
                 name: "Deposits",
                 columns: table => new
                 {
-                    DepositId = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DepositNumber = table.Column<string>(nullable: true),
                     DepositBalance = table.Column<decimal>(nullable: false),
@@ -92,7 +92,7 @@ namespace BankingSystem.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Deposits", x => x.DepositId);
+                    table.PrimaryKey("PK_Deposits", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Deposits_Accounts_AccountId",
                         column: x => x.AccountId,

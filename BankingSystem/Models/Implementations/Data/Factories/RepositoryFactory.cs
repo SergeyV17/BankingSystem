@@ -121,7 +121,7 @@ namespace BankingSystem.Models.Implementations.Data.Factories
                                     EntitiesCardFactories[random.Next(EntitiesCardFactories.Length)].CreateCard(balance),
                                     random.Next(2) == 0 ? new DefaultDepositFactory().CreateDeposit(balance, capitalization, ClientType.Entity) : new NullDeposit());
 
-                            var company = CompanyFactory.CreateCompany($"Компания_{i}", $"Company.Website.ru_{i}");
+                            var company = CompanyFactory.CreateCompany($"Компания_{i}", $"http:\\Company.Website.ru_{i}");
 
                             client = EntityFactory.CreateEntity(passport, contact, entityAccount, company);
                             break;

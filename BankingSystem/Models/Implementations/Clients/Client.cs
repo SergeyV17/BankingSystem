@@ -28,8 +28,8 @@ namespace BankingSystem.Models.Implementations.Clients
         }
 
         public int Id { get; set; }
-        public Passport Passport { get; private set; }
-        public Contact Contact { get; private set; }
+        public Passport Passport { get; set; }
+        public Contact Contact { get; set; }
         public Account Account { get; private set; }
     }
 }

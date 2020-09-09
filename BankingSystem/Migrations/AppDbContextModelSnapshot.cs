@@ -51,7 +51,7 @@ namespace BankingSystem.Migrations
 
             modelBuilder.Entity("BankingSystem.Models.Implementations.BankServices.CardService.Card", b =>
                 {
-                    b.Property<int>("CardId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -72,7 +72,7 @@ namespace BankingSystem.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("CardId");
+                    b.HasKey("Id");
 
                     b.HasIndex("AccountId")
                         .IsUnique();
@@ -84,7 +84,7 @@ namespace BankingSystem.Migrations
 
             modelBuilder.Entity("BankingSystem.Models.Implementations.BankServices.DepositService.Deposit", b =>
                 {
-                    b.Property<int>("DepositId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -114,7 +114,7 @@ namespace BankingSystem.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("DepositId");
+                    b.HasKey("Id");
 
                     b.HasIndex("AccountId")
                         .IsUnique();

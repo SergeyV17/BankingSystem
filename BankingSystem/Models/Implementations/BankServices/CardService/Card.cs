@@ -25,8 +25,8 @@ namespace BankingSystem.Models.Implementations.BankServices.CardService
             CardBalance = cardBalance;
         }
 
-        public int CardId { get; set; }
-        public string CardName { get; private set; }
+        public int Id { get; set; }
+        public string CardName { get; set; }
         public string CardNumber { get; private set; }
         public decimal CardBalance { get; private set; }
 

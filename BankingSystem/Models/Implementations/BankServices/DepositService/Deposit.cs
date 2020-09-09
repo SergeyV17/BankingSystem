@@ -32,7 +32,7 @@ namespace BankingSystem.Models.Implementations.BankServices.DepositService
             DepositRate = depositRate;
         }
 
-        public int DepositId { get; set; }
+        public int Id { get; set; }
         public bool HasDeposit => !IsNull();
         public string DepositNumber { get => HasDeposit ? depositNumber : "Отсутствует"; private set { depositNumber = value; } }
         public decimal DepositBalance { get; private set; }

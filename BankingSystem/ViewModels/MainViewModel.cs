@@ -296,7 +296,26 @@ namespace BankingSystem.ViewModels
                 return editClientCommand ??
                     (editClientCommand = new RelayCommand(obj =>
                     {
-                        var addEntityWindow = new AddEntityWindow() { Owner = mainWindow, DataContext = EditEntityViewModel };
+                        switch (SelectedNode.Type)
+                        {
+                            case NodeType.Individual:
+                            case NodeType.VIPIndividual:
+                                var addIndividualWindow = new EditIndividualWindow() { Owner = mainWindow };
+                                addIndividualWindow.DataContext = new EditIndividualViewModel(addIndividualWindow, messageService, SelectedClient);
+
+                                addIndividualWindow.ShowDialog();
+                                break;
+                            case NodeType.Entity:
+                            case NodeType.VIPEntity:
+                                //var addEntityWindow = new EditEntityWindow() { Owner = mainWindow };
+                                //addEntityWindow.DataContext = new EditEntityViewModel(addEntityWindow, messageService, SelectedClient);
+
+                                //addEntityWindow.ShowDialog();
+                                break;
+                        }
+
+                        selectedTreeItemChangedCommand = null;
+                        SelectedTreeItemChangedCommand.Execute(SelectedNode);
                     },
                     (obj) => SelectedClient != null));
             }

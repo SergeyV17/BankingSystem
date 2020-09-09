@@ -25,6 +25,6 @@ namespace BankingSystem.Models.Implementations.Requisites.ClientRequisites.Conta
         }
 
         public PhoneNumber PhoneNumber { get; private set; }
-        public string Email { get; private set; }
+        public string Email { get; set; }
     }
 }

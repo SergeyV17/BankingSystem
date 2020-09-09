@@ -225,6 +225,7 @@
     <Compile Include="Models\Implementations\Data\NodeType.cs" />
     <Compile Include="Models\Implementations\Data\Repository.cs" />
     <Compile Include="Models\Implementations\Requisites\ClientRequisites\CompanyData\Company.cs" />
+    <Compile Include="Models\Implementations\Requisites\ClientRequisites\CompanyData\Factories\CompanyFactory.cs" />
     <Compile Include="Models\Implementations\Requisites\ClientRequisites\ContactData\Contact.cs" />
     <Compile Include="Models\Implementations\Clients\Entity.cs" />
     <Compile Include="Models\Implementations\Clients\Individual.cs" />

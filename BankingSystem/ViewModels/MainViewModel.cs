@@ -53,7 +53,6 @@ namespace BankingSystem.ViewModels
         public IRepository Repository { get; private set; }
 
         public Node SelectedNode { get; private set; }
-        public ObservableCollection<Client> Clients { get; private set; }
         public Client SelectedClient
         {
             get => selectedClient;
@@ -63,6 +62,8 @@ namespace BankingSystem.ViewModels
                 OnPropertyChanged(nameof(ClientPanelVisibility));
             }
         }
+        public ObservableCollection<Client> Clients { get; private set; }
+
         #region Visibility
 
         public bool LoadingPanelVisibility { get; private set; } // в разработке (требуется многопоточность)
@@ -266,22 +267,15 @@ namespace BankingSystem.ViewModels
                         {
                             case NodeType.Individual:
                             case NodeType.VIPIndividual:
-
                                 var addIndividualWindow = new AddIndividualWindow(){ Owner = mainWindow };
-                                addIndividualWindow.DataContext = new AddIndividualViewModel(
-                                    addIndividualWindow, messageService,
-                                    SelectedNode.Type == NodeType.Individual ? AccountType.Regular : AccountType.VIP);
+                                addIndividualWindow.DataContext = new AddIndividualViewModel(addIndividualWindow, messageService, SelectedNode.IsVIP);
 
                                 addIndividualWindow.ShowDialog();
                                 break;
                             case NodeType.Entity:
                             case NodeType.VIPEntity:
-
-                                var addEntityWindow = new AddEntityWindow()
-                                {
-                                    Owner = mainWindow,
-                                    DataContext = new AddEntityViewModel(SelectedNode.Type == NodeType.Entity ? AccountType.Regular : AccountType.VIP)
-                                };
+                                var addEntityWindow = new AddEntityWindow() { Owner = mainWindow };
+                                addEntityWindow.DataContext = new AddEntityViewModel(addEntityWindow, messageService, SelectedNode.IsVIP);
 
                                 addEntityWindow.ShowDialog();
                                 break;

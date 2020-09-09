@@ -6,6 +6,7 @@ using BankingSystem.Models.Implementations.BankServices.DepositService.Factories
 using BankingSystem.Models.Implementations.Clients;
 using BankingSystem.Models.Implementations.Clients.Factories;
 using BankingSystem.Models.Implementations.Requisites.ClientRequisites.CompanyData;
+using BankingSystem.Models.Implementations.Requisites.ClientRequisites.CompanyData.Factories;
 using BankingSystem.Models.Implementations.Requisites.ClientRequisites.ContactData.Factories;
 using BankingSystem.Models.Implementations.Requisites.ClientRequisites.Factories;
 using BankingSystem.Models.Implementations.Requisites.ClientRequisites.PassportData;
@@ -105,7 +106,7 @@ namespace BankingSystem.Models.Implementations.Data.Factories
 
                             var contact = ContactFactory.CreateContact(PhoneNumberFactory.CreateNumber(), $"Client@Email.ru_{i}");
 
-                            var individualAccount = AppFactories.AccountFactories[random.Next(AccountFactories.Length)].CreateAccount(
+                            var individualAccount = AccountFactories[random.Next(AccountFactories.Length)].CreateAccount(
                                     IndividualsCardFactories[random.Next(IndividualsCardFactories.Length)].CreateCard(balance),
                                     random.Next(2) == 0 ? new DefaultDepositFactory().CreateDeposit(balance, capitalization, ClientType.Individual) : new NullDeposit());
 
@@ -120,7 +121,7 @@ namespace BankingSystem.Models.Implementations.Data.Factories
                                     EntitiesCardFactories[random.Next(EntitiesCardFactories.Length)].CreateCard(balance),
                                     random.Next(2) == 0 ? new DefaultDepositFactory().CreateDeposit(balance, capitalization, ClientType.Entity) : new NullDeposit());
 
-                            var company = new Company($"Компания_{i}", $"Company.Website.ru_{i}");
+                            var company = CompanyFactory.CreateCompany($"Компания_{i}", $"Company.Website.ru_{i}");
 
                             client = EntityFactory.CreateEntity(passport, contact, entityAccount, company);
                             break;

@@ -3,7 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         WindowStartupLocation="CenterOwner"
         Title="Добавить клиента" 
-        Height="500" Width="600">
+        Height="500" Width="600"
+        MaxHeight="500" MinHeight="500"
+        MaxWidth="600" MinWidth="600">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
@@ -91,8 +93,16 @@
                     Text="Адрес:"
                     Style="{StaticResource BaseDialogTextBlockStyle}"/>
                 <TextBox 
-                    Text="{Binding Address}"
-                    Style="{StaticResource BaseTextBoxStyle}"/>
+                    Style="{StaticResource BaseTextBoxStyle}"
+                    Validation.ErrorTemplate="{StaticResource validationFailed}">
+                    <TextBox.Text>
+                        <Binding Path="Address" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <DataErrorValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
 
                 <!--Текст блок: Паспорт-->
                 <TextBlock 

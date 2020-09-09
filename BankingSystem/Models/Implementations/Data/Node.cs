@@ -23,6 +23,8 @@ namespace BankingSystem.Models.Implementations.Data
         public Node Parent { get; private set; }
         public IList<Node> Children { get; }
 
+        public bool IsVIP => Type == NodeType.VIPIndividual || Type == NodeType.VIPEntity;
+
         /// <summary>
         /// Метод добавления узла
         /// </summary>

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
@@ -30,25 +29,29 @@ namespace BankingSystem.ViewModels.EditPanelViewModels
         private string middleName;
         private string series;
         private string number;
+        private string address;
         private string email;
         private string phoneNumber;
 
         /// <summary>
         /// Конструктор модели представления
         /// </summary>
-        /// <param name="type">тип аккаунта</param>
-        public AddIndividualViewModel(Window addIndividualWindow, IMessageService messageService, AccountType type)
+        /// <param name="addIndividualWindow">окно добавления физ. лица</param>
+        /// <param name="messageService">сервис работы с сообщениями</param>
+        /// <param name="isVIPNode">признак вип узла</param>
+        public AddIndividualViewModel(Window addIndividualWindow, IMessageService messageService, bool isVIPNode)
         {
             this.addIndividualWindow = addIndividualWindow;
             this.messageService = messageService;
 
-            Type = type;
+            Type = isVIPNode ? AccountType.VIP : AccountType.Regular;
 
             errors = new Dictionary<string, string>
             { 
                 [nameof(LastName)] = null,
                 [nameof(FirstName)] = null,
                 [nameof(MiddleName)] = null,
+                [nameof(Address)] = null,
                 [nameof(Series)] = null,
                 [nameof(Number)] = null,
                 [nameof(PhoneNumber)] = null,
@@ -56,6 +59,8 @@ namespace BankingSystem.ViewModels.EditPanelViewModels
             };
 
             CardName = CardNameFactory.CardNamesDictionary[CardNames.VisaClassic];
+
+            CheckFields();
         }
 
         public string Error => throw new NotImplementedException();
@@ -72,6 +77,8 @@ namespace BankingSystem.ViewModels.EditPanelViewModels
 
                 if (!lastName.All(Char.IsLetter))
                     errors[nameof(LastName)] = "Недопустимые символы.";
+                else if (lastName.Length == 0)
+                    errors[nameof(LastName)] = "*";
                 else
                     errors[nameof(LastName)] = null;
             } 
@@ -86,6 +93,8 @@ namespace BankingSystem.ViewModels.EditPanelViewModels
 
                 if (!firstName.All(Char.IsLetter))
                     errors[nameof(FirstName)] = "Недопустимые символы.";
+                else if (firstName.Length == 0)
+                    errors[nameof(FirstName)] = "*";
                 else
                     errors[nameof(FirstName)] = null;
             }
@@ -100,6 +109,8 @@ namespace BankingSystem.ViewModels.EditPanelViewModels
 
                 if (!middleName.All(Char.IsLetter))
                     errors[nameof(MiddleName)] = "Недопустимые символы.";
+                else if (middleName.Length == 0)
+                    errors[nameof(MiddleName)] = "*";
                 else
                     errors[nameof(MiddleName)] = null;
             }
@@ -112,8 +123,10 @@ namespace BankingSystem.ViewModels.EditPanelViewModels
             {
                 series = value;
 
-                if (!series.All(Char.IsDigit) || series.Length < 4)
+                if (!series.All(Char.IsDigit))
                     errors[nameof(Series)] = "Ошибка.";
+                else if (series.Length < 4)
+                    errors[nameof(Series)] = "*";
                 else
                     errors[nameof(Series)] = null;
             }
@@ -126,14 +139,29 @@ namespace BankingSystem.ViewModels.EditPanelViewModels
             {
                 number = value;
 
-                if (!number.All(Char.IsDigit) || number.Length < 6)
+                if (!number.All(Char.IsDigit))
                     errors[nameof(Number)] = "Ошибка.";
+                else if (number.Length < 6)
+                    errors[nameof(Number)] = "*";
                 else
                     errors[nameof(Number)] = null;
             }
         }
 
-        public string Address { get; set; }
+        public string Address
+        {
+            get => address;
+            set
+            {
+                address = value;
+
+                if (address.Length == 0)
+                    errors[nameof(Address)] = "*";
+                else
+                    errors[nameof(Address)] = null;
+            }
+        }
+
         public string PhoneNumber
         {
             get => phoneNumber;
@@ -141,12 +169,15 @@ namespace BankingSystem.ViewModels.EditPanelViewModels
             {
                 phoneNumber = value;
 
-                if (!phoneNumber.All(Char.IsDigit) || phoneNumber.Length < 10)
+                if (!phoneNumber.All(Char.IsDigit))
                     errors[nameof(PhoneNumber)] = "Ошибка.";
+                else if (phoneNumber.Length < 10)
+                    errors[nameof(PhoneNumber)] = "*";
                 else
                     errors[nameof(PhoneNumber)] = null;
             }
         }
+
         public string Email
         {
             get => email;
@@ -156,8 +187,10 @@ namespace BankingSystem.ViewModels.EditPanelViewModels
 
                 var regex = new Regex(@"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$");
 
-                if (!regex.IsMatch(email))
-                    errors[nameof(Email)] = "Недопустимые символы.";
+                if (email.Length == 0)
+                    errors[nameof(Email)] = "*";
+                else if (!regex.IsMatch(email))
+                    errors[nameof(Email)] = "Недопустимый email.";
                 else
                     errors[nameof(Email)] = null;
             }
@@ -165,7 +198,9 @@ namespace BankingSystem.ViewModels.EditPanelViewModels
 
         public string CardName { get; set; }
 
-        public bool IsValid => errors.Values.All(x => x == null) && lastName != null && firstName != null && middleName != null && series != null && number != null && Address != null && PhoneNumber != null;
+        public bool IsValid => errors.Values.All(x => x == null) && 
+            lastName != null && firstName != null && middleName != null && series != null && number != null && Address != null && 
+            PhoneNumber != null && Email != null;
 
         /// <summary>
         /// Команда добавления физ. лица в БД
@@ -203,6 +238,21 @@ namespace BankingSystem.ViewModels.EditPanelViewModels
                         },
                         (obj) => IsValid));
             }
+        }
+
+        /// <summary>
+        /// Метод для подсвечивания обязательных полей при инициализации окна
+        /// </summary>
+        private void CheckFields()
+        {
+            LastName = "";
+            FirstName = "";
+            MiddleName = "";
+            Address = "";
+            Series = "";
+            Number = "";
+            PhoneNumber = "";
+            Email = "";
         }
     }
 }

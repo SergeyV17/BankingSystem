@@ -8,7 +8,7 @@
         xmlns:local="clr-namespace:BankingSystem.Views.Converters"
         mc:Ignorable="d"
         Icon="Resources/Icons/Bank.png"
-        Title ="BankingSystem"
+        Title ="Банковская система"
         Height="800" MinHeight="700"
         Width="1400" MinWidth="1400" >
     <Window.Resources>

@@ -49,15 +49,10 @@ namespace BankingSystem.Models.Implementations.Requisites.ClientRequisites.Facto
         /// <returns>номер телефона</returns>
         public static PhoneNumber CreateNumber(string phoneNumber)
         {
-            if (!int.TryParse(phoneNumber, out _))
+            if (!long.TryParse(phoneNumber, out _))
                 throw new ArgumentException($"Передача недопустимого аргумента в параметры. Проверьте: {nameof(phoneNumber)}", phoneNumber);
 
-            using (AppDbContext context = new AppDbContext())
-            {
-                var client = context.Clients.FirstOrDefault(c => c.Contact.PhoneNumber.Number == $"{countryCode}{phoneNumber}");
-
-                return client == null ? new PhoneNumber(phoneNumber) : null;
-            }
+            return new PhoneNumber($"+{countryCode}{phoneNumber}");
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using static BankingSystem.Models.Implementations.Requisites.CardRequisites.Factories.CardNameFactory;
 
 namespace BankingSystem.Models.Implementations.BankServices.CardService.Factories
 {
@@ -23,23 +24,17 @@ namespace BankingSystem.Models.Implementations.BankServices.CardService.Factorie
         public static Card CreateCard(string cardName, decimal cardBalance)
         {
             Card card;
-            switch (cardName)
-            {
-                case "Visa Classic":
-                    card = new VisaClassicFactory().CreateCard(cardBalance);
-                    break;
-                case "Visa Black":
-                    card = new VisaBlackFactory().CreateCard(cardBalance);
-                    break;
-                case "Visa Platinum":
-                    card = new VisaPlatinumFactory().CreateCard(cardBalance);
-                    break;
-                case "Visa Сorporate":
-                    card = new VisaCorporateFactory().CreateCard(cardBalance);
-                    break;
-                default:
-                    throw new ArgumentException($"Передача недопустимого аргумента в параметры. Проверьте:{nameof(cardName)}", nameof(cardName));
-            }
+
+            if (cardName == CardNamesDictionary[CardNames.VisaClassic])
+                card = new VisaClassicFactory().CreateCard(cardBalance);
+            else if (cardName == CardNamesDictionary[CardNames.VisaBlack])
+                card = new VisaBlackFactory().CreateCard(cardBalance);
+            else if (cardName == CardNamesDictionary[CardNames.VisaPlatinum])
+                card = new VisaPlatinumFactory().CreateCard(cardBalance);
+            else if (cardName == CardNamesDictionary[CardNames.VisaCorporate])
+                card = new VisaCorporateFactory().CreateCard(cardBalance);
+            else
+                throw new ArgumentException($"Передача недопустимого аргумента в параметры. Проверьте:{nameof(cardName)}", nameof(cardName));
 
             return card;
         }

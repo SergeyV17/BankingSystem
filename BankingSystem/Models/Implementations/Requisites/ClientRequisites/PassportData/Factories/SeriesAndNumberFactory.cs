@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace BankingSystem.Models.Implementations.Requisites.ClientRequisites.PassportData.Factories
 {
@@ -47,12 +48,10 @@ namespace BankingSystem.Models.Implementations.Requisites.ClientRequisites.Passp
         /// <returns>серия и номер</returns>
         public static SeriesAndNumber CreateSeriesAndNumber(string series, string number)
         {
-            using (AppDbContext context = new AppDbContext())
-            {
-                var client = context.Clients.FirstOrDefault(c => c.Passport.SeriesAndNumber.Series == series && c.Passport.SeriesAndNumber.Number == number);
+            if (!int.TryParse(series, out _) || !int.TryParse(number, out _))
+                throw new ArgumentException($"Передача недопустимого аргумента в параметры. Проверьте: {nameof(series)} и {nameof(number)}");
 
-                return client == null ? new SeriesAndNumber(series, number) : null;
-            }
+            return new SeriesAndNumber(series, number);
         }
     }
 }

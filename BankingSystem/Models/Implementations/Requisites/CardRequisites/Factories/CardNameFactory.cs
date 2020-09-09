@@ -1,4 +1,5 @@
-﻿using BankingSystem.Models.Implementations.Clients;
+﻿using BankingSystem.Models.Implementations.BankServices.CardService;
+using BankingSystem.Models.Implementations.Clients;
 using System;
 using System.Collections.Generic;
 
@@ -9,28 +10,17 @@ namespace BankingSystem.Models.Implementations.Requisites.CardRequisites.Factori
     /// </summary>
     static class CardNameFactory
     {
-        /// <summary>
-        /// Имена карты
-        /// </summary>
-        private enum CardNames
-        {
-            VisaClassic,
-            VisaPlatinum,
-            VisaBlack,
-            VisaCorporate
-        }
-
-        private static readonly Random _random;
-        private static readonly Dictionary<CardNames, string> _cardNames;
+        private static readonly Random random;
+        public static Dictionary<CardNames, string> CardNamesDictionary { get; }
 
         /// <summary>
         /// Конструктор фабрики наименования карты
         /// </summary>
         static CardNameFactory()
         {
-            _random = new Random();
+            random = new Random();
 
-            _cardNames = new Dictionary<CardNames, string>
+            CardNamesDictionary = new Dictionary<CardNames, string>
             {
                 [CardNames.VisaClassic] = "Visa Classic",
                 [CardNames.VisaPlatinum] = "Visa Platinum",
@@ -47,17 +37,17 @@ namespace BankingSystem.Models.Implementations.Requisites.CardRequisites.Factori
         {
             if (type == ClientType.Individual)
             {
-                int percent = _random.Next(101);
+                int percent = random.Next(101);
 
                 if (percent < 60)
-                    return _cardNames[CardNames.VisaClassic];
+                    return CardNamesDictionary[CardNames.VisaClassic];
                 else if (percent > 60 && percent < 80)
-                    return _cardNames[CardNames.VisaPlatinum];
+                    return CardNamesDictionary[CardNames.VisaPlatinum];
                 else
-                    return _cardNames[CardNames.VisaBlack];
+                    return CardNamesDictionary[CardNames.VisaBlack];
             }
 
-            return _cardNames[CardNames.VisaCorporate];
+            return CardNamesDictionary[CardNames.VisaCorporate];
         }
     }
 }

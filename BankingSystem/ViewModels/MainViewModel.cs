@@ -262,30 +262,23 @@ namespace BankingSystem.ViewModels
                 return addClientCommand ??
                     (addClientCommand = new RelayCommand(obj =>
                     {
-                        if (SelectedNode == null || SelectedNode.Type == NodeType.Intermediate)
-                        {
-                            messageService.ShowErrorMessage(mainWindow, "Необходимо выбрать раздел с клиентами.");
-                            return;
-                        }
-
                         switch (SelectedNode.Type)
                         {
                             case NodeType.Individual:
                             case NodeType.VIPIndividual:
 
-                                var addIndividualWindow = new AddIndividualWindow() 
-                                { 
-                                    Owner = mainWindow,
-                                    DataContext = new AddIndividualViewModel(SelectedNode.Type == NodeType.Individual ? AccountType.Regular : AccountType.VIP)
-                                };
+                                var addIndividualWindow = new AddIndividualWindow(){ Owner = mainWindow };
+                                addIndividualWindow.DataContext = new AddIndividualViewModel(
+                                    addIndividualWindow, messageService,
+                                    SelectedNode.Type == NodeType.Individual ? AccountType.Regular : AccountType.VIP);
 
                                 addIndividualWindow.ShowDialog();
                                 break;
                             case NodeType.Entity:
                             case NodeType.VIPEntity:
 
-                                var addEntityWindow = new AddEntityWindow() 
-                                { 
+                                var addEntityWindow = new AddEntityWindow()
+                                {
                                     Owner = mainWindow,
                                     DataContext = new AddEntityViewModel(SelectedNode.Type == NodeType.Entity ? AccountType.Regular : AccountType.VIP)
                                 };
@@ -293,7 +286,11 @@ namespace BankingSystem.ViewModels
                                 addEntityWindow.ShowDialog();
                                 break;
                         }
-                    }));
+
+                        selectedTreeItemChangedCommand = null;
+                        SelectedTreeItemChangedCommand.Execute(SelectedNode);
+                    },
+                    (obj) => SelectedNode != null ? SelectedNode.Type != NodeType.Intermediate ? true : false : false));
             }
         }
 
@@ -305,14 +302,9 @@ namespace BankingSystem.ViewModels
                 return editClientCommand ??
                     (editClientCommand = new RelayCommand(obj =>
                     {
-                        if (SelectedClient == null)
-                        {
-                            messageService.ShowErrorMessage(mainWindow, "Необходимо выбрать клиента.");
-                            return;
-                        }
-
                         var addEntityWindow = new AddEntityWindow() { Owner = mainWindow, DataContext = EditEntityViewModel };
-                    }));
+                    },
+                    (obj) => SelectedClient != null));
             }
         }
 
@@ -326,12 +318,6 @@ namespace BankingSystem.ViewModels
                     {
                         try
                         {
-                            if (SelectedClient == null)
-                            {
-                                messageService.ShowErrorMessage(mainWindow, "Необходимо выбрать клиента.");
-                                return;
-                            }
-
                             using (AppDbContext context = new AppDbContext())
                             {
                                 context.Clients.Remove(SelectedClient);
@@ -345,7 +331,8 @@ namespace BankingSystem.ViewModels
                         {
                             messageService.ShowErrorMessage(mainWindow, ex.Message);
                         }
-                    }));
+                    },
+                    (obj) => SelectedClient != null));
             }
         }
 
@@ -363,7 +350,8 @@ namespace BankingSystem.ViewModels
                     {
                         CardPanelVisibility = true;
                         DepositPanelVisibility = false;
-                    }));
+                    },
+                    (obj) => SelectedClient != null));
             }
         }
 
@@ -377,7 +365,8 @@ namespace BankingSystem.ViewModels
                     {
                         DepositPanelVisibility = true;
                         CardPanelVisibility = false;
-                    }));
+                    },
+                    (obj) => SelectedClient != null));
             }
         }
 

@@ -2,11 +2,16 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text.RegularExpressions;
+using System.Windows;
 using System.Windows.Input;
 using BankingSystem.Commands;
+using BankingSystem.Models.Abstractions;
 using BankingSystem.Models.Implementations.Accounts;
+using BankingSystem.Models.Implementations.BankServices.CardService;
 using BankingSystem.Models.Implementations.Data.DbInteraction;
+using BankingSystem.Models.Implementations.Requisites.CardRequisites.Factories;
 
 namespace BankingSystem.ViewModels.EditPanelViewModels
 {
@@ -16,6 +21,9 @@ namespace BankingSystem.ViewModels.EditPanelViewModels
     class AddIndividualViewModel : ViewModelBase, IDataErrorInfo
     {
         private readonly Dictionary<string, string> errors;
+
+        private Window addIndividualWindow;
+        private readonly IMessageService messageService;
 
         private string lastName;
         private string firstName;
@@ -29,8 +37,11 @@ namespace BankingSystem.ViewModels.EditPanelViewModels
         /// Конструктор модели представления
         /// </summary>
         /// <param name="type">тип аккаунта</param>
-        public AddIndividualViewModel(AccountType type)
+        public AddIndividualViewModel(Window addIndividualWindow, IMessageService messageService, AccountType type)
         {
+            this.addIndividualWindow = addIndividualWindow;
+            this.messageService = messageService;
+
             Type = type;
 
             errors = new Dictionary<string, string>
@@ -44,7 +55,7 @@ namespace BankingSystem.ViewModels.EditPanelViewModels
                 [nameof(Email)] = null
             };
 
-            CardName = "Visa Classic";
+            CardName = CardNameFactory.CardNamesDictionary[CardNames.VisaClassic];
         }
 
         public string Error => throw new NotImplementedException();
@@ -101,7 +112,7 @@ namespace BankingSystem.ViewModels.EditPanelViewModels
             {
                 series = value;
 
-                if (!series.All(Char.IsDigit))
+                if (!series.All(Char.IsDigit) || series.Length < 4)
                     errors[nameof(Series)] = "Ошибка.";
                 else
                     errors[nameof(Series)] = null;
@@ -115,7 +126,7 @@ namespace BankingSystem.ViewModels.EditPanelViewModels
             {
                 number = value;
 
-                if (!number.All(Char.IsDigit))
+                if (!number.All(Char.IsDigit) || number.Length < 6)
                     errors[nameof(Number)] = "Ошибка.";
                 else
                     errors[nameof(Number)] = null;
@@ -130,7 +141,7 @@ namespace BankingSystem.ViewModels.EditPanelViewModels
             {
                 phoneNumber = value;
 
-                if (!phoneNumber.All(Char.IsDigit))
+                if (!phoneNumber.All(Char.IsDigit) || phoneNumber.Length < 10)
                     errors[nameof(PhoneNumber)] = "Ошибка.";
                 else
                     errors[nameof(PhoneNumber)] = null;
@@ -154,7 +165,7 @@ namespace BankingSystem.ViewModels.EditPanelViewModels
 
         public string CardName { get; set; }
 
-        public bool IsValid => errors.Values.All(x => x == null);
+        public bool IsValid => errors.Values.All(x => x == null) && lastName != null && firstName != null && middleName != null && series != null && number != null && Address != null && PhoneNumber != null;
 
         /// <summary>
         /// Команда добавления физ. лица в БД
@@ -167,11 +178,28 @@ namespace BankingSystem.ViewModels.EditPanelViewModels
                 return addIndividualCommand ??
                     (addIndividualCommand = new RelayCommand(obj =>
                         {
-                            AddClient.AddIndividualToDb(
-                                LastName, FirstName, MiddleName,
-                                Series, Number, Address, 
-                                PhoneNumber, Email,
-                                CardName, Type);
+                            try
+                            {
+                                var (successfully, message) = AddClient.AddIndividualToDb(
+                                                LastName, FirstName, MiddleName,
+                                                Series, Number, Address,
+                                                PhoneNumber, Email,
+                                                CardName, Type);
+
+                                if (successfully)
+                                {
+                                    messageService.ShowInfoMessage(addIndividualWindow, message);
+                                    addIndividualWindow.Close();
+                                }
+                                else
+                                {
+                                    messageService.ShowWarningtMessage(addIndividualWindow, message);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                messageService.ShowErrorMessage(addIndividualWindow, ex.Message);
+                            }
                         },
                         (obj) => IsValid));
             }

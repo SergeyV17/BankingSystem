@@ -27,7 +27,7 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction
         /// <param name="email">эмейл</param>
         /// <param name="cardName">наименование карты</param>
         /// <param name="accountType">тип аккаунта</param>
-        public static void AddIndividualToDb(string lastName, string firstName, string middleName, 
+        public static (bool successfully, string message) AddIndividualToDb(string lastName, string firstName, string middleName, 
             string series, string number, 
             string address, 
             string phoneNumber, string email, 
@@ -51,8 +51,16 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction
 
                 var individual = IndividualFactory.CreateIndividual(passport, contact, account);
 
-                context.Clients.Add(individual);
-                context.SaveChanges();
+                //Проверка на совпадения в реквизитах
+                var (IsntMached, message) = SearchForMatches.ErrorProcessing(context, passport, contact);
+
+                if (IsntMached)
+                {
+                    context.Clients.Add(individual);
+                    context.SaveChanges();
+                }
+
+                return (IsntMached, message);
             }
         }
 

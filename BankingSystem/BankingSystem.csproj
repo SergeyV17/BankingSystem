@@ -196,6 +196,7 @@
     <Compile Include="Models\Implementations\Accounts\RegularAccount.cs" />
     <Compile Include="Models\Implementations\Accounts\VipAccount.cs" />
     <Compile Include="Models\Implementations\BankServices\CardService\Card.cs" />
+    <Compile Include="Models\Implementations\BankServices\CardService\CardNames.cs" />
     <Compile Include="Models\Implementations\BankServices\CardService\Factories\CardFactory.cs" />
     <Compile Include="Models\Implementations\BankServices\CardService\Factories\VisaBlackFactory.cs" />
     <Compile Include="Models\Implementations\BankServices\CardService\Factories\VisaClassicFactory.cs" />
@@ -214,6 +215,7 @@
     <Compile Include="Models\Implementations\Clients\Client.cs" />
     <Compile Include="Models\Implementations\Clients\Factories\EntityFactory.cs" />
     <Compile Include="Models\Implementations\Clients\Factories\IndividualFactory.cs" />
+    <Compile Include="Models\Implementations\Data\DbInteraction\SearchForMatches.cs" />
     <Compile Include="Models\Implementations\Data\Factories\AppFactories.cs" />
     <Compile Include="Models\Implementations\Data\DbInteraction\AddClient.cs" />
     <Compile Include="Models\Implementations\Data\DbInteraction\SelectClients.cs" />

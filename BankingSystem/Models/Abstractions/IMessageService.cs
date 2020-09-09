@@ -22,6 +22,13 @@ namespace BankingSystem.Models.Abstractions
         void ShowInfoMessage(Window window, string message);
 
         /// <summary>
+        /// Метод вызывающий окно сообщения с предупреждением
+        /// </summary>
+        /// <param name="window">текущее окно</param>
+        /// <param name="message">сообщение</param>
+        void ShowWarningtMessage(Window window, string message);
+
+        /// <summary>
         /// Метод вызывающий окно сообщения с информацией об ошибке
         /// </summary>
         /// <param name="window">текущее окно</param>

@@ -11,10 +11,10 @@ namespace BankingSystem.Models.Implementations
     class MessageService : IMessageService
     {
         /// <summary>
-        /// Метод вызывающий окно сообщения с информацией об ошибке
+        /// Метод вызывающий окно сообщения с информацией из файла
         /// </summary>
         /// <param name="window">текущее окно</param>
-        /// <param name="message">сообщение</param>
+        /// <param name="filePath">путь к файлу</param>
         public void ShowMessageFromFile(Window window, string filePath)
         {
             MessageBox.Show(window,
@@ -25,7 +25,7 @@ namespace BankingSystem.Models.Implementations
         }
 
         /// <summary>
-        /// Метод вызывающий окно сообщения с информацией об ошибке
+        /// Метод вызывающий окно сообщения с информацией
         /// </summary>
         /// <param name="window">текущее окно</param>
         /// <param name="message">сообщение</param>
@@ -36,6 +36,20 @@ namespace BankingSystem.Models.Implementations
                 window.Title,
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
+        }
+
+        /// <summary>
+        /// Метод вызывающий окно сообщения с предупреждением
+        /// </summary>
+        /// <param name="window">текущее окно</param>
+        /// <param name="message">сообщение</param>
+        public void ShowWarningtMessage(Window window, string message)
+        {
+            MessageBox.Show(window,
+                message,
+                window.Title,
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
         }
 
         /// <summary>

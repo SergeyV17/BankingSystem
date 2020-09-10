@@ -11,6 +11,13 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction
     /// </summary>
     class SearchForMatches
     {
+        /// <summary>
+        /// Метод проверки на совпадения базовых полей с БД клиентов
+        /// </summary>
+        /// <param name="context">контекст БД</param>
+        /// <param name="passport">пасспортные данные</param>
+        /// <param name="contact">контакнтные данные</param>
+        /// <returns>признак совпадений, сообщение</returns>
         public static (bool IsntMached, string message) BaseErrorProcessing(AppDbContext context, Passport passport, Contact contact)
         {
             if(context.Clients.FirstOrDefault(c => c.Passport.SeriesAndNumber.Series == passport.SeriesAndNumber.Series
@@ -60,7 +67,7 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction
             }
             else
             {
-                return (true, $"Клиент {passport.FullName.Name} успешно добавлен.");
+                return (true, "Cовпадений не найдено.");
             }
         }
 
@@ -96,7 +103,7 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction
             }
             else
             {
-                return (true, $"Клиент {passport.FullName.Name} успешно добавлен.");
+                return (true, "Cовпадений не найдено.");
             }
         }
     }

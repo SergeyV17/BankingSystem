@@ -2,10 +2,8 @@
 using BankingSystem.Models;
 using BankingSystem.Models.Abstractions;
 using BankingSystem.Models.Implementations.Clients;
-using BankingSystem.Models.Implementations.Requisites.ClientRequisites.ContactData.Factories;
+using BankingSystem.Models.Implementations.Data.DbInteraction;
 using BankingSystem.Models.Implementations.Requisites.ClientRequisites.Factories;
-using BankingSystem.Models.Implementations.Requisites.ClientRequisites.PassportData.Factories;
-using BankingSystem.Views.Windows.EditClientPanel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -223,25 +221,21 @@ namespace BankingSystem.ViewModels.EditPanelViewModels
                     {
                         try
                         {
-                            using (AppDbContext context = new AppDbContext())
+                            var (successfully, message) = EditClient.EditIndividualFromDb(
+                                            SelectedClient,
+                                            LastName, FirstName, MiddleName,
+                                            Series, Number, Address,
+                                            PhoneNumber, Email,
+                                            CardName);
+
+                            if (successfully)
                             {
-                                var client = context.Clients.FirstOrDefault(c => c.Id == SelectedClient.Id);
-
-                                var fullName = FullNameFactory.CreateFullName(LastName, FirstName, MiddleName);
-                                var seriesAndNumber = SeriesAndNumberFactory.CreateSeriesAndNumber(Series, Number);
-                                var passport = PassportFactory.CreatePassport(fullName, seriesAndNumber, Address);
-
-                                var phoneNumber = PhoneNumberFactory.CreateNumber(PhoneNumber);
-                                var contact = ContactFactory.CreateContact(phoneNumber, Email);
-
-                                client.Passport = passport;
-                                client.Contact = contact;
-
-                                var card = context.Cards.FirstOrDefault(c => c.Id == SelectedClient.Id);
-                                card.CardName = CardName;
-
-                                context.SaveChanges();
+                                messageService.ShowInfoMessage(editIndividualWindow, message);
                                 editIndividualWindow.Close();
+                            }
+                            else
+                            {
+                                messageService.ShowWarningtMessage(editIndividualWindow, message);
                             }
                         }
                         catch (Exception ex)
@@ -249,7 +243,7 @@ namespace BankingSystem.ViewModels.EditPanelViewModels
                             messageService.ShowErrorMessage(editIndividualWindow, ex.Message);
                         }
                     },
-                        (obj) => IsValid));
+                    (obj) => IsValid));
             }
         }
     }

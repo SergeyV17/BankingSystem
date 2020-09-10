@@ -1,21 +1,18 @@
-﻿using BankingSystem.Models.Implementations.Accounts;
-using BankingSystem.Models.Implementations.Accounts.Factories;
-using BankingSystem.Models.Implementations.BankServices.CardService.Factories;
-using BankingSystem.Models.Implementations.BankServices.DepositService;
-using BankingSystem.Models.Implementations.Clients.Factories;
+﻿using BankingSystem.Models.Implementations.Clients;
 using BankingSystem.Models.Implementations.Requisites.ClientRequisites.CompanyData.Factories;
+using BankingSystem.Models.Implementations.Requisites.ClientRequisites.ContactData;
 using BankingSystem.Models.Implementations.Requisites.ClientRequisites.ContactData.Factories;
 using BankingSystem.Models.Implementations.Requisites.ClientRequisites.Factories;
-using BankingSystem.Models.Implementations.Requisites.ClientRequisites.PassportData.Factories;
 using BankingSystem.Models.Implementations.Requisites.ClientRequisites.PassportData;
-using BankingSystem.Models.Implementations.Requisites.ClientRequisites.ContactData;
+using BankingSystem.Models.Implementations.Requisites.ClientRequisites.PassportData.Factories;
+using System.Linq;
 
 namespace BankingSystem.Models.Implementations.Data.DbInteraction
 {
     /// <summary>
-    /// Класс добавления клиентов в БД
+    /// Класс редактирования клиентов БД
     /// </summary>
-    static class AddClient
+    class EditClient
     {
         /// <summary>
         /// Метод создания базовых реквизитов
@@ -28,15 +25,12 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction
         /// <param name="address">адрес</param>
         /// <param name="phoneNumber">номер телефона</param>
         /// <param name="email">эмейл</param>
-        /// <param name="cardName">наименование карты</param>
-        /// <param name="accountType">тип аккаунта</param>
-        /// <returns>паспортные данные, контактные данные, аккаунт</returns>
-        private static (Passport passport, Contact contact, Account account) CreateBaseRequisites(string lastName, string firstName, string middleName,
+        /// <returns>паспортные данные, контактные данные</returns>
+        private static (Passport passport, Contact contact) CreateBaseRequisites(string lastName, string firstName, string middleName,
             string series, string number,
             string address,
-            string phoneNumber, string email,
-            string cardName, AccountType accountType)
-        {   
+            string phoneNumber, string email)
+        {
             //Паспортные данные
             var fullName = FullNameFactory.CreateFullName(lastName, firstName, middleName);
             var seriesAndNumber = SeriesAndNumberFactory.CreateSeriesAndNumber(series, number);
@@ -46,17 +40,13 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction
             var phone = PhoneNumberFactory.CreateNumber(phoneNumber);
             var contact = ContactFactory.CreateContact(phone, email);
 
-            //Данные аккаунта
-            var card = CardFactory.CreateCard(cardName, default);
-            var deposit = new NullDeposit();
-            var account = AccountFactory.CreateAccount(accountType, card, deposit);
-
-            return (passport, contact, account);
+            return (passport, contact);
         }
 
         /// <summary>
-        /// Метод добавления физ.лица в БД
+        /// Метод редактирования физ.лица БД
         /// </summary>
+        /// <param name="selectedClient">выбранный клиент</param>
         /// <param name="lastName">фамилия</param>
         /// <param name="firstName">имя</param>
         /// <param name="middleName">отчество</param>
@@ -66,26 +56,29 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction
         /// <param name="phoneNumber">номер телефона</param>
         /// <param name="email">эмейл</param>
         /// <param name="cardName">наименование карты</param>
-        /// <param name="accountType">тип аккаунта</param>
-        /// <returns>признак успешного добавления, сообщение</returns>
-        public static (bool successfully, string message) AddIndividualToDb(string lastName, string firstName, string middleName, 
+        /// <returns>признак успешного редактирования, сообщение</returns>
+        public static (bool successfully, string message) EditIndividualFromDb(Client selectedClient, 
+            string lastName, string firstName, string middleName,
             string series, string number, 
             string address, 
             string phoneNumber, string email, 
-            string cardName, AccountType accountType)
+            string cardName)
         {
             using (AppDbContext context = new AppDbContext())
             {
-                var (passport, contact, account) = CreateBaseRequisites(lastName, firstName, middleName, series, number, address, phoneNumber, email, cardName, accountType);
+                var client = context.Clients.FirstOrDefault(c => c.Id == selectedClient.Id);
+                var card = context.Cards.FirstOrDefault(c => c.Id == selectedClient.Id);
 
-                var individual = IndividualFactory.CreateIndividual(passport, contact, account);
+                var (passport, contact) = CreateBaseRequisites(lastName, firstName, middleName, series, number, address, phoneNumber, email);
 
                 //Проверка на совпадения в реквизитах
                 var (noMatchesFound, message) = SearchForMatches.IndividualErrorProcessing(context, passport, contact);
 
                 if (noMatchesFound)
                 {
-                    context.Clients.Add(individual);
+                    client.Passport = passport;
+                    client.Contact = contact;
+                    card.CardName = cardName;
 
                     context.SaveChanges();
                     message = SuccessMessage(passport.FullName.Name);
@@ -96,8 +89,9 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction
         }
 
         /// <summary>
-        /// Метод добавления юр.лица в БД
+        /// Метод редактирования юр.лица БД
         /// </summary>
+        /// <param name="selectedClient">выбранный клиент</param>
         /// <param name="lastName">фамилия</param>
         /// <param name="firstName">имя</param>
         /// <param name="middleName">отчество</param>
@@ -107,30 +101,32 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction
         /// <param name="phoneNumber">номер телефона</param>
         /// <param name="email">эмейл</param>
         /// <param name="cardName">наименование карты</param>
-        /// <param name="accountType">тип аккаунта</param>
-        /// <returns>признак успешного добавления, сообщение</returns>
-        public static (bool successfully, string message) AddEntityToDb(string lastName, string firstName, string middleName,
+        /// <returns>признак успешного редактирования, сообщение</returns>
+        public static (bool successfully, string message) EditEntityFromDb(Client selectedClient,
+            string lastName, string firstName, string middleName,
             string series, string number,
             string address,
             string phoneNumber, string email,
-            string nameOfCompany, string website,
-            string cardName, AccountType accountType)
+            string nameOfCompany, string website)
         {
             using (AppDbContext context = new AppDbContext())
             {
-                var (passport, contact, account) = CreateBaseRequisites(lastName, firstName, middleName, series, number, address, phoneNumber, email, cardName, accountType);
+                var client = context.Clients.FirstOrDefault(c => c.Id == selectedClient.Id);
+                var entity = context.Entities.FirstOrDefault(e => e.Id == selectedClient.Id);
+
+                var (passport, contact) = CreateBaseRequisites(lastName, firstName, middleName, series, number, address, phoneNumber, email);
 
                 //Данные компании
                 var company = CompanyFactory.CreateCompany(nameOfCompany, website);
-
-                var entity = EntityFactory.CreateEntity(passport, contact, account, company);
 
                 //Проверка на совпадения в реквизитах
                 var (noMatchesFound, message) = SearchForMatches.EntityErrorProcessing(context, passport, contact, company);
 
                 if (noMatchesFound)
                 {
-                    context.Clients.Add(entity);
+                    client.Passport = passport;
+                    client.Contact = contact;
+                    entity.Company = company;
 
                     context.SaveChanges();
                     message = SuccessMessage(passport.FullName.Name);
@@ -141,13 +137,13 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction
         }
 
         /// <summary>
-        /// Метод порождающий сообщение об успешном добавлении клиента
+        /// Метод порождающий сообщение об успешном редактировании клиента
         /// </summary>
         /// <param name="clientName">полное имя клиента</param>
         /// <returns>сообщение</returns>
         private static string SuccessMessage(string clientName)
         {
-            return $"Клиент \"{clientName}\" успешно добавлен.";
+            return $"Клиент \"{clientName}\" успешно отредактирован.";
         }
     }
 }

@@ -3,129 +3,258 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         WindowStartupLocation="CenterOwner"
         Title="Редактировать клиента" 
-        Height="610" Width="270"
-        MaxHeight="610" MinHeight="610"
-        MaxWidth="300" MinWidth="300">
+        Height="500" Width="600"
+        MaxHeight="500" MinHeight="500"
+        MaxWidth="600" MinWidth="600">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
         <!--Заголовок-->
-        <Border Style="{StaticResource BaseBorderStyle}">
+        <Border
+            Grid.ColumnSpan="3"
+            Style="{StaticResource BaseBorderStyle}">
             <TextBlock 
-            Text="Редактировать клиента"
-            Style="{StaticResource DialogTitleTextBlockStyle}"/>
+                Text="Редактировать клиента"
+                Style="{StaticResource DialogTitleTextBlockStyle}"/>
         </Border>
 
-        <StackPanel
+        <!--Паспортные данные-->
+        <Border 
             Grid.Row="1"
-            Margin="0 3">
-            <!--Текст блок: фамилия-->
-            <TextBlock 
+            Style="{StaticResource BaseBorderStyle}">
+            <TextBlock
+                Text="Паспортные данные"
+                Style="{StaticResource TitleTextBlockStyle}"/>
+        </Border>
+        <Border
+            Grid.Row="2"
+            Style="{StaticResource BaseBorderStyle}">
+            <StackPanel >
+                <!--Текст блок: фамилия-->
+                <TextBlock 
                 Text="Фамилия:"
                 Style="{StaticResource BaseDialogTextBlockStyle}"/>
-            <!--Текстбокс для ввода-->
-            <TextBox
-                Name="textBoxLastName"
-                Style="{StaticResource BaseTextBoxStyle}" />
+                <TextBox 
+                    Style="{StaticResource BaseTextBoxStyle}"
+                    Validation.ErrorTemplate="{StaticResource validationFailed}">
+                    <TextBox.Text>
+                        <Binding Path="LastName" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <DataErrorValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
 
-            <!--Текст блок: имя-->
-            <TextBlock 
+                <!--Текст блок: имя-->
+                <TextBlock 
                 Text="Имя:"
                 Style="{StaticResource BaseDialogTextBlockStyle}"/>
-            <!--Текстбокс для ввода-->
-            <TextBox
-                Name="textBoxFirstName"
-                Style="{StaticResource BaseTextBoxStyle}" />
+                <TextBox 
+                    Style="{StaticResource BaseTextBoxStyle}"
+                    Validation.ErrorTemplate="{StaticResource validationFailed}">
+                    <TextBox.Text>
+                        <Binding Path="FirstName" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <DataErrorValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
 
-            <!--Текст блок: отчество-->
-            <TextBlock 
-                Text="Отчество:"
-                Style="{StaticResource BaseDialogTextBlockStyle}"/>
-            <!--Текстбокс для ввода-->
-            <TextBox
-                Name="textBoxMiddleName"
-                Style="{StaticResource BaseTextBoxStyle}" />
-
-            <!--Текст блок: Адрес-->
-            <TextBlock 
-                Text="Адрес:"
-                Style="{StaticResource BaseDialogTextBlockStyle}"/>
-            <!--Текстбокс для ввода-->
-            <TextBox
-                Name="textBoxAddress"
-                Style="{StaticResource BaseTextBoxStyle}" />
-
-            <!--Текст блок: паспорт-->
-            <TextBlock 
-                Text="Паспорт:"
-                Style="{StaticResource BaseDialogTextBlockStyle}"/>
-
-            <!--Блоки для ввода паспортных данных-->
-            <StackPanel Orientation="Horizontal">
+                <!--Текст блок: отчество-->
                 <TextBlock 
-                    Text="Серия:"
+                    Text="Отчество:"
                     Style="{StaticResource BaseDialogTextBlockStyle}"/>
+                <TextBox 
+                    Style="{StaticResource BaseTextBoxStyle}"
+                    Validation.ErrorTemplate="{StaticResource validationFailed}">
+                    <TextBox.Text>
+                        <Binding Path="MiddleName" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <DataErrorValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
 
-                <!--Текстбокс для ввода cерии-->
-                <TextBox
-                    Name="textBoxPassportSeries"
-                    Style="{StaticResource PasSeriesTextBoxStyle}"/>
+                <!--Текст блок: Адрес-->
                 <TextBlock 
-                    Text="Номер:"
+                    Text="Адрес:"
                     Style="{StaticResource BaseDialogTextBlockStyle}"/>
-                <!--Текстбокс для ввода номера-->
-                <TextBox
-                    Name="textBoxPassportNumber"
-                    Style="{StaticResource PasNumberTextBoxStyle}"/>
-            </StackPanel>
+                <TextBox 
+                    Style="{StaticResource BaseTextBoxStyle}"
+                    Validation.ErrorTemplate="{StaticResource validationFailed}">
+                    <TextBox.Text>
+                        <Binding Path="Address" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <DataErrorValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
 
-            <!--Текст блок: телефон-->
-            <TextBlock 
-                Text="Телефон:"
-                Style="{StaticResource BaseDialogTextBlockStyle}"/>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock
-                    Text="+7"
+                <!--Текст блок: Паспорт-->
+                <TextBlock 
+                    Text="Паспорт:"
                     Style="{StaticResource BaseDialogTextBlockStyle}"/>
-                <!--Текстбокс для ввода-->
-                <TextBox
-                    Name="textBoxPhoneNumber"
-                    Style="{StaticResource PhoneNumberTextBoxStyle}"/>
+
+                <!--Блоки для ввода паспортных данных-->
+                <StackPanel Orientation="Horizontal">
+                    <!--Серия-->
+                    <TextBlock 
+                        Text="S:"
+                        Style="{StaticResource ExtendDialogTextBlockStyle}"/>
+                    <TextBox 
+                        Style="{StaticResource PasSeriesTextBoxStyle}"
+                        Validation.ErrorTemplate="{StaticResource validationFailed}">
+                        <TextBox.Text>
+                            <Binding Path="Series" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <DataErrorValidationRule/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                    <!--Номер-->
+                    <TextBlock 
+                        Text="N:"
+                        Style="{StaticResource ExtendDialogTextBlockStyle}"/>
+                    <TextBox 
+                        Style="{StaticResource PasNumberTextBoxStyle}"
+                        Validation.ErrorTemplate="{StaticResource validationFailed}">
+                        <TextBox.Text>
+                            <Binding Path="Number" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <DataErrorValidationRule/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                </StackPanel>
             </StackPanel>
+        </Border>
 
-            <!--Текст блок: email-->
-            <TextBlock 
-                Text="Email:"
-                Style="{StaticResource BaseDialogTextBlockStyle}"/>
-            <!--Текстбокс для ввода-->
-            <TextBox
-                Name="textBoxEmail"
-                Style="{StaticResource BaseTextBoxStyle}"/>
-
-            <!--Текст блок: наименование карты-->
-            <TextBlock 
-                Text="Наименование карты:"
-                Style="{StaticResource BaseDialogTextBlockStyle}"/>
-            <!--Комбобокс для выбора карты-->
-            <ComboBox Style="{StaticResource DialogComboBoxStyle}">
-                <TextBlock>Visa Classic</TextBlock>
-                <TextBlock>Visa Platinum</TextBlock>
-                <TextBlock>Visa Black</TextBlock>
-            </ComboBox>
-        </StackPanel>
-
-        <!--Кнопка редактировать-->
+        <!--Контактные данные-->
         <Border 
+            Grid.Row="1"
+            Grid.Column="1"
+            Style="{StaticResource BaseBorderStyle}">
+            <TextBlock
+                Text="Контактные данные"
+                Style="{StaticResource TitleTextBlockStyle}"/>
+        </Border>
+        <Border
+            Grid.Row="2"
+            Grid.Column="1"
+            Style="{StaticResource BaseBorderStyle}">
+            <StackPanel>
+                <!--Текст блок: Телефон-->
+                <TextBlock 
+                    Text="Телефон:"
+                    Style="{StaticResource BaseDialogTextBlockStyle}"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        Text="+7"
+                        Style="{StaticResource ExtendDialogTextBlockStyle}"/>
+                    <TextBox 
+                        Style="{StaticResource PhoneNumberTextBoxStyle}"
+                        Validation.ErrorTemplate="{StaticResource validationFailed}">
+                        <TextBox.Text>
+                            <Binding Path="PhoneNumber" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <DataErrorValidationRule/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                </StackPanel>
+
+                <!--Текст блок: Email-->
+                <TextBlock 
+                    Text="Email:"
+                    Style="{StaticResource BaseDialogTextBlockStyle}"/>
+                <TextBox 
+                        Style="{StaticResource BaseTextBoxStyle}"
+                        Validation.ErrorTemplate="{StaticResource validationFailed}">
+                    <TextBox.Text>
+                        <Binding Path="Email" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <DataErrorValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+            </StackPanel>
+        </Border>
+
+        <!--Данные о компании-->
+        <Border 
+            Grid.Row="1"
+            Grid.Column="2"
+            Style="{StaticResource BaseBorderStyle}">
+            <TextBlock
+                Text="Компания"
+                Style="{StaticResource TitleTextBlockStyle}"/>
+        </Border>
+        <Border
+            Grid.Row="2"
+            Grid.Column="2"
+            Style="{StaticResource BaseBorderStyle}">
+            <StackPanel>
+                <!--Текст блок: Наименование компании-->
+                <TextBlock 
+                Text="Компания:"
+                Style="{StaticResource BaseDialogTextBlockStyle}"/>
+                <TextBox 
+                    Style="{StaticResource BaseTextBoxStyle}"
+                    Validation.ErrorTemplate="{StaticResource validationFailed}">
+                    <TextBox.Text>
+                        <Binding Path="NameOfCompany" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <DataErrorValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+
+                <!--Текст блок: Вебсайт-->
+                <TextBlock 
+                Text="Вебсайт:"
+                Style="{StaticResource BaseDialogTextBlockStyle}"/>
+                <TextBox 
+                    Style="{StaticResource BaseTextBoxStyle}"
+                    Validation.ErrorTemplate="{StaticResource validationFailed}">
+                    <TextBox.Text>
+                        <Binding Path="Website" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <DataErrorValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+            </StackPanel>
+        </Border>
+
+        <!--Кнопка Редактировать-->
+        <Border 
+            Grid.ColumnSpan="3"
             Grid.Row="3"
             Style="{StaticResource BaseBorderStyle}">
             <Button
                 Content="Редактировать"
                 Style="{StaticResource EditClientDialogStyle}"
-                Command="{Binding AddClientCommand}"/>
+                Command="{Binding EditEntityCommand}"/>
         </Border>
     </Grid>
 </Window>

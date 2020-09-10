@@ -300,17 +300,17 @@ namespace BankingSystem.ViewModels
                         {
                             case NodeType.Individual:
                             case NodeType.VIPIndividual:
-                                var addIndividualWindow = new EditIndividualWindow() { Owner = mainWindow };
-                                addIndividualWindow.DataContext = new EditIndividualViewModel(addIndividualWindow, messageService, SelectedClient);
+                                var editIndividualWindow = new EditIndividualWindow() { Owner = mainWindow };
+                                editIndividualWindow.DataContext = new EditIndividualViewModel(editIndividualWindow, messageService, SelectedClient);
 
-                                addIndividualWindow.ShowDialog();
+                                editIndividualWindow.ShowDialog();
                                 break;
                             case NodeType.Entity:
                             case NodeType.VIPEntity:
-                                //var addEntityWindow = new EditEntityWindow() { Owner = mainWindow };
-                                //addEntityWindow.DataContext = new EditEntityViewModel(addEntityWindow, messageService, SelectedClient);
+                                var editEntityWindow = new EditEntityWindow() { Owner = mainWindow };
+                                editEntityWindow.DataContext = new EditEntityViewModel(editEntityWindow, messageService, SelectedClient);
 
-                                //addEntityWindow.ShowDialog();
+                                editEntityWindow.ShowDialog();
                                 break;
                         }
 

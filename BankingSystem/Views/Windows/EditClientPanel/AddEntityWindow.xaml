@@ -246,7 +246,7 @@
             </StackPanel>
         </Border>
 
-        <!--Кнопка Добавить-->
+        <!--Кнопка Редактировать-->
         <Border 
             Grid.ColumnSpan="3"
             Grid.Row="3"

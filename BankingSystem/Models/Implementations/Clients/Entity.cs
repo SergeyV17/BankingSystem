@@ -27,6 +27,6 @@ namespace BankingSystem.Models.Implementations.Clients
             Company = company;
         }
 
-        public Company Company { get; private set; }
+        public Company Company { get; set; }
     }
 }

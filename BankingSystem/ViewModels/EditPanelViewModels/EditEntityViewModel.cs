@@ -3,6 +3,7 @@ using BankingSystem.Models.Abstractions;
 using BankingSystem.Models.Implementations.BankServices.CardService;
 using BankingSystem.Models.Implementations.Clients;
 using BankingSystem.Models.Implementations.Data.DbInteraction;
+using BankingSystem.Models.Implementations.Data.DbInteraction.ClientBaseEditing;
 using BankingSystem.Models.Implementations.Requisites.CardRequisites.Factories;
 using BankingSystem.Models.Implementations.Requisites.ClientRequisites.Factories;
 using System;
@@ -41,11 +42,13 @@ namespace BankingSystem.ViewModels.EditPanelViewModels
         /// </summary>
         /// <param name="editEntityWindow">окно добавления юр. лица</param>
         /// <param name="messageService">сервис работы с сообщениями</param>
-        /// <param name="selectedClient">выбранный клиент</param>
-        public EditEntityViewModel(Window editEntityWindow, IMessageService messageService, Client selectedClient)
+        /// <param name="selectedEntity">выбранный клиент</param>
+        public EditEntityViewModel(Window editEntityWindow, IMessageService messageService, Entity selectedEntity)
         {
             this.editEntityWindow = editEntityWindow;
             this.messageService = messageService;
+
+            SelectedEntity = selectedEntity;
 
             errors = new Dictionary<string, string>
             {
@@ -61,18 +64,14 @@ namespace BankingSystem.ViewModels.EditPanelViewModels
                 [nameof(Website)] = null
             };
 
-            SelectedClient = selectedClient;
-
-            var selectedEntity = SelectedClient as Entity;
-
-            LastName = selectedClient.Passport.FullName.LastName;
-            FirstName = selectedClient.Passport.FullName.FirstName;
-            MiddleName = selectedClient.Passport.FullName.MiddleName;
-            Address = selectedClient.Passport.Address;
-            Series = selectedClient.Passport.SeriesAndNumber.Series;
-            Number = selectedClient.Passport.SeriesAndNumber.Number;
-            PhoneNumber = selectedClient.Contact.PhoneNumber.Number.Remove(0, PhoneNumberFactory.countryCode.Length);
-            Email = selectedClient.Contact.Email;
+            LastName = selectedEntity.Passport.FullName.LastName;
+            FirstName = selectedEntity.Passport.FullName.FirstName;
+            MiddleName = selectedEntity.Passport.FullName.MiddleName;
+            Address = selectedEntity.Passport.Address;
+            Series = selectedEntity.Passport.SeriesAndNumber.Series;
+            Number = selectedEntity.Passport.SeriesAndNumber.Number;
+            PhoneNumber = selectedEntity.Contact.PhoneNumber.Number.Remove(0, PhoneNumberFactory.countryCode.Length);
+            Email = selectedEntity.Contact.Email;
             NameOfCompany = selectedEntity.Company.Name;
             Website = selectedEntity.Company.Website;
         }
@@ -80,7 +79,7 @@ namespace BankingSystem.ViewModels.EditPanelViewModels
         public string Error => throw new NotImplementedException();
         public string this[string columnName] => errors.ContainsKey(columnName) ? errors[columnName] : null;
 
-        public Client SelectedClient { get; }
+        public Entity SelectedEntity { get; }
 
         public string LastName
         {
@@ -259,7 +258,7 @@ namespace BankingSystem.ViewModels.EditPanelViewModels
                         try
                         {
                             var (successfully, message) = EditClient.EditEntityFromDb(
-                                            SelectedClient,
+                                            SelectedEntity,
                                             LastName, FirstName, MiddleName,
                                             Series, Number, Address,
                                             PhoneNumber, Email,
@@ -272,7 +271,7 @@ namespace BankingSystem.ViewModels.EditPanelViewModels
                             }
                             else
                             {
-                                messageService.ShowWarningtMessage(editEntityWindow, message);
+                                messageService.ShowWarningMessage(editEntityWindow, message);
                             }
                         }
                         catch (Exception ex)

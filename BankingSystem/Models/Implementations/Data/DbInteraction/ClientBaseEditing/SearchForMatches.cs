@@ -4,7 +4,7 @@ using BankingSystem.Models.Implementations.Requisites.ClientRequisites.ContactDa
 using BankingSystem.Models.Implementations.Requisites.ClientRequisites.PassportData;
 using System.Linq;
 
-namespace BankingSystem.Models.Implementations.Data.DbInteraction
+namespace BankingSystem.Models.Implementations.Data.DbInteraction.ClientBaseEditing
 {
     /// <summary>
     /// Класс поиска совпадений реквизитов клиентов в БД
@@ -52,9 +52,9 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction
         /// <returns>признак совпадений, сообщение</returns>
         public static (bool IsntMached, string message) IndividualErrorProcessing(AppDbContext context, Passport passport, Contact contact)
         {
-            var client = context.Clients.AsEnumerable().FirstOrDefault(c => c.Passport.FullName.Name == passport.FullName.Name);
+            var individual = context.Individuals.AsEnumerable().FirstOrDefault(c => c.Passport.FullName.Name == passport.FullName.Name);
 
-            if (client != null && client is Individual)
+            if (individual != null)
             {
                 return (false, "Клиент с введёнными реквизитами уже существует\n-проверьте ФИО");
             }
@@ -80,9 +80,9 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction
         /// <returns>признак совпадений, сообщение</returns>
         public static (bool IsntMached, string message) EntityErrorProcessing(AppDbContext context, Passport passport, Contact contact, Company company)
         {
-            var client = context.Clients.AsEnumerable().FirstOrDefault(c => c.Passport.FullName.Name == passport.FullName.Name);
+            var entity = context.Entities.AsEnumerable().FirstOrDefault(c => c.Passport.FullName.Name == passport.FullName.Name);
 
-            if (client != null && client is Entity)
+            if (entity != null)
             {
                 return (false, "Клиент с введёнными реквизитами уже существует\n-проверьте ФИО");
             } 

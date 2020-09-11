@@ -24,5 +24,6 @@
         <Setter Property="Height" Value="25"/>
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="Margin" Value="5 0 0 0"/>
+        <Setter Property="IsDefault" Value="True"/>
     </Style>
 </ResourceDictionary>

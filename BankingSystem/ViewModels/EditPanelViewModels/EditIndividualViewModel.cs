@@ -1,8 +1,7 @@
 ﻿using BankingSystem.Commands;
-using BankingSystem.Models;
 using BankingSystem.Models.Abstractions;
 using BankingSystem.Models.Implementations.Clients;
-using BankingSystem.Models.Implementations.Data.DbInteraction;
+using BankingSystem.Models.Implementations.Data.DbInteraction.ClientBaseEditing;
 using BankingSystem.Models.Implementations.Requisites.ClientRequisites.Factories;
 using System;
 using System.Collections.Generic;
@@ -38,11 +37,13 @@ namespace BankingSystem.ViewModels.EditPanelViewModels
         /// </summary>
         /// <param name="editIndividualWindow">окно редактирования физ. лица</param>
         /// <param name="messageService">сервис работы с сообщениями</param>
-        /// <param name="selectedClient">выбранный клиент узла</param>
-        public EditIndividualViewModel(Window editIndividualWindow, IMessageService messageService, Client selectedClient)
+        /// <param name="selectedIndividual">выбранный клиент узла</param>
+        public EditIndividualViewModel(Window editIndividualWindow, IMessageService messageService, Individual selectedIndividual)
         {
             this.editIndividualWindow = editIndividualWindow;
             this.messageService = messageService;
+
+            SelectedClient = selectedIndividual;
 
             errors = new Dictionary<string, string>
             {
@@ -56,23 +57,21 @@ namespace BankingSystem.ViewModels.EditPanelViewModels
                 [nameof(Email)] = null
             };
 
-            SelectedClient = selectedClient;
-
-            LastName = selectedClient.Passport.FullName.LastName;
-            FirstName = selectedClient.Passport.FullName.FirstName;
-            MiddleName = selectedClient.Passport.FullName.MiddleName;
-            Address = selectedClient.Passport.Address;
-            Series = selectedClient.Passport.SeriesAndNumber.Series;
-            Number = selectedClient.Passport.SeriesAndNumber.Number;
-            PhoneNumber = selectedClient.Contact.PhoneNumber.Number.Remove(0, PhoneNumberFactory.countryCode.Length);
-            Email = selectedClient.Contact.Email;
-            CardName = selectedClient.Account.Card.CardName;
+            LastName = selectedIndividual.Passport.FullName.LastName;
+            FirstName = selectedIndividual.Passport.FullName.FirstName;
+            MiddleName = selectedIndividual.Passport.FullName.MiddleName;
+            Address = selectedIndividual.Passport.Address;
+            Series = selectedIndividual.Passport.SeriesAndNumber.Series;
+            Number = selectedIndividual.Passport.SeriesAndNumber.Number;
+            PhoneNumber = selectedIndividual.Contact.PhoneNumber.Number.Remove(0, PhoneNumberFactory.countryCode.Length);
+            Email = selectedIndividual.Contact.Email;
+            CardName = selectedIndividual.Account.Card.CardName;
         }
 
         public string Error => throw new NotImplementedException();
         public string this[string columnName] => errors.ContainsKey(columnName) ? errors[columnName] : null;
 
-        public Client SelectedClient { get; }
+        public Individual SelectedClient { get; }
 
         public string LastName
         {
@@ -235,7 +234,7 @@ namespace BankingSystem.ViewModels.EditPanelViewModels
                             }
                             else
                             {
-                                messageService.ShowWarningtMessage(editIndividualWindow, message);
+                                messageService.ShowWarningMessage(editIndividualWindow, message);
                             }
                         }
                         catch (Exception ex)

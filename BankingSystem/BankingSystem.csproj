@@ -180,9 +180,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Migrations\20200909111953_InitialCreate.cs" />
-    <Compile Include="Migrations\20200909111953_InitialCreate.designer.cs">
-      <DependentUpon>20200909111953_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\20200911071753_InitialCreate.cs" />
+    <Compile Include="Migrations\20200911071753_InitialCreate.designer.cs">
+      <DependentUpon>20200911071753_InitialCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\AppDbContextModelSnapshot.cs" />
     <Compile Include="Models\Abstractions\IFilePathService.cs" />
@@ -215,11 +215,14 @@
     <Compile Include="Models\Implementations\Clients\Client.cs" />
     <Compile Include="Models\Implementations\Clients\Factories\EntityFactory.cs" />
     <Compile Include="Models\Implementations\Clients\Factories\IndividualFactory.cs" />
-    <Compile Include="Models\Implementations\Data\DbInteraction\EditClient.cs" />
-    <Compile Include="Models\Implementations\Data\DbInteraction\SearchForMatches.cs" />
+    <Compile Include="Models\Implementations\Data\DbInteraction\CardOperations\ReplenishCard.cs" />
+    <Compile Include="Models\Implementations\Data\DbInteraction\CardOperations\TransferCardToCard.cs" />
+    <Compile Include="Models\Implementations\Data\DbInteraction\ClientBaseEditing\DeleteClient.cs" />
+    <Compile Include="Models\Implementations\Data\DbInteraction\ClientBaseEditing\EditClient.cs" />
+    <Compile Include="Models\Implementations\Data\DbInteraction\ClientBaseEditing\SearchForMatches.cs" />
     <Compile Include="Models\Implementations\Data\Factories\AppFactories.cs" />
-    <Compile Include="Models\Implementations\Data\DbInteraction\AddClient.cs" />
-    <Compile Include="Models\Implementations\Data\DbInteraction\SelectClients.cs" />
+    <Compile Include="Models\Implementations\Data\DbInteraction\ClientBaseEditing\AddClient.cs" />
+    <Compile Include="Models\Implementations\Data\DbInteraction\ClientBaseEditing\SelectClients.cs" />
     <Compile Include="Models\Implementations\Data\Factories\RepositoryFactory.cs" />
     <Compile Include="Models\Implementations\Data\IRepository.cs" />
     <Compile Include="Models\Implementations\Data\Node.cs" />
@@ -257,6 +260,7 @@
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\Converters\CapitalizationConverter.cs" />
     <Compile Include="Views\Converters\ColumnWidthConverter.cs" />
+    <Compile Include="Views\Converters\InverseBooleanConverter.cs" />
     <Compile Include="Views\Windows\EditClientPanel\AddEntityWindow.xaml.cs">
       <DependentUpon>AddEntityWindow.xaml</DependentUpon>
     </Compile>

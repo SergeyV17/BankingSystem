@@ -1,9 +1,139 @@
-﻿namespace BankingSystem.ViewModels.OperationViewModels
+﻿using BankingSystem.Commands;
+using BankingSystem.Models;
+using BankingSystem.Models.Abstractions;
+using BankingSystem.Models.Implementations.BankServices.CardService;
+using BankingSystem.Models.Implementations.Clients;
+using BankingSystem.Models.Implementations.Data;
+using BankingSystem.Models.Implementations.Data.DbInteraction.CardOperations;
+using BankingSystem.Models.Implementations.Data.DbInteraction.ClientBaseEditing;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Windows;
+using System.Windows.Input;
+
+namespace BankingSystem.ViewModels.OperationViewModels
 {
     /// <summary>
     /// Класс модели представления для окна "Перевод"
     /// </summary>
-    class TransferViewModel : ViewModelBase
+    class TransferViewModel : ViewModelBase, IDataErrorInfo
     {
+        private readonly Dictionary<string, string> errors;
+
+        private Window transferWindow;
+        private readonly IMessageService messageService;
+
+        private string amount;
+
+        private bool reportVisibility;
+
+        /// <summary>
+        /// Конструктор модели представления
+        /// </summary>
+        /// <param name="replenishCardWindow">окно пополнение лиц. счета карты</param>
+        /// <param name="messageService">сервис работы с сообщениями</param>
+        /// <param name="selectedCard">выбранная карта</param>
+        public TransferViewModel(Window replenishCardWindow, IMessageService messageService, Client fromClient)
+        {
+            this.transferWindow = replenishCardWindow;
+            this.messageService = messageService;
+
+            FromCard = fromClient.Account.Card;
+
+            errors = new Dictionary<string, string>
+            {
+                [nameof(Amount)] = null
+            };
+
+            Clients = fromClient is Individual ? SelectClients.SelectAllIndividuals(fromClient) : SelectClients.SelectAllEntities(fromClient);
+
+            CheckFields();
+        }
+
+        public string Error => throw new NotImplementedException();
+        public string this[string columnName] => errors.ContainsKey(columnName) ? errors[columnName] : null;
+
+        public Card FromCard { get; set; }
+
+        public IEnumerable<Client> Clients { get; set; }
+
+        public string Amount
+        {
+            get => amount;
+            set
+            {
+                amount = value;
+
+                if (amount == default)
+                    errors[nameof(Amount)] = "*";
+                else if (!decimal.TryParse(amount, out _))
+                    errors[nameof(Amount)] = "Недопустимые символы.";
+                else if (decimal.Parse(amount) == default)
+                    errors[nameof(Amount)] = "Недопустимое значение.";
+                else if (decimal.Parse(amount) > 300_000)
+                    errors[nameof(Amount)] = "Превышен лимит.";
+                else
+                    errors[nameof(Amount)] = null;
+            }
+        }
+
+        public bool IsValid => errors.Values.All(x => x == null) && Amount != default;
+
+        public bool ReportVisibility
+        {
+            get => reportVisibility;
+            set
+            {
+                reportVisibility = value;
+                OnPropertyChanged(nameof(ReportVisibility));
+            }
+        }
+
+        /// <summary>
+        /// Команда добавления юр. лица в БД
+        /// </summary>
+        private ICommand transferCommand;
+        public ICommand TransferCommand
+        {
+            get
+            {
+                return transferCommand ??
+                    (transferCommand = new RelayCommand(obj =>
+                    {
+                        try
+                        {
+                            var toCard = obj as Card;
+
+                            var (successfully, message) = TransferCardToCard.Transfer(FromCard, toCard, decimal.Parse(Amount));
+
+                            if (successfully)
+                            {
+                                ReportVisibility = true;
+                                messageService.ShowInfoMessage(transferWindow, message);
+                                transferWindow.Close();
+                            }
+                            else
+                            {
+                                messageService.ShowWarningMessage(transferWindow, message);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            messageService.ShowErrorMessage(transferWindow, ex.Message);
+                        }
+                    },
+                    (obj) => IsValid));
+            }
+        }
+
+        /// <summary>
+        /// Метод для подсвечивания обязательных полей при инициализации окна
+        /// </summary>
+        private void CheckFields()
+        {
+            Amount = default;
+        }
     }
 }

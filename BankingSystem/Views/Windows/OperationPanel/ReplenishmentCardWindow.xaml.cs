@@ -17,9 +17,9 @@ namespace BankingSystem.Views.Windows.OperationPanel
     /// <summary>
     /// Логика взаимодействия для ReplenishmentCardWindow.xaml
     /// </summary>
-    public partial class ReplenishmentCardWindow : Window
+    public partial class ReplenishCardWindow : Window
     {
-        public ReplenishmentCardWindow()
+        public ReplenishCardWindow()
         {
             InitializeComponent();
         }

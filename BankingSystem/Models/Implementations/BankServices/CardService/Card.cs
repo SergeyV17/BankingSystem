@@ -28,7 +28,7 @@ namespace BankingSystem.Models.Implementations.BankServices.CardService
         public int Id { get; set; }
         public string CardName { get; set; }
         public string CardNumber { get; private set; }
-        public decimal CardBalance { get; private set; }
+        public decimal CardBalance { get; set; }
 
         //Свойства для БД
         public int AccountId { get; set; }

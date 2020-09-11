@@ -38,6 +38,7 @@ namespace BankingSystem.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     AccountLockout = table.Column<bool>(nullable: false),
                     AmountOfReplenishmentPerDay = table.Column<decimal>(nullable: false),
+                    DateOfLastReplenish = table.Column<DateTime>(nullable: false),
                     ClientId = table.Column<int>(nullable: false),
                     Discriminator = table.Column<string>(nullable: false)
                 },

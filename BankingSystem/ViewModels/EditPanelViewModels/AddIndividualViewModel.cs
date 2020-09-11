@@ -9,7 +9,7 @@ using BankingSystem.Commands;
 using BankingSystem.Models.Abstractions;
 using BankingSystem.Models.Implementations.Accounts;
 using BankingSystem.Models.Implementations.BankServices.CardService;
-using BankingSystem.Models.Implementations.Data.DbInteraction;
+using BankingSystem.Models.Implementations.Data.DbInteraction.ClientBaseEditing;
 using BankingSystem.Models.Implementations.Requisites.CardRequisites.Factories;
 
 namespace BankingSystem.ViewModels.EditPanelViewModels
@@ -228,7 +228,7 @@ namespace BankingSystem.ViewModels.EditPanelViewModels
                                 }
                                 else
                                 {
-                                    messageService.ShowWarningtMessage(addIndividualWindow, message);
+                                    messageService.ShowWarningMessage(addIndividualWindow, message);
                                 }
                             }
                             catch (Exception ex)

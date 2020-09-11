@@ -7,12 +7,13 @@
         xmlns:intr="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:local="clr-namespace:BankingSystem.Views.Converters"
         mc:Ignorable="d"
-        Icon="Resources/Icons/Bank.png"
+        Icon="Resources/Icons/Bank.png" 
         Title ="Банковская система"
         Height="800" MinHeight="700"
         Width="1400" MinWidth="1400" >
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter" />
+        <local:InverseBooleanConverter x:Key="inverseBooleanConverter" />
         <local:ColumnWidthConverter x:Key="columnWidthConverter" />
         <local:CapitalizationConverter x:Key="capitalizationConverter" />
     </Window.Resources>
@@ -136,6 +137,9 @@
                 <ListView.Resources>
                     <Style TargetType="{x:Type GridViewColumnHeader}">
                         <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                    </Style>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <Setter Property="IsEnabled" Value="{Binding Account.AccountLockout, Converter={StaticResource inverseBooleanConverter}}"/> 
                     </Style>
                 </ListView.Resources>
                 <intr:Interaction.Triggers>
@@ -348,7 +352,8 @@
                             Text="{Binding ElementName= LisOfClients, Path=SelectedItem.Account.Card.CardBalance, StringFormat={}{0:C}}"
                             Style="{StaticResource BaseTextBlockStyle}"/>
                         <!--Кнопка пополнить карту-->
-                        <Button Style="{StaticResource EditPanelButtonStyle}">
+                        <Button Style="{StaticResource EditPanelButtonStyle}" 
+                                Command="{Binding ReplenishCardCommand}">
                             <StackPanel Orientation="Horizontal">
                                 <Image Source="Resources/Icons/ReplenishmentIcon.png"/>
                                 <TextBlock 
@@ -357,7 +362,9 @@
                             </StackPanel>
                         </Button>
                         <!--Кнопка перевод-->
-                        <Button Style="{StaticResource EditPanelButtonStyle}">
+                        <Button 
+                            Style="{StaticResource EditPanelButtonStyle}"
+                            Command="{Binding TransferCommand}">
                             <StackPanel Orientation="Horizontal">
                                 <Image Source="Resources/Icons/TransferIcon.png"/>
                                 <TextBlock

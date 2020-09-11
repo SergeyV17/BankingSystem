@@ -43,7 +43,7 @@ namespace BankingSystem.Models.Implementations
         /// </summary>
         /// <param name="window">текущее окно</param>
         /// <param name="message">сообщение</param>
-        public void ShowWarningtMessage(Window window, string message)
+        public void ShowWarningMessage(Window window, string message)
         {
             MessageBox.Show(window,
                 message,

@@ -1,6 +1,7 @@
 ﻿using BankingSystem.Models.Implementations.BankServices.CardService;
 using BankingSystem.Models.Implementations.BankServices.DepositService;
 using BankingSystem.Models.Implementations.Clients;
+using System;
 
 namespace BankingSystem.Models.Implementations.Accounts
 {
@@ -9,6 +10,8 @@ namespace BankingSystem.Models.Implementations.Accounts
     /// </summary>
     abstract class Account
     {
+        private decimal amountOfReplenishmentPerDay;
+
         /// <summary>
         /// Конструктор по умолчанию для EF
         /// </summary>
@@ -31,8 +34,24 @@ namespace BankingSystem.Models.Implementations.Accounts
         public int Id { get; set; }
         public Card Card { get; private set; }
         public Deposit Deposit { get; private set; }
-        public bool AccountLockout { get; private set; }
-        public decimal AmountOfReplenishmentPerDay { get; private set; }
+        public bool AccountLockout { get; set; }
+        public decimal AmountOfReplenishmentPerDay
+        {
+            get => amountOfReplenishmentPerDay;
+
+            set
+            {
+                if (DateOfLastReplenish != null && DateTime.Today != DateOfLastReplenish)
+                {
+                    amountOfReplenishmentPerDay = 0;
+                }
+
+                amountOfReplenishmentPerDay = value;
+                DateOfLastReplenish = DateTime.Today;
+            }
+        }
+        public decimal ReplenishementPerDayLimit => 300_000;
+        public DateTime DateOfLastReplenish { get; set; }
 
         //Свойства для БД
         public int ClientId { get; set; }

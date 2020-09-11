@@ -11,9 +11,8 @@ using BankingSystem.Models.Implementations.Data;
 using BankingSystem.Models.Implementations.Data.Factories;
 using System.Collections.ObjectModel;
 using BankingSystem.Models.Implementations.Clients;
-using BankingSystem.Models.Implementations.Data.DbInteraction;
-using BankingSystem.Models;
-using BankingSystem.Models.Implementations.Accounts;
+using BankingSystem.Models.Implementations.Data.DbInteraction.ClientBaseEditing;
+using BankingSystem.Views.Windows.OperationPanel;
 
 namespace BankingSystem.ViewModels
 {
@@ -41,7 +40,7 @@ namespace BankingSystem.ViewModels
         public EditIndividualViewModel EditIndividualViewModel { get; private set; }
         public EditEntityViewModel EditEntityViewModel { get; private set; }
 
-        public ReplenishmentCardViewModel ReplenishmentCardViewModel { get; private set; }
+        public ReplenishCardViewModel ReplenishmentCardViewModel { get; private set; }
         public TransferViewModel TransferViewModel { get; private set; }
         public OpenDeposiViewModel OpenDeposiViewModel { get; private set; }
 
@@ -301,14 +300,14 @@ namespace BankingSystem.ViewModels
                             case NodeType.Individual:
                             case NodeType.VIPIndividual:
                                 var editIndividualWindow = new EditIndividualWindow() { Owner = mainWindow };
-                                editIndividualWindow.DataContext = new EditIndividualViewModel(editIndividualWindow, messageService, SelectedClient);
+                                editIndividualWindow.DataContext = new EditIndividualViewModel(editIndividualWindow, messageService, SelectedClient as Individual);
 
                                 editIndividualWindow.ShowDialog();
                                 break;
                             case NodeType.Entity:
                             case NodeType.VIPEntity:
                                 var editEntityWindow = new EditEntityWindow() { Owner = mainWindow };
-                                editEntityWindow.DataContext = new EditEntityViewModel(editEntityWindow, messageService, SelectedClient);
+                                editEntityWindow.DataContext = new EditEntityViewModel(editEntityWindow, messageService, SelectedClient as Entity);
 
                                 editEntityWindow.ShowDialog();
                                 break;
@@ -331,13 +330,9 @@ namespace BankingSystem.ViewModels
                     {
                         try
                         {
-                            using (AppDbContext context = new AppDbContext())
-                            {
-                                context.Clients.Remove(SelectedClient);
-                                context.SaveChanges();
-                            }
+                            var (success, message) = DeleteClient.DeleteClientFromDb(SelectedClient);
 
-                            messageService.ShowInfoMessage(mainWindow, $"Клиент: {SelectedClient.Passport.FullName.Name} успешно удален.");
+                            messageService.ShowInfoMessage(mainWindow, message);
                             Clients.Remove(SelectedClient);
                         }
                         catch (Exception ex)
@@ -395,7 +390,15 @@ namespace BankingSystem.ViewModels
                 return replenishCardCommand ??
                     (replenishCardCommand = new RelayCommand(obj =>
                     {
-                    }));
+                        var replenishCardWindow = new ReplenishCardWindow() { Owner = mainWindow };
+                        replenishCardWindow.DataContext = new ReplenishCardViewModel(replenishCardWindow, messageService, SelectedClient);
+
+                        replenishCardWindow.ShowDialog();
+
+                        selectedTreeItemChangedCommand = null;
+                        SelectedTreeItemChangedCommand.Execute(SelectedNode);
+                    },
+                    (obj) => SelectedClient != null));
             }
         }
 
@@ -407,7 +410,15 @@ namespace BankingSystem.ViewModels
                 return transferCommand ??
                     (transferCommand = new RelayCommand(obj =>
                     {
-                    }));
+                        var transferWindow = new TransferWindow() { Owner = mainWindow };
+                        transferWindow.DataContext = new TransferViewModel(transferWindow, messageService, SelectedClient);
+
+                        transferWindow.ShowDialog();
+
+                        selectedTreeItemChangedCommand = null;
+                        SelectedTreeItemChangedCommand.Execute(SelectedNode);
+                    },
+                    (obj) => SelectedClient != null ? SelectedClient.Account.Card.CardBalance <= 0 ? false : true : false));
             }
         }
 

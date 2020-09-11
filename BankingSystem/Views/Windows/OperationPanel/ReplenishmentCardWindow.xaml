@@ -1,4 +1,4 @@
-﻿<Window x:Class="BankingSystem.Views.Windows.OperationPanel.ReplenishmentCardWindow"
+﻿<Window x:Class="BankingSystem.Views.Windows.OperationPanel.ReplenishCardWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         WindowStartupLocation="CenterOwner"
@@ -6,7 +6,10 @@
         Height="300" Width="300"
         MaxHeight="300" MinHeight="300"
         MaxWidth="300" MinWidth="300">
-    <Grid>
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter"/>
+    </Window.Resources>
+        <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
             <RowDefinition Height="*"/>
@@ -23,34 +26,45 @@
             Style="{StaticResource DialogTitleTextBlockStyle}"/>
         </Border>
 
-        <StackPanel Grid.Row="1">
+        <StackPanel 
+            Grid.Row="1" 
+            Margin="5">
             <!--Наименование-->
             <TextBlock
-                Text="{Binding}"
-                Style="{StaticResource DialogTitleTextBlockStyle}"/>
+                Text="{Binding CardName}"
+                Style="{StaticResource BaseDialogTextBlockStyle}"/>
             <!--Номер-->
             <TextBlock
-                Text="{Binding}"
-                Style="{StaticResource DialogTitleTextBlockStyle}"/>
+                Text="{Binding CardNumber}"
+                Style="{StaticResource BaseDialogTextBlockStyle}"/>
             <!--Баланс-->
             <TextBlock
-                Text="{Binding StringFormat={}{0:C}}"
-                Style="{StaticResource DialogTitleTextBlockStyle}"/>
+                Text="{Binding CardBalance, StringFormat={}{0:C}}"
+                Style="{StaticResource BaseDialogTextBlockStyle}"/>
             <!--Взнос-->
             <StackPanel Orientation="Horizontal">
                 <TextBlock
                     Text="Сумма:"
                     Style="{StaticResource BaseDialogTextBlockStyle}"/>
-                <!--Текстбокс для ввода-->
-                <TextBox Style="{StaticResource BaseTextBoxStyle}"/>
+                <TextBox 
+                    Style="{StaticResource BaseTextBoxStyle}" Margin="10 5 0 0"
+                    Validation.ErrorTemplate="{StaticResource validationFailed}">
+                    <TextBox.Text>
+                        <Binding Path="Amount" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <DataErrorValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
             </StackPanel>
 
             <!--Отчет об операции-->
             <TextBlock 
                 Text="Успешно"
                 Foreground="Green"
-                Visibility="Hidden"
-                Style="{StaticResource BaseDialogTextBlockStyle}"/>
+                Visibility="{Binding ReportVisibility, Converter={StaticResource booleanToVisibilityConverter}}"
+                Style="{StaticResource BaseDialogTextBlockStyle}" HorizontalAlignment="Center" Margin="0 30"/>
         </StackPanel>
 
         <!--Кнопка Пополнить-->

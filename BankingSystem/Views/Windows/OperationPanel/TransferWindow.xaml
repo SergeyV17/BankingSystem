@@ -4,8 +4,11 @@
         WindowStartupLocation="CenterOwner"
         Title="Перевод с карты на карту" 
         Height="450" Width="300"
-        MinHeight="450" MaxHeight="800"
+        MinHeight="500" MaxHeight="800"
         MinWidth="340" MaxWidth="340">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter"/>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -19,13 +22,14 @@
                 Name="transferByClientName"
                 Header="Клиенту банка">
                 <TabItem.Content>
-                    <ListBox
+                    <ListBox 
+                        ItemsSource="{Binding Clients}"
                         Name="listOfClients">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel>
-                                    <TextBlock Text="{Binding }"/>
-                                    <TextBlock Text="{Binding }"/>
+                                    <TextBlock Text="{Binding Passport.FullName.Name}"/>
+                                    <TextBlock Text="{Binding Contact.PhoneNumber.Number}"/>
                                 </StackPanel>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
@@ -33,37 +37,48 @@
                 </TabItem.Content>
             </TabItem>
         </TabControl>
-
         <!--Панель перевода-->
-        <StackPanel Grid.Row="2">
-            <!--Сумма перевода-->
-            <StackPanel Orientation="Horizontal">
-                <!--Текст блок: Сумма-->
-                <TextBlock 
+        <StackPanel 
+            Grid.Row="1" 
+            Margin="5">
+            <StackPanel
+                Grid.Row="1"
+                Orientation="Horizontal">
+                <TextBlock
                     Text="Сумма:"
                     Style="{StaticResource BaseDialogTextBlockStyle}"/>
-                <TextBox Style="{StaticResource BaseTextBoxStyle}"/>
+                <TextBox 
+                    Style="{StaticResource BaseTextBoxStyle}"
+                    Validation.ErrorTemplate="{StaticResource validationFailed}" 
+                    Margin="10 5 0 0">
+                    <TextBox.Text>
+                        <Binding Path="Amount" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <DataErrorValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
             </StackPanel>
-
-            <StackPanel Orientation="Horizontal">
-                <!--Кнопка перевода-->
-                <Button 
-                    Style="{StaticResource EditPanelButtonStyle}"
-                    Command="{Binding TransferCommand}">
+            <StackPanel Orientation="Horizontal" Margin="0 25">
+                <!--Кнопка перевести-->
+                <Button
+                    Style="{StaticResource EditClientDialogStyle}" 
+                    Command="{Binding TransferCommand}"
+                    CommandParameter="{Binding ElementName=listOfClients, Path=SelectedItem.Account.Card}">
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="Resources/Icons/TransferIcon.png"/>
-                        <TextBlock 
-                            Text="Перевести"
-                            Style="{StaticResource BaseTextBlockStyle}"/>
+                        <Image Source="../../Resources/Icons/TransferIcon.png" Margin="0"/>
+                        <TextBlock
+                            Text="Перевод"
+                            Style="{StaticResource ButtonTextBlockStyle}"/>
                     </StackPanel>
                 </Button>
-
                 <!--Отчет об операции-->
-                <TextBlock
+                <TextBlock 
                     Text="Успешно"
                     Foreground="Green"
-                    Visibility="Hidden"
-                    Style="{StaticResource BaseTextBoxStyle}" />
+                    Visibility="{Binding ReportVisibility, Converter={StaticResource booleanToVisibilityConverter}}"
+                    Style="{StaticResource BaseDialogTextBlockStyle}" HorizontalAlignment="Center" Margin="25 0 0 0"/>
             </StackPanel>
         </StackPanel>
     </Grid>

@@ -65,7 +65,7 @@
                 <Button
                     Style="{StaticResource EditClientDialogStyle}" 
                     Command="{Binding TransferCommand}"
-                    CommandParameter="{Binding ElementName=listOfClients, Path=SelectedItem.Account.Card}">
+                    CommandParameter="{Binding ElementName=listOfClients, Path=SelectedItem}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="../../Resources/Icons/TransferIcon.png" Margin="0"/>
                         <TextBlock

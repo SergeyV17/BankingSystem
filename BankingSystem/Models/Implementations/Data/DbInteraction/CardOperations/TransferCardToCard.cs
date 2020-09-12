@@ -1,4 +1,5 @@
-﻿using BankingSystem.Models.Implementations.BankServices.CardService;
+﻿using BankingSystem.Models.Implementations.Clients;
+using BankingSystem.Models.Implementations.Data.DbInteraction.CardOperations.EventArgs;
 using System;
 using System.Linq;
 
@@ -9,21 +10,23 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction.CardOperations
     /// </summary>
     class TransferCardToCard
     {
+        public static event EventHandler<TransferEventArgs> TransferredCardToCard;
+
         /// <summary>
         /// Метод перевода с карты на карту
         /// </summary>
-        /// <param name="fromCard">карта отправитель</param>
-        /// <param name="toCard">карта получатель</param>
+        /// <param name="fromClient">отправитель</param>
+        /// <param name="toClient">получатель</param>
         /// <param name="amount">сумма</param>
         /// <returns>признак успешного перевода, сообщение</returns>
-        public static (bool successfully, string message) Transfer(Card fromCard, Card toCard, decimal amount)
+        public static (bool successfully, string message) Transfer(Client fromClient, Client toClient, decimal amount)
         {
             using (AppDbContext context = new AppDbContext())
             {
                 try
                 {
-                    var from = context.Cards.FirstOrDefault(c => c.Id == fromCard.Id);
-                    var to = context.Cards.FirstOrDefault(c => c.Id == toCard.Id);
+                    var from = context.Cards.FirstOrDefault(c => c.AccountId == fromClient.Account.Id);
+                    var to = context.Cards.FirstOrDefault(c => c.AccountId == toClient.Account.Id);
 
                     from.CardBalance -= amount;
                     to.CardBalance += amount;
@@ -35,10 +38,19 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction.CardOperations
                     return (false, ex.Message);
                 }
 
-                return (true,
-                    $"Карта {fromCard.CardName} {fromCard.CardNumber}\n\n" +
-                    $"Перевод на сумму: {amount:C2}\n" +
-                    $"Текущий баланс: {(fromCard.CardBalance - amount):C2}");
+                string message = 
+                    $"Отправитель: {fromClient.Passport.FullName.Name}\n" +
+                    $"Карта: {fromClient.Account.Card.CardName} {fromClient.Account.Card.CardNumber}\n" +
+                    $"Баланс: {fromClient.Account.Card.CardBalance:C}\n" +
+                    $"Получатель: {toClient.Passport.FullName.Name}\n" +
+                    $"Карта: {toClient.Account.Card.CardName} {toClient.Account.Card.CardNumber}\n" +
+                    $"Баланс: {toClient.Account.Card.CardBalance:C}\n" +
+                    $"Перевод на сумму: {amount:C}\n" +
+                    $"Дата: {DateTime.Now:dd/MM/yyyy HH:mm:ss}\n" + "Отчет: Успешно";
+
+                TransferredCardToCard?.Invoke(null, new TransferEventArgs { LogMessage = message });
+
+                return (true, message);
             }
         }
     }

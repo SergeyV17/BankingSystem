@@ -215,10 +215,14 @@
     <Compile Include="Models\Implementations\Clients\Client.cs" />
     <Compile Include="Models\Implementations\Clients\Factories\EntityFactory.cs" />
     <Compile Include="Models\Implementations\Clients\Factories\IndividualFactory.cs" />
+    <Compile Include="Models\Implementations\Data\DbInteraction\CardOperations\EventArgs\ReplenishmentEventArgs.cs" />
+    <Compile Include="Models\Implementations\Data\DbInteraction\CardOperations\EventArgs\TransferEventArgs.cs" />
     <Compile Include="Models\Implementations\Data\DbInteraction\CardOperations\ReplenishCard.cs" />
     <Compile Include="Models\Implementations\Data\DbInteraction\CardOperations\TransferCardToCard.cs" />
     <Compile Include="Models\Implementations\Data\DbInteraction\ClientBaseEditing\DeleteClient.cs" />
     <Compile Include="Models\Implementations\Data\DbInteraction\ClientBaseEditing\EditClient.cs" />
+    <Compile Include="Models\Implementations\Data\DbInteraction\DepositOperations\EventArgs\CloseDepositEventArgs.cs" />
+    <Compile Include="Models\Implementations\Data\DbInteraction\DepositOperations\EventArgs\OpenDepositEventArgs.cs" />
     <Compile Include="Models\Implementations\Data\DbInteraction\DepositOperations\СloseDeposit.cs" />
     <Compile Include="Models\Implementations\Data\DbInteraction\SearchForMatches\SearchForMatchesForAdding.cs" />
     <Compile Include="Models\Implementations\Data\DbInteraction\SearchForMatches\SearchForMatchesForEditing.cs" />
@@ -436,6 +440,7 @@
   <ItemGroup>
     <Resource Include="Views\Resources\Icons\Bank.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

@@ -38,7 +38,7 @@ namespace BankingSystem.ViewModels.OperationViewModels
             this.transferWindow = transferWindow;
             this.messageService = messageService;
 
-            FromCard = fromClient.Account.Card;
+            FromClient = fromClient;
 
             errors = new Dictionary<string, string>
             {
@@ -53,7 +53,7 @@ namespace BankingSystem.ViewModels.OperationViewModels
         public string Error => throw new NotImplementedException();
         public string this[string columnName] => errors.ContainsKey(columnName) ? errors[columnName] : null;
 
-        public Card FromCard { get; set; }
+        public Client FromClient { get; set; }
 
         public IEnumerable<Client> Clients { get; set; }
 
@@ -70,7 +70,7 @@ namespace BankingSystem.ViewModels.OperationViewModels
                     errors[nameof(Amount)] = "Недопустимые символы.";
                 else if (decimal.Parse(amount) == default)
                     errors[nameof(Amount)] = "Недопустимое значение.";
-                else if (FromCard.CardBalance - decimal.Parse(amount) < 0)
+                else if (FromClient.Account.Card.CardBalance - decimal.Parse(amount) < 0)
                     errors[nameof(Amount)] = "Недостаточно средств.";
                 else if (decimal.Parse(amount) > 300_000)
                     errors[nameof(Amount)] = "Превышен лимит.";
@@ -104,9 +104,9 @@ namespace BankingSystem.ViewModels.OperationViewModels
                     {
                         try
                         {
-                            var toCard = obj as Card;
+                            var toClient = obj as Client;
 
-                            var (successfully, message) = TransferCardToCard.Transfer(FromCard, toCard, decimal.Parse(Amount));
+                            var (successfully, message) = TransferCardToCard.Transfer(FromClient, toClient, decimal.Parse(Amount));
 
                             if (successfully)
                             {

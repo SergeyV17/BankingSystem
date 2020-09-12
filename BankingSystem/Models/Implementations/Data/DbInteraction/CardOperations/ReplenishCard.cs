@@ -1,4 +1,5 @@
 ﻿using BankingSystem.Models.Implementations.Clients;
+using BankingSystem.Models.Implementations.Data.DbInteraction.CardOperations.EventArgs;
 using System;
 using System.Linq;
 
@@ -9,6 +10,8 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction.CardOperations
     /// </summary>
     class ReplenishCard
     {
+        public static event EventHandler<ReplenishmentEventArgs> CardReplenished;
+
         /// <summary>
         /// Метод пополнения карты
         /// </summary>
@@ -19,6 +22,8 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction.CardOperations
         {
             using (AppDbContext context = new AppDbContext())
             {
+                string message;
+
                 try
                 {
                     var account = context.Accounts.FirstOrDefault(a => a.Id == client.Account.Id);
@@ -27,15 +32,17 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction.CardOperations
                     if (client.Account.AmountOfReplenishmentPerDay + amount > client.Account.ReplenishementPerDayLimit)
                     {
                         account.AccountLockout = true;
-
                         context.SaveChanges();
 
-                        return (false,
-                            "Система зафиксировала превышение максимальной суммы пополнения лицевого счёта.\n" +
-                            "Информация\n" +
-                            $"Карта: {client.Account.Card.CardName} {client.Account.Card.CardNumber}\n" +
-                            $"Владелец: {client.Passport.FullName.Name}\n" +
-                            "Решение: Блокировка");
+                        message = "Система зафиксировала превышение максимальной суммы пополнения лицевого счёта.\n" +
+                                  "Информация\n" +
+                                  $"Карта: {client.Account.Card.CardName} {client.Account.Card.CardNumber}\n" +
+                                  $"Владелец: {client.Passport.FullName.Name}\n" +
+                                  "Решение: Блокировка";
+
+                        CardReplenished?.Invoke(null, new ReplenishmentEventArgs { LogMessage = message });
+
+                        return (false, message);
                     }
                     else
                     {
@@ -50,10 +57,16 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction.CardOperations
                     return (false, ex.Message);
                 }
 
-                return (true, 
-                    $"Карта {client.Account.Card.CardName} {client.Account.Card.CardNumber}\n\n" + 
-                    $"Пополнение на сумму: {amount:C2}\n" +
-                    $"Текущий баланс: {(client.Account.Card.CardBalance + amount):C2}");
+                message = $"Клиент: {client.Passport.FullName.Name}\n" +
+                          $"Карта: {client.Account.Card.CardName}\n" +
+                          $"Номер: {client.Account.Card.CardNumber}\n" +
+                          $"Текущий баланс: {client.Account.Card.CardBalance:C}\n" +
+                          $"Пополнение на сумму: {amount:C}\n" +
+                          $"Дата: {DateTime.Now:dd/MM/yyyy HH:mm:ss}\n" + "Отчет: Успешно";
+
+                CardReplenished?.Invoke(null, new ReplenishmentEventArgs { LogMessage = message });
+
+                return (true, message);
             }
         }
     }

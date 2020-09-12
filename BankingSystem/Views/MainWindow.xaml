@@ -41,8 +41,12 @@
         <Menu Grid.ColumnSpan="4">
             <MenuItem Header="Файл">
                 <MenuItem Header="История">
-                    <MenuItem Header="Операции"/>
-                    <MenuItem Header="Клиенты"/>
+                    <MenuItem 
+                        Header="Операции"
+                        Command="{Binding OpenOperationHistoryWindow}"/>
+                    <MenuItem 
+                        Header="Клиенты"
+                        Command="{Binding OpenClientHistoryWindow}"/>
                 </MenuItem>
                 <Separator/>
                 <MenuItem 
@@ -80,8 +84,10 @@
                     <Calendar
                         x:Name="DepositCalendar"
                         SelectedDate="{Binding SelectedDate}"
-                        DisplayDateStart="{Binding ElementName=LisOfClients, Path=SelectedItem.Account.Deposit.DateOfDepositOpen, Mode=OneWay}"
-                        DisplayDateEnd="{Binding ElementName=LisOfClients, Path=SelectedItem.Account.Deposit.DateOfDepositClose, Mode=OneWay}"/>
+                        DisplayDateStart="{Binding ElementName=LisOfClients, Path=SelectedItem.Account.Deposit.DateOfDepositOpen, Mode=OneWay,
+                        FallbackValue={x:Static sys:DateTime.MinValue}}"
+                        DisplayDateEnd="{Binding ElementName=LisOfClients, Path=SelectedItem.Account.Deposit.DateOfDepositClose, Mode=OneWay,
+                        FallbackValue={x:Static sys:DateTime.MaxValue}}"/>
                 </Viewbox>
                 <!--Дерево-->
                 <TreeView 

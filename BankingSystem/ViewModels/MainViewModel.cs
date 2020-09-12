@@ -16,6 +16,7 @@ using BankingSystem.Views.Windows.OperationPanel;
 using BankingSystem.Models.Implementations.Data.DbInteraction.Selections;
 using BankingSystem.Models.Implementations.Data.DbInteraction.DepositOperations;
 using CalculateDepositLibrary;
+using BankingSystem.Views.Windows.History;
 
 namespace BankingSystem.ViewModels
 {
@@ -61,19 +62,6 @@ namespace BankingSystem.ViewModels
 
         #region Свойства
 
-        #region Модели представления
-        public EditIndividualViewModel EditIndividualViewModel { get; private set; }
-        public EditEntityViewModel EditEntityViewModel { get; private set; }
-
-        public ReplenishCardViewModel ReplenishmentCardViewModel { get; private set; }
-        public TransferViewModel TransferViewModel { get; private set; }
-        public OpenDeposiViewModel OpenDeposiViewModel { get; private set; }
-
-        public ClientHistoryViewModel ClientHistoryViewModel { get; private set; }
-        public OperationHistoryViewModel OperationHistoryViewModel { get; private set; }
-
-        #endregion
-
         public IRepository Repository { get; private set; }
 
         public Node SelectedNode { get; private set; }
@@ -88,7 +76,7 @@ namespace BankingSystem.ViewModels
         }
         public ObservableCollection<Client> Clients { get; private set; }
 
-        #region DepositCalculator
+        #region Калькулятор депозита
 
         public DateTime SelectedDate
         {
@@ -138,7 +126,15 @@ namespace BankingSystem.ViewModels
         }
         public decimal BalanceWithProfit
         {
-            get => balanceWithProfit;
+            get
+            {
+                if (selectedClient != null)
+                {
+                    return balanceWithProfit == default ? selectedClient.Account.Deposit.DepositBalance : balanceWithProfit;
+                }
+
+                return balanceWithProfit;
+            } 
             set
             {
                 balanceWithProfit = value;
@@ -242,6 +238,38 @@ namespace BankingSystem.ViewModels
                 }));
             }
         }
+
+        #region Логи
+
+        private ICommand openOperationHistoryWindow;
+        public ICommand OpenOperationHistoryWindow
+        {
+            get
+            {
+                return openOperationHistoryWindow ??
+                    (openOperationHistoryWindow = new RelayCommand(obj =>
+                    {
+                        var operationHistoryWindow = new OperationHistoryWindow() { Owner = mainWindow, DataContext = new OperationHistoryViewModel() };
+                        operationHistoryWindow.ShowDialog();
+                    }));
+            }
+        }
+
+        private ICommand openClientHistoryWindow;
+        public ICommand OpenClientHistoryWindow
+        {
+            get
+            {
+                return openClientHistoryWindow ??
+                    (openClientHistoryWindow = new RelayCommand(obj =>
+                    {
+                        var clientHistoryWindow = new ClientHitoryWindow() { Owner = mainWindow, DataContext = new ClientHistoryViewModel() };
+                        clientHistoryWindow.ShowDialog();
+                    }));
+            }
+        }
+
+        #endregion
 
         #endregion
 

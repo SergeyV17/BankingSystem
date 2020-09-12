@@ -1,5 +1,6 @@
 ﻿using BankingSystem.Models.Implementations.BankServices.DepositService;
 using BankingSystem.Models.Implementations.Clients;
+using BankingSystem.Models.Implementations.Data.DbInteraction.DepositOperations.EventArgs;
 using System;
 using System.Linq;
 
@@ -10,6 +11,8 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction.DepositOperati
     /// </summary>
     class СloseDeposit
     {
+        public static event EventHandler<CloseDepositEventArgs> DepositClosed;
+
         /// <summary>
         /// Метод закрытия депозита
         /// </summary>
@@ -39,14 +42,17 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction.DepositOperati
                     return (false, ex.Message);
                 }
 
-                return (true,
-                    $"Закрытие депозита {deposit.DepositNumber}\n\n" +
-                    $"Текущий баланс: {deposit.DepositBalance:C2}\n" +
-                    $"Капитализация: {(deposit.DepositCapitalization ? "Подключена" : "Отключена")}\n" +
-                    $"Ставка: {deposit.DepositRate:P}\n" +
-                    $"Дата открытия: {deposit.DateOfDepositOpen}\n" +
-                    $"Дата закрытия: {DateTime.Now}\n\n" +
-                    $"Отчет об операции: успешно\n");
+                string message =
+                    $"Клиент: {selectedClient.Passport.FullName.Name}\n" +
+                    $"Операция: Досрочное закрытие вклада\n" +
+                    $"Сумма вклада: {selectedClient.Account.Deposit.DepositBalance:C}\n" +
+                    $"Капитализация: {(selectedClient.Account.Deposit.DepositCapitalization ? "Подключена" : "Отключена")}\n" +
+                    $"Дата: {DateTime.Now:dd/MM/yyyy HH:mm:ss}\n" +
+                    $"Отчет: Успешно";
+
+                DepositClosed?.Invoke(null, new CloseDepositEventArgs { LogMessage = message });
+
+                return (true, message);
             }
         }
     }

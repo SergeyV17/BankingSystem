@@ -1,4 +1,7 @@
-﻿using System.Globalization;
+﻿using BankingSystem.Models.Implementations.Data.DbInteraction.CardOperations;
+using BankingSystem.Models.Implementations.Data.DbInteraction.DepositOperations;
+using BankingSystem.ViewModels.HistoryViewModels;
+using System.Globalization;
 using System.Threading;
 using System.Windows;
 using System.Windows.Markup;
@@ -9,7 +12,6 @@ namespace BankingSystem
     /// Interaction logic for App.xaml
     /// </summary>
     public partial class App : Application
-
     {
         public App() { }
 
@@ -23,7 +25,24 @@ namespace BankingSystem
               new FrameworkPropertyMetadata(
                     XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
 
+            SubscribeToLogs();
+
             base.OnStartup(e);
+        }
+
+        /// <summary>
+        /// Метод подписки на события для записи в логи
+        /// </summary>
+        private void SubscribeToLogs()
+        {
+            //События редактирования БД клиентов
+
+
+            // События операций
+            ReplenishCard.CardReplenished += OperationHistoryViewModel.OnCardReplenished;
+            TransferCardToCard.TransferredCardToCard += OperationHistoryViewModel.OnTransferCardToCard;
+            OpenDeposit.DepositOpened += OperationHistoryViewModel.OnDepositOpen;
+            СloseDeposit.DepositClosed += OperationHistoryViewModel.OnDepositClose;              
         }
     }
 }

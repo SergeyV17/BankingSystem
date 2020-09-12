@@ -12,19 +12,25 @@
             <!--Пополнения-->
             <TabItem Header="Пополнения">
                 <TabItem.Content>
-                    <ListBox ItemContainerStyle="{StaticResource HistoryListBoxItemStyle}"/>
+                    <ListBox 
+                        ItemsSource="{Binding ReplenishementList}"
+                        ItemContainerStyle="{StaticResource HistoryListBoxItemStyle}"/>
                 </TabItem.Content>
             </TabItem>
             <!--Транзакции-->
             <TabItem Header="Транзакции">
                 <TabItem.Content>
-                    <ListBox ItemContainerStyle="{StaticResource HistoryListBoxItemStyle}"/>
+                    <ListBox 
+                        ItemsSource="{Binding TransactionList}"
+                        ItemContainerStyle="{StaticResource HistoryListBoxItemStyle}"/>
                 </TabItem.Content>
             </TabItem>
             <!--Вклады-->
             <TabItem Header="Вклады">
                 <TabItem.Content>
-                    <ListBox ItemContainerStyle="{StaticResource HistoryListBoxItemStyle}"/>
+                    <ListBox 
+                        ItemsSource="{Binding DepositList}"
+                        ItemContainerStyle="{StaticResource HistoryListBoxItemStyle}"/>
                 </TabItem.Content>
             </TabItem>
         </TabControl>

@@ -180,9 +180,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Migrations\20200911071753_InitialCreate.cs" />
-    <Compile Include="Migrations\20200911071753_InitialCreate.designer.cs">
-      <DependentUpon>20200911071753_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\20200912010559_InitialCreate.cs" />
+    <Compile Include="Migrations\20200912010559_InitialCreate.designer.cs">
+      <DependentUpon>20200912010559_InitialCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\AppDbContextModelSnapshot.cs" />
     <Compile Include="Models\Abstractions\IFilePathService.cs" />
@@ -219,10 +219,12 @@
     <Compile Include="Models\Implementations\Data\DbInteraction\CardOperations\TransferCardToCard.cs" />
     <Compile Include="Models\Implementations\Data\DbInteraction\ClientBaseEditing\DeleteClient.cs" />
     <Compile Include="Models\Implementations\Data\DbInteraction\ClientBaseEditing\EditClient.cs" />
-    <Compile Include="Models\Implementations\Data\DbInteraction\ClientBaseEditing\SearchForMatches.cs" />
+    <Compile Include="Models\Implementations\Data\DbInteraction\SearchForMatches\SearchForMatchesForAdding.cs" />
+    <Compile Include="Models\Implementations\Data\DbInteraction\SearchForMatches\SearchForMatchesForEditing.cs" />
+    <Compile Include="Models\Implementations\Data\DbInteraction\DepositOperations\OpenDeposit.cs" />
     <Compile Include="Models\Implementations\Data\Factories\AppFactories.cs" />
     <Compile Include="Models\Implementations\Data\DbInteraction\ClientBaseEditing\AddClient.cs" />
-    <Compile Include="Models\Implementations\Data\DbInteraction\ClientBaseEditing\SelectClients.cs" />
+    <Compile Include="Models\Implementations\Data\DbInteraction\Selections\SelectClients.cs" />
     <Compile Include="Models\Implementations\Data\Factories\RepositoryFactory.cs" />
     <Compile Include="Models\Implementations\Data\IRepository.cs" />
     <Compile Include="Models\Implementations\Data\Node.cs" />

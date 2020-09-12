@@ -7,14 +7,14 @@ namespace BankingSystem.Models.Implementations.BankServices.DepositService
     /// </summary>
     struct DepositRates
     {
-        private const decimal _individualRate = 0.12m;
-        private const decimal _entityRate = 0.10m;
+        private const double individualRate = 0.12;
+        private const double entityRate = 0.10;
 
         /// <summary>
         /// Метод создания ставки для депозита
         /// </summary>
         /// <param name="clientType">тип клиента</param>
         /// <returns>ставка</returns>
-        public static decimal GetDepositRate(ClientType clientType) => clientType == ClientType.Individual ? _individualRate : _entityRate;
+        public static double GetDepositRate(ClientType clientType) => clientType == ClientType.Individual ? individualRate : entityRate;
     }
 }

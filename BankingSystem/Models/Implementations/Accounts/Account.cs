@@ -32,8 +32,8 @@ namespace BankingSystem.Models.Implementations.Accounts
         }
 
         public int Id { get; set; }
-        public Card Card { get; private set; }
-        public Deposit Deposit { get; private set; }
+        public Card Card { get; set; }
+        public Deposit Deposit { get; set; }
         public bool AccountLockout { get; set; }
         public decimal AmountOfReplenishmentPerDay
         {

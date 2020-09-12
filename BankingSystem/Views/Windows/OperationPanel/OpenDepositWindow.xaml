@@ -5,7 +5,7 @@
         Title="Открыть вклад" 
         Height="300" Width="300"
         MaxHeight="300" MinHeight="300"
-        MaxWidth="300" MinWidth="300">
+        MaxWidth="315" MinWidth="315">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
@@ -34,20 +34,31 @@
                     Style="{StaticResource BaseDialogTextBlockStyle}"/>
                 <!--Баланс на карте-->
                 <TextBlock
-                    Text="{Binding}"
+                    Text="{Binding CardBalance, StringFormat={}{0:C}}"
                     Style="{StaticResource BaseDialogTextBlockStyle}"/>
                 <!--Сумма вклада-->
                 <TextBlock
                     Text="Сумма вклада:"
                     Style="{StaticResource BaseDialogTextBlockStyle}"/>
                 <TextBox 
-                    Style="{StaticResource BaseTextBoxStyle}" 
-                    ToolTip="Сумма вклада не менее 100 000 р"/>
+                    Style="{StaticResource BaseTextBoxStyle}" Width="140"
+                    Validation.ErrorTemplate="{StaticResource validationFailed}"
+                    ToolTip="Сумма вклада не менее 20 000 р">
+                    <TextBox.Text>
+                        <Binding Path="Amount" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <DataErrorValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
                 <!--Капитализация-->
                 <TextBlock
                     Text="Капитализация:"
                     Style="{StaticResource BaseDialogTextBlockStyle}"/>
-                <CheckBox Margin="10 5"/>
+                <CheckBox 
+                    Margin="10 5"
+                    IsChecked="{Binding Capitalization}"/>
             </StackPanel>
 
             <!--Условия-->
@@ -62,70 +73,13 @@
                         Text="Ставка:"
                         Style="{StaticResource BaseDialogTextBlockStyle}"/>
                     <TextBlock
-                        Text="{Binding}"
+                        Text="{Binding DepositRate, StringFormat={}{0:P}}"
                         Style="{StaticResource BaseDialogTextBlockStyle}"/>
                 </StackPanel>
                 <!--Срок-->
                 <TextBlock
                     Text="Срок: 1 год"
                     Style="{StaticResource BaseDialogTextBlockStyle}"/>
-            </StackPanel>
-
-            <!--Уведомление об успешном открытии вклада-->
-            <StackPanel Visibility="Hidden">
-                <StackPanel Orientation="Horizontal">
-                    <!--Ваш вклад-->
-                    <TextBlock
-                        Text="Ваш вклад:"
-                        Style="{StaticResource BaseDialogTextBlockStyle}"/>
-                    <!--Номер вклада-->
-                    <TextBlock
-                        Text="{Binding}"
-                        Style="{StaticResource BaseDialogTextBlockStyle}"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <!--На сумму-->
-                    <TextBlock
-                        Text="На сумму:"
-                        Style="{StaticResource BaseDialogTextBlockStyle}"/>
-                    <TextBlock
-                        Text="{Binding}"
-                        Style="{StaticResource BaseDialogTextBlockStyle}"/>
-                </StackPanel>
-
-                <StackPanel Orientation="Horizontal">
-                    <!--Ваш срок вклада-->
-                    <TextBlock
-                    Text="Срок действия:"
-                        Style="{StaticResource BaseDialogTextBlockStyle}"/>
-                    <!--До такого то числа-->
-                    <TextBlock
-                        Text="{Binding}"
-                        Style="{StaticResource BaseDialogTextBlockStyle}"/>
-                </StackPanel>
-
-                <StackPanel Orientation="Horizontal">
-                    <!--Капитализация-->
-                    <TextBlock
-                        Text="Капитализация:"
-                        Style="{StaticResource BaseDialogTextBlockStyle}"/>
-                    <!--Чекбокс с капитализацией-->
-                    <CheckBox 
-                        Margin="10 0 0 2" 
-                        VerticalAlignment="Bottom"
-                        IsChecked="{Binding Mode=OneWay}"/>
-                </StackPanel>
-
-                <StackPanel Orientation="Horizontal">
-                    <!--Дата открытия-->
-                    <TextBlock
-                        Text="Дата открытия:"
-                        Style="{StaticResource BaseDialogTextBlockStyle}"/>
-                    <!--Дата-->
-                    <TextBlock
-                        Text="{Binding}"
-                        Style="{StaticResource BaseDialogTextBlockStyle}"/>
-                </StackPanel>
             </StackPanel>
         </Grid>
         <!--Кнопка Открыть-->
@@ -134,12 +88,5 @@
             Content="Открыть"
             Style="{StaticResource EditClientDialogStyle}"
             Command="{Binding OpenDepositCommand}"/>
-        <!--Кнопка ОК-->
-        <Button
-            Grid.Row="2"
-            Visibility="Hidden"
-            Content="Ок"
-            Style="{StaticResource EditClientDialogStyle}"
-            Command="{Binding OkCommand}"/>   
     </Grid>
 </Window>

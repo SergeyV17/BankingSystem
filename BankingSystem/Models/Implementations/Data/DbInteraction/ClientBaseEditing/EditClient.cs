@@ -1,4 +1,6 @@
-﻿using BankingSystem.Models.Implementations.Clients;
+﻿using BankingSystem.Models.Implementations.BankServices.CardService.Factories;
+using BankingSystem.Models.Implementations.Clients;
+using BankingSystem.Models.Implementations.Data.DbInteraction.SearchesForMatches;
 using BankingSystem.Models.Implementations.Requisites.ClientRequisites.CompanyData.Factories;
 using BankingSystem.Models.Implementations.Requisites.ClientRequisites.ContactData;
 using BankingSystem.Models.Implementations.Requisites.ClientRequisites.ContactData.Factories;
@@ -66,19 +68,27 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction.ClientBaseEdit
         {
             using (AppDbContext context = new AppDbContext())
             {
-                var individual = context.Clients.FirstOrDefault(c => c.Id == selectedIndividual.Id);
-                var card = context.Cards.FirstOrDefault(c => c.Id == selectedIndividual.Id);
+                var individual = context.Individuals.FirstOrDefault(c => c.Id == selectedIndividual.Id);
+                var account = context.Accounts.FirstOrDefault(c => c.Id == selectedIndividual.Account.Id);
 
                 var (passport, contact) = CreateBaseRequisites(lastName, firstName, middleName, series, number, address, phoneNumber, email);
 
                 //Проверка на совпадения в реквизитах
-                var (noMatchesFound, message) = SearchForMatches.IndividualErrorProcessing(context, passport, contact);
+                var (noMatchesFound, message) = SearchForMatchesForEditing.IndividualErrorProcessing(individual, passport, contact);
 
                 if (noMatchesFound)
                 {
                     individual.Passport = passport;
                     individual.Contact = contact;
-                    card.CardName = cardName;
+
+                    if (cardName != selectedIndividual.Account.Card.CardName)
+                    {
+                        var newCard = CardFactory.CreateCard(cardName, selectedIndividual.Account.Card.CardBalance);
+                        var oldCard = context.Cards.FirstOrDefault(c => c.AccountId == selectedIndividual.Account.Id);
+
+                        context.Remove(oldCard);
+                        account.Card = newCard;
+                    }
 
                     context.SaveChanges();
                     message = SuccessMessage(passport.FullName.Name);
@@ -111,7 +121,6 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction.ClientBaseEdit
         {
             using (AppDbContext context = new AppDbContext())
             {
-                var client = context.Clients.FirstOrDefault(c => c.Id == selectedEntity.Id);
                 var entity = context.Entities.FirstOrDefault(e => e.Id == selectedEntity.Id);
 
                 var (passport, contact) = CreateBaseRequisites(lastName, firstName, middleName, series, number, address, phoneNumber, email);
@@ -120,12 +129,12 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction.ClientBaseEdit
                 var company = CompanyFactory.CreateCompany(nameOfCompany, website);
 
                 //Проверка на совпадения в реквизитах
-                var (noMatchesFound, message) = SearchForMatches.EntityErrorProcessing(context, passport, contact, company);
+                var (noMatchesFound, message) = SearchForMatchesForEditing.EntityErrorProcessing(entity, passport, contact, company);
 
                 if (noMatchesFound)
                 {
-                    client.Passport = passport;
-                    client.Contact = contact;
+                    entity.Passport = passport;
+                    entity.Contact = contact;
                     entity.Company = company;
 
                     context.SaveChanges();

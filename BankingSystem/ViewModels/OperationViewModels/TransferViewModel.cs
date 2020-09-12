@@ -1,11 +1,9 @@
 ﻿using BankingSystem.Commands;
-using BankingSystem.Models;
 using BankingSystem.Models.Abstractions;
 using BankingSystem.Models.Implementations.BankServices.CardService;
 using BankingSystem.Models.Implementations.Clients;
-using BankingSystem.Models.Implementations.Data;
 using BankingSystem.Models.Implementations.Data.DbInteraction.CardOperations;
-using BankingSystem.Models.Implementations.Data.DbInteraction.ClientBaseEditing;
+using BankingSystem.Models.Implementations.Data.DbInteraction.Selections;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -32,12 +30,12 @@ namespace BankingSystem.ViewModels.OperationViewModels
         /// <summary>
         /// Конструктор модели представления
         /// </summary>
-        /// <param name="replenishCardWindow">окно пополнение лиц. счета карты</param>
+        /// <param name="transferWindow">окно перевода с карты на карту</param>
         /// <param name="messageService">сервис работы с сообщениями</param>
-        /// <param name="selectedCard">выбранная карта</param>
-        public TransferViewModel(Window replenishCardWindow, IMessageService messageService, Client fromClient)
+        /// <param name="fromClient">клиент отправитель</param>
+        public TransferViewModel(Window transferWindow, IMessageService messageService, Client fromClient)
         {
-            this.transferWindow = replenishCardWindow;
+            this.transferWindow = transferWindow;
             this.messageService = messageService;
 
             FromCard = fromClient.Account.Card;
@@ -72,6 +70,8 @@ namespace BankingSystem.ViewModels.OperationViewModels
                     errors[nameof(Amount)] = "Недопустимые символы.";
                 else if (decimal.Parse(amount) == default)
                     errors[nameof(Amount)] = "Недопустимое значение.";
+                else if (FromCard.CardBalance - decimal.Parse(amount) < 0)
+                    errors[nameof(Amount)] = "Недостаточно средств.";
                 else if (decimal.Parse(amount) > 300_000)
                     errors[nameof(Amount)] = "Превышен лимит.";
                 else

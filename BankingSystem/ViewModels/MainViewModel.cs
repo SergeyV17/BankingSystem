@@ -13,6 +13,7 @@ using System.Collections.ObjectModel;
 using BankingSystem.Models.Implementations.Clients;
 using BankingSystem.Models.Implementations.Data.DbInteraction.ClientBaseEditing;
 using BankingSystem.Views.Windows.OperationPanel;
+using BankingSystem.Models.Implementations.Data.DbInteraction.Selections;
 
 namespace BankingSystem.ViewModels
 {
@@ -209,7 +210,7 @@ namespace BankingSystem.ViewModels
                                 break;
                             default:
                                 Clients = null;
-                                break;
+                                break; 
                         }
 
                         CardPanelVisibility = false;
@@ -430,7 +431,15 @@ namespace BankingSystem.ViewModels
                 return openDepositCommand ??
                     (openDepositCommand = new RelayCommand(obj =>
                     {
-                    }));
+                        var openDepositWindow = new OpenDepositWindow() { Owner = mainWindow };
+                        openDepositWindow.DataContext = new OpenDeposiViewModel(openDepositWindow, messageService, SelectedClient);
+
+                        openDepositWindow.ShowDialog();
+
+                        selectedTreeItemChangedCommand = null;
+                        SelectedTreeItemChangedCommand.Execute(SelectedNode);
+                    },
+                    (obj) => SelectedClient != null ? SelectedClient.Account.Card.CardBalance >= 20_000 ? true : false : false));
             }
         }
 

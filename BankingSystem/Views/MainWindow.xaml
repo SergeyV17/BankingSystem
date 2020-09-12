@@ -385,7 +385,8 @@
                         <!--Кнопка открыть вклад-->
                         <Button  
                             Style="{StaticResource EditPanelButtonStyle}" 
-                            Visibility="{Binding OpenDepositBtnVisibility, Converter={StaticResource booleanToVisibilityConverter}}">
+                            Visibility="{Binding OpenDepositBtnVisibility, Converter={StaticResource booleanToVisibilityConverter}}"
+                            Command="{Binding OpenDepositCommand}">
                             <StackPanel Orientation="Horizontal">
                                 <Image Source="Resources/Icons/ReplenishmentIcon.png" />
                                 <TextBlock
@@ -396,7 +397,7 @@
                         <StackPanel Visibility="{Binding DepositInfoVisibility, Converter={StaticResource booleanToVisibilityConverter}}">
                             <!--Наименование-->
                             <TextBlock 
-                                Text="{Binding ElementName=LisOfClients, Path=SelectedItem.Account.Deposit.DepositNumber, StringFormat={}№{0}}"
+                                Text="{Binding ElementName=LisOfClients, Path=SelectedItem.Account.Deposit.DepositNumber}"
                                 Style="{StaticResource BaseTextBlockStyle}"/>
                             <!--Баланс-->
                             <TextBlock

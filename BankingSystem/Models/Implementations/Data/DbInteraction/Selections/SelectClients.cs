@@ -4,9 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows.Documents;
 
-namespace BankingSystem.Models.Implementations.Data.DbInteraction.ClientBaseEditing
+namespace BankingSystem.Models.Implementations.Data.DbInteraction.Selections
 {
     /// <summary>
     /// Класс выборки клиентов из БД

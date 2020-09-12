@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BankingSystem.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20200911071753_InitialCreate")]
+    [Migration("20200912010559_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -112,8 +112,8 @@ namespace BankingSystem.Migrations
                     b.Property<string>("DepositNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("DepositRate")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("DepositRate")
+                        .HasColumnType("float");
 
                     b.Property<string>("Discriminator")
                         .IsRequired()

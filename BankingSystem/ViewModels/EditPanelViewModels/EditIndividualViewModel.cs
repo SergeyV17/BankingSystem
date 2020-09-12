@@ -240,7 +240,7 @@ namespace BankingSystem.ViewModels.EditPanelViewModels
                         catch (Exception ex)
                         {
                             messageService.ShowErrorMessage(editIndividualWindow, ex.Message);
-                        }
+                         }
                     },
                     (obj) => IsValid));
             }

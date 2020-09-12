@@ -110,8 +110,8 @@ namespace BankingSystem.Migrations
                     b.Property<string>("DepositNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("DepositRate")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("DepositRate")
+                        .HasColumnType("float");
 
                     b.Property<string>("Discriminator")
                         .IsRequired()

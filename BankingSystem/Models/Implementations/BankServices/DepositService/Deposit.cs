@@ -1,5 +1,6 @@
 ﻿using System;
 using BankingSystem.Models.Implementations.Accounts;
+using BankingSystem.Models.Implementations.Clients;
 using BankingSystem.Models.Implementations.Requisites.DepositRequisites.Factories;
 
 namespace BankingSystem.Models.Implementations.BankServices.DepositService
@@ -22,7 +23,7 @@ namespace BankingSystem.Models.Implementations.BankServices.DepositService
         /// <param name="depositBalance">баланс</param>
         /// <param name="depositCapitalization">капитализация</param>
         /// <param name="depositRate">ставка</param>
-        public Deposit(decimal depositBalance, bool depositCapitalization, decimal depositRate)
+        public Deposit(decimal depositBalance, bool depositCapitalization, double depositRate)
         {
             DepositNumber = $"№{DepositNumberFactory.CreateDepositNumber()}";
             DepositBalance = depositBalance;
@@ -39,7 +40,7 @@ namespace BankingSystem.Models.Implementations.BankServices.DepositService
         public DateTime DateOfDepositOpen { get; private set; }
         public DateTime DateOfDepositClose { get; private set; }
         public bool DepositCapitalization { get; private set; }
-        public decimal DepositRate { get; set; }
+        public double DepositRate { get; set; }
 
         //Свойства для БД
         public int AccountId { get; set; }

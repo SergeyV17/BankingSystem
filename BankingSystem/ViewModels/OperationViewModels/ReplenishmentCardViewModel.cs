@@ -31,7 +31,7 @@ namespace BankingSystem.ViewModels.OperationViewModels
         /// </summary>
         /// <param name="replenishCardWindow">окно пополнение лиц. счета карты</param>
         /// <param name="messageService">сервис работы с сообщениями</param>
-        /// <param name="selectedClient">выбранная карта</param>
+        /// <param name="selectedClient">выбранный клиент</param>
         public ReplenishCardViewModel(Window replenishCardWindow, IMessageService messageService, Client selectedClient)
         {
             this.replenishCardWindow = replenishCardWindow;

@@ -95,34 +95,45 @@ namespace BankingSystem.Models.Implementations.Data.Factories
                     decimal balance = random.Next(1, 10) * 10000;
                     bool capitalization = Convert.ToBoolean(random.Next(2));
 
+                    //Паспортные данные
                     var passport = PassportFactory.CreatePassport(
                         FullNameFactory.CreateFullName(Gender.Female),
                         SeriesAndNumberFactory.CreateSeriesAndNumber(),
                         $"Адрес_{i}");
 
+                    //Контактные данные
+                    var contact = ContactFactory.CreateContact(PhoneNumberFactory.CreateNumber(), $"Client@Email_{i}.ru");
+
                     switch (random.Next(Enum.GetNames(typeof(ClientType)).Length))
                     {
                         case (int)ClientType.Individual:
 
-                            var contact = ContactFactory.CreateContact(PhoneNumberFactory.CreateNumber(), $"Client@Email.ru_{i}");
+                            //Данные аккаунта
+                            var card = IndividualsCardFactories[random.Next(IndividualsCardFactories.Length)].CreateCard(balance);
+                            var deposit = random.Next(2) == 0 ? 
+                                                new DefaultDepositFactory().CreateDeposit(balance, capitalization, ClientType.Individual) : 
+                                                new NullDeposit();
 
-                            var individualAccount = AccountFactories[random.Next(AccountFactories.Length)].CreateAccount(
-                                    IndividualsCardFactories[random.Next(IndividualsCardFactories.Length)].CreateCard(balance),
-                                    random.Next(2) == 0 ? new DefaultDepositFactory().CreateDeposit(balance, capitalization, ClientType.Individual) : new NullDeposit());
+                            var individualAccount = AccountFactories[random.Next(AccountFactories.Length)].CreateAccount(card, deposit);
 
+                            //Создание физ. лица
                             client = IndividualFactory.CreateIndividual(passport, contact, individualAccount);
                             break;
 
                         case (int)ClientType.Entity:
 
-                            contact = ContactFactory.CreateContact(PhoneNumberFactory.CreateNumber(), $"Client@Email.ru_{i}");
+                            //Данные аккаунта
+                            card = EntitiesCardFactories[random.Next(EntitiesCardFactories.Length)].CreateCard(balance);
+                            deposit = random.Next(2) == 0 ? 
+                                            new DefaultDepositFactory().CreateDeposit(balance, capitalization, ClientType.Entity) : 
+                                            new NullDeposit();
 
-                            var entityAccount = AccountFactories[random.Next(AccountFactories.Length)].CreateAccount(
-                                    EntitiesCardFactories[random.Next(EntitiesCardFactories.Length)].CreateCard(balance),
-                                    random.Next(2) == 0 ? new DefaultDepositFactory().CreateDeposit(balance, capitalization, ClientType.Entity) : new NullDeposit());
+                            var entityAccount = AccountFactories[random.Next(AccountFactories.Length)].CreateAccount(card, deposit);
 
-                            var company = CompanyFactory.CreateCompany($"Компания_{i}", $"http:\\Company.Website.ru_{i}");
+                            //Данные компании
+                            var company = CompanyFactory.CreateCompany($"Компания_{i}", $"http:\\Company.Website_{i}.ru");
 
+                            //Создание юр.лица
                             client = EntityFactory.CreateEntity(passport, contact, entityAccount, company);
                             break;
 

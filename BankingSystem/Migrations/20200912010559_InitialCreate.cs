@@ -87,7 +87,7 @@ namespace BankingSystem.Migrations
                     DateOfDepositOpen = table.Column<DateTime>(nullable: false),
                     DateOfDepositClose = table.Column<DateTime>(nullable: false),
                     DepositCapitalization = table.Column<bool>(nullable: false),
-                    DepositRate = table.Column<decimal>(nullable: false),
+                    DepositRate = table.Column<double>(nullable: false),
                     AccountId = table.Column<int>(nullable: false),
                     Discriminator = table.Column<string>(nullable: false)
                 },

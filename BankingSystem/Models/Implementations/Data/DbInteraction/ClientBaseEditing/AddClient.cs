@@ -9,6 +9,7 @@ using BankingSystem.Models.Implementations.Requisites.ClientRequisites.Factories
 using BankingSystem.Models.Implementations.Requisites.ClientRequisites.PassportData.Factories;
 using BankingSystem.Models.Implementations.Requisites.ClientRequisites.PassportData;
 using BankingSystem.Models.Implementations.Requisites.ClientRequisites.ContactData;
+using BankingSystem.Models.Implementations.Data.DbInteraction.SearchesForMatches;
 
 namespace BankingSystem.Models.Implementations.Data.DbInteraction.ClientBaseEditing
 {
@@ -78,10 +79,11 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction.ClientBaseEdit
             {
                 var (passport, contact, account) = CreateBaseRequisites(lastName, firstName, middleName, series, number, address, phoneNumber, email, cardName, accountType);
 
+                //Создание физ.лица
                 var individual = IndividualFactory.CreateIndividual(passport, contact, account);
 
                 //Проверка на совпадения в реквизитах
-                var (noMatchesFound, message) = SearchForMatches.IndividualErrorProcessing(context, passport, contact);
+                var (noMatchesFound, message) = SearchForMatchesForAdding.IndividualErrorProcessing(passport, contact);
 
                 if (noMatchesFound)
                 {
@@ -123,10 +125,11 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction.ClientBaseEdit
                 //Данные компании
                 var company = CompanyFactory.CreateCompany(nameOfCompany, website);
 
+                //Создание юр.лица
                 var entity = EntityFactory.CreateEntity(passport, contact, account, company);
 
                 //Проверка на совпадения в реквизитах
-                var (noMatchesFound, message) = SearchForMatches.EntityErrorProcessing(context, passport, contact, company);
+                var (noMatchesFound, message) = SearchForMatchesForAdding.EntityErrorProcessing(passport, contact, company);
 
                 if (noMatchesFound)
                 {

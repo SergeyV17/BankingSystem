@@ -12,6 +12,7 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction.ClientBaseEdit
         /// Метод удаления клиента из БД
         /// </summary>
         /// <param name="selectedClient">выбранный клиент</param>
+        /// <returns>признак успешной операции, сообщение</returns>
         public static (bool successfully, string message) DeleteClientFromDb(Client selectedClient)
         {
             using (AppDbContext context = new AppDbContext())

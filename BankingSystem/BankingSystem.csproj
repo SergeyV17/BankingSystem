@@ -219,6 +219,7 @@
     <Compile Include="Models\Implementations\Data\DbInteraction\CardOperations\TransferCardToCard.cs" />
     <Compile Include="Models\Implementations\Data\DbInteraction\ClientBaseEditing\DeleteClient.cs" />
     <Compile Include="Models\Implementations\Data\DbInteraction\ClientBaseEditing\EditClient.cs" />
+    <Compile Include="Models\Implementations\Data\DbInteraction\DepositOperations\СloseDeposit.cs" />
     <Compile Include="Models\Implementations\Data\DbInteraction\SearchForMatches\SearchForMatchesForAdding.cs" />
     <Compile Include="Models\Implementations\Data\DbInteraction\SearchForMatches\SearchForMatchesForEditing.cs" />
     <Compile Include="Models\Implementations\Data\DbInteraction\DepositOperations\OpenDeposit.cs" />

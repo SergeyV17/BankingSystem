@@ -436,7 +436,9 @@
                                 </TextBlock>
                             </StackPanel>
                             <!--Закрыть вклад-->
-                            <Button Style="{StaticResource EditPanelButtonStyle}">
+                            <Button 
+                                Style="{StaticResource EditPanelButtonStyle}"
+                                Command="{Binding CloseDepositCommand}">
                                 <StackPanel 
                                     Orientation="Horizontal">
                                     <Image Source="Resources/Icons/CloseDepositIcon.png"/>

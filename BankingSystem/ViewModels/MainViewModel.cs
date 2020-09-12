@@ -14,6 +14,7 @@ using BankingSystem.Models.Implementations.Clients;
 using BankingSystem.Models.Implementations.Data.DbInteraction.ClientBaseEditing;
 using BankingSystem.Views.Windows.OperationPanel;
 using BankingSystem.Models.Implementations.Data.DbInteraction.Selections;
+using BankingSystem.Models.Implementations.Data.DbInteraction.DepositOperations;
 
 namespace BankingSystem.ViewModels
 {
@@ -333,8 +334,15 @@ namespace BankingSystem.ViewModels
                         {
                             var (success, message) = DeleteClient.DeleteClientFromDb(SelectedClient);
 
-                            messageService.ShowInfoMessage(mainWindow, message);
-                            Clients.Remove(SelectedClient);
+                            if (success)
+                            {
+                                messageService.ShowInfoMessage(mainWindow, message);
+                                Clients.Remove(SelectedClient);
+                            }
+                            else
+                            {
+                                messageService.ShowWarningMessage(mainWindow, message);
+                            }
                         }
                         catch (Exception ex)
                         {
@@ -451,7 +459,28 @@ namespace BankingSystem.ViewModels
                 return closeDepositCommand ??
                     (closeDepositCommand = new RelayCommand(obj =>
                     {
-                    }));
+                        try
+                        {
+                            var(success, message) = СloseDeposit.Close(SelectedClient);
+
+                            if (success)
+                            {
+                                messageService.ShowInfoMessage(mainWindow, message);
+                            }
+                            else
+                            {
+                                messageService.ShowWarningMessage(mainWindow, message);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            messageService.ShowErrorMessage(mainWindow, ex.Message);
+                        }
+
+                        selectedTreeItemChangedCommand = null;
+                        SelectedTreeItemChangedCommand.Execute(SelectedNode);
+                    },
+                    (obj) => SelectedClient != null ? SelectedClient.Account.Deposit.HasDeposit ? true : false : false));
             }
         }
 

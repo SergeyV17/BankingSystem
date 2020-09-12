@@ -21,7 +21,7 @@ namespace BankingSystem.ViewModels.EditPanelViewModels
     {
         private readonly Dictionary<string, string> errors;
 
-        private Window addEntityWindow;
+        private readonly Window addEntityWindow;
         private readonly IMessageService messageService;
 
         private string lastName;

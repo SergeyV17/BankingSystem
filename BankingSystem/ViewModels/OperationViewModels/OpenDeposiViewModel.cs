@@ -19,7 +19,7 @@ namespace BankingSystem.ViewModels.OperationViewModels
     {
         private readonly Dictionary<string, string> errors;
 
-        private Window openDepositWindow;
+        private readonly Window openDepositWindow;
         private readonly IMessageService messageService;
 
         private string amount;

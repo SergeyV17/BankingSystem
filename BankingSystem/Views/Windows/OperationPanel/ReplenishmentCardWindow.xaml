@@ -64,7 +64,7 @@
                 Text="Успешно"
                 Foreground="Green"
                 Visibility="{Binding ReportVisibility, Converter={StaticResource booleanToVisibilityConverter}}"
-                Style="{StaticResource BaseDialogTextBlockStyle}" HorizontalAlignment="Center" Margin="0 30"/>
+                Style="{StaticResource BaseDialogTextBlockStyle}" HorizontalAlignment="Center" Margin="0 20"/>
         </StackPanel>
 
         <!--Кнопка Пополнить-->

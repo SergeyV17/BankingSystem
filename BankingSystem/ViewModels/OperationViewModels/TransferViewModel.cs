@@ -20,7 +20,7 @@ namespace BankingSystem.ViewModels.OperationViewModels
     {
         private readonly Dictionary<string, string> errors;
 
-        private Window transferWindow;
+        private readonly Window transferWindow;
         private readonly IMessageService messageService;
 
         private string amount;

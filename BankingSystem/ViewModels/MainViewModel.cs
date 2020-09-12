@@ -15,6 +15,7 @@ using BankingSystem.Models.Implementations.Data.DbInteraction.ClientBaseEditing;
 using BankingSystem.Views.Windows.OperationPanel;
 using BankingSystem.Models.Implementations.Data.DbInteraction.Selections;
 using BankingSystem.Models.Implementations.Data.DbInteraction.DepositOperations;
+using CalculateDepositLibrary;
 
 namespace BankingSystem.ViewModels
 {
@@ -33,6 +34,28 @@ namespace BankingSystem.ViewModels
         private Client selectedClient;
         private bool cardPanelVisibility;
         private bool depositPanelVisibility;
+
+        private DateTime selectedDate;
+        private decimal profit;
+        private decimal balanceWithProfit;
+
+        #endregion
+
+        #region Конструктор
+
+        /// <summary>
+        /// Конструктор модели представления главного окна
+        /// </summary>
+        /// <param name="dialogService"><сервис диалоговых окон/param>
+        public MainViewModel(MainWindow mainWindow, IFilePathService filePathService, IMessageService messageService)
+        {
+            this.mainWindow = mainWindow;
+
+            this.filePathService = filePathService;
+            this.messageService = messageService;
+
+            SelectedDate = DateTime.Now;
+        }
 
         #endregion
 
@@ -65,6 +88,66 @@ namespace BankingSystem.ViewModels
         }
         public ObservableCollection<Client> Clients { get; private set; }
 
+        #region DepositCalculator
+
+        public DateTime SelectedDate
+        {
+            get => selectedDate;
+            set
+            {
+                selectedDate = value;
+                OnPropertyChanged(nameof(SelectedDate));
+
+                try
+                {
+                    if (SelectedClient != null)
+                    {
+                        if (SelectedClient.Account.Deposit.DepositCapitalization)
+                        {
+                            (Profit, BalanceWithProfit) = CalculateDeposit.CalculateWithCapitalization(
+                                SelectedClient.Account.Deposit.DepositBalance,
+                                SelectedClient.Account.Deposit.DateOfDepositOpen,
+                                SelectedClient.Account.Deposit.DepositRate,
+                                selectedDate);
+                        }
+                        else
+                        {
+                            (Profit, BalanceWithProfit) = CalculateDeposit.CalculateWithoutCapitalization(
+                                SelectedClient.Account.Deposit.DepositBalance,
+                                SelectedClient.Account.Deposit.DateOfDepositOpen,
+                                SelectedClient.Account.Deposit.DepositRate,
+                                selectedDate);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    messageService.ShowErrorMessage(mainWindow, ex.Message);
+                }
+            }
+        }
+
+        public decimal Profit
+        {
+            get => profit;
+            set
+            {
+                profit = value;
+                OnPropertyChanged(nameof(Profit));
+            }
+        }
+        public decimal BalanceWithProfit
+        {
+            get => balanceWithProfit;
+            set
+            {
+                balanceWithProfit = value;
+                OnPropertyChanged(nameof(BalanceWithProfit));
+            }
+        }
+
+        #endregion
+
         #region Visibility
 
         public bool LoadingPanelVisibility { get; private set; } // в разработке (требуется многопоточность)
@@ -72,14 +155,14 @@ namespace BankingSystem.ViewModels
         public bool ClientsVisibility => SelectedNode != null ? SelectedNode.Type != NodeType.Intermediate ? true : false : false;
         public bool ClientPanelVisibility => SelectedClient != null ? true : false;
 
-        public bool CardPanelVisibility 
-        { 
-            get => cardPanelVisibility; 
-            private set 
-            { 
-                cardPanelVisibility = value; 
-                OnPropertyChanged(nameof(CardPanelVisibility)); 
-            } 
+        public bool CardPanelVisibility
+        {
+            get => cardPanelVisibility;
+            private set
+            {
+                cardPanelVisibility = value;
+                OnPropertyChanged(nameof(CardPanelVisibility));
+            }
         }
 
         public bool DepositPanelVisibility
@@ -96,22 +179,6 @@ namespace BankingSystem.ViewModels
         public bool DepositInfoVisibility => SelectedClient != null ? SelectedClient.Account.Deposit.HasDeposit ? true : false : false;
 
         #endregion
-
-        #endregion
-
-        #region Конструктор
-
-        /// <summary>
-        /// Конструктор модели представления главного окна
-        /// </summary>
-        /// <param name="dialogService"><сервис диалоговых окон/param>
-        public MainViewModel(MainWindow mainWindow, IFilePathService filePathService, IMessageService messageService)
-        {
-            this.mainWindow = mainWindow;
-
-            this.filePathService = filePathService;
-            this.messageService = messageService;
-        }
 
         #endregion
 
@@ -198,10 +265,10 @@ namespace BankingSystem.ViewModels
                         switch (SelectedNode.Type)
                         {
                             case NodeType.Individual:
-                                Clients = SelectClients.SelectIndividuals(); 
+                                Clients = SelectClients.SelectIndividuals();
                                 break;
                             case NodeType.Entity:
-                                Clients = SelectClients.SelectEntities(); 
+                                Clients = SelectClients.SelectEntities();
                                 break;
                             case NodeType.VIPIndividual:
                                 Clients = SelectClients.SelectVIPIndividuals();
@@ -211,7 +278,7 @@ namespace BankingSystem.ViewModels
                                 break;
                             default:
                                 Clients = null;
-                                break; 
+                                break;
                         }
 
                         CardPanelVisibility = false;
@@ -243,6 +310,7 @@ namespace BankingSystem.ViewModels
                     {
                         OnPropertyChanged(nameof(OpenDepositBtnVisibility));
                         OnPropertyChanged(nameof(DepositInfoVisibility));
+                        SelectedDate = SelectedDate;
                     }
                     catch (Exception ex)
                     {
@@ -268,7 +336,7 @@ namespace BankingSystem.ViewModels
                         {
                             case NodeType.Individual:
                             case NodeType.VIPIndividual:
-                                var addIndividualWindow = new AddIndividualWindow(){ Owner = mainWindow };
+                                var addIndividualWindow = new AddIndividualWindow() { Owner = mainWindow };
                                 addIndividualWindow.DataContext = new AddIndividualViewModel(addIndividualWindow, messageService, SelectedNode.IsVIP);
 
                                 addIndividualWindow.ShowDialog();
@@ -461,7 +529,7 @@ namespace BankingSystem.ViewModels
                     {
                         try
                         {
-                            var(success, message) = СloseDeposit.Close(SelectedClient);
+                            var (success, message) = СloseDeposit.Close(SelectedClient);
 
                             if (success)
                             {

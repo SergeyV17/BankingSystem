@@ -65,7 +65,7 @@
             <StackPanel Grid.Column="1">
                 <!--Условия-->
                 <TextBlock
-                    Text="Условия:"
+                    Text="Условия"
                     Style="{StaticResource BaseDialogTextBlockStyle}"/>
                 <!--Ставка-->
                 <StackPanel Orientation="Horizontal">

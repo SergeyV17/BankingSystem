@@ -19,7 +19,7 @@ namespace BankingSystem.ViewModels.OperationViewModels
     {
         private readonly Dictionary<string, string> errors;
 
-        private Window replenishCardWindow;
+        private readonly Window replenishCardWindow;
         private readonly IMessageService messageService;
 
         private string amount;

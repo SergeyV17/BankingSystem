@@ -79,7 +79,9 @@
                 <Viewbox DockPanel.Dock="Bottom">
                     <Calendar
                         x:Name="DepositCalendar"
-                        SelectedDate="{x:Static sys:DateTime.Now}"/>
+                        SelectedDate="{Binding SelectedDate}"
+                        DisplayDateStart="{Binding ElementName=LisOfClients, Path=SelectedItem.Account.Deposit.DateOfDepositOpen, Mode=OneWay}"
+                        DisplayDateEnd="{Binding ElementName=LisOfClients, Path=SelectedItem.Account.Deposit.DateOfDepositClose, Mode=OneWay}"/>
                 </Viewbox>
                 <!--Дерево-->
                 <TreeView 
@@ -467,21 +469,19 @@
                         Visibility="{Binding DepositPanelVisibility, Converter={StaticResource booleanToVisibilityConverter}}">
                         <StackPanel Visibility="{Binding DepositInfoVisibility, Converter={StaticResource booleanToVisibilityConverter}}">
                             <TextBlock
-                            Text="{Binding ElementName=DepositCalendar, Path=SelectedDate, StringFormat={}Выбранная дата: {0:dd.MM.yyyy}}"
-                            Style="{StaticResource BaseTextBlockStyle}"/>
+                                Text="{Binding SelectedDate, StringFormat={}Выбранная дата: {0:dd.MM.yyyy}}"
+                                Style="{StaticResource BaseTextBlockStyle}"/>
                             <TextBlock
-                            Text="{Binding ElementName=LisOfClients, 
-                            Path=SelectedItem.Account.Deposit.DepositRate, 
-                            StringFormat={}Текущая ставка по депозиту: {0:P}}"
-                            Style="{StaticResource BaseTextBlockStyle}"/>
+                                Text="{Binding ElementName=LisOfClients, 
+                                Path=SelectedItem.Account.Deposit.DepositRate, 
+                                StringFormat={}Текущая ставка по депозиту: {0:P}}"
+                                Style="{StaticResource BaseTextBlockStyle}"/>
                             <TextBlock
-                            Text="{Binding ElementName=LisOfClients, 
-                            Path=SelectedItem.Account.Deposit.DepositBalance, 
-                            StringFormat={}Доходность составит: {0:C}}"
-                            Style="{StaticResource BaseTextBlockStyle}"/>
+                                Text="{Binding Profit, StringFormat={}Прибыль составит: {0:C}}"
+                                Style="{StaticResource BaseTextBlockStyle}"/>
                             <TextBlock
-                            Text="{Binding ElementName=LisOfClients, Path=SelectedItem.Account.Deposit.DepositBalance, StringFormat={}Баланс с учётом доходности: {0:C}}"
-                            Style="{StaticResource BaseTextBlockStyle}"/>
+                                Text="{Binding BalanceWithProfit,StringFormat={}Баланс с учётом прибыли: {0:C}}"
+                                Style="{StaticResource BaseTextBlockStyle}"/>
                         </StackPanel>
                     </StackPanel>
                 </Border>

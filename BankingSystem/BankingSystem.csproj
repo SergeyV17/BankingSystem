@@ -414,7 +414,12 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\CalculateDepositLibrary\CalculateDepositLibrary.csproj">
+      <Project>{4322593e-da19-4cb2-88cb-5d4cc846cfb9}</Project>
+      <Name>CalculateDepositLibrary</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Views\Resources\Text\InformationSheet.txt" />
   </ItemGroup>

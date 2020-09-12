@@ -20,7 +20,7 @@ namespace BankingSystem.ViewModels.EditPanelViewModels
     {
         private readonly Dictionary<string, string> errors;
 
-        private Window editIndividualWindow;
+        private readonly Window editIndividualWindow;
         private readonly IMessageService messageService;
 
         private string lastName;

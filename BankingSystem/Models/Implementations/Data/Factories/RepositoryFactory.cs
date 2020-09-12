@@ -21,7 +21,7 @@ namespace BankingSystem.Models.Implementations.Data.Factories
     class RepositoryFactory
     {
         private static readonly Random random;
-        private static object locker;
+        private static readonly object locker;
 
         /// <summary>
         /// Конструктор репозитория

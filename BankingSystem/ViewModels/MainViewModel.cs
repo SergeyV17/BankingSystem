@@ -17,6 +17,7 @@ using BankingSystem.Models.Implementations.Data.DbInteraction.Selections;
 using BankingSystem.Models.Implementations.Data.DbInteraction.DepositOperations;
 using CalculateDepositLibrary;
 using BankingSystem.Views.Windows.History;
+using System.ComponentModel;
 
 namespace BankingSystem.ViewModels
 {
@@ -41,6 +42,10 @@ namespace BankingSystem.ViewModels
         private decimal balanceWithProfit;
 
         private const int numberOfClients = 1_000;
+
+        private bool loadingPanelVisibility;
+        private int progressBarValue;
+        private double percentCount;
 
         #endregion
 
@@ -167,7 +172,7 @@ namespace BankingSystem.ViewModels
                 }
 
                 return balanceWithProfit;
-            } 
+            }
             set
             {
                 balanceWithProfit = value;
@@ -179,7 +184,15 @@ namespace BankingSystem.ViewModels
 
         #region Visibility
 
-        public bool LoadingPanelVisibility { get; private set; } // в разработке (требуется многопоточность)
+        public bool LoadingPanelVisibility
+        {
+            get => loadingPanelVisibility;
+            private set
+            {
+                loadingPanelVisibility = value;
+                OnPropertyChanged(nameof(LoadingPanelVisibility));
+            }
+        }
 
         public bool ClientsVisibility => SelectedNode != null ? SelectedNode.Type != NodeType.Intermediate ? true : false : false;
         public bool ClientPanelVisibility => SelectedClient != null ? true : false;
@@ -209,6 +222,32 @@ namespace BankingSystem.ViewModels
 
         #endregion
 
+        #region ProgressBar
+
+        public int ProgressBarValue
+        {
+            get => progressBarValue;
+            set
+            {
+                progressBarValue = value;
+                OnPropertyChanged(nameof(ProgressBarValue));
+            }
+        }
+
+        public double PercentCount
+        {
+            get => percentCount;
+            private set
+            {
+                percentCount = value;
+                OnPropertyChanged(nameof(PercentCount));
+            }
+        }
+
+        public int ProgressBarMaximum => numberOfClients;
+
+        #endregion
+
         #endregion
 
         #region Команды
@@ -226,8 +265,28 @@ namespace BankingSystem.ViewModels
                 {
                     try
                     {
-                        Repository = RepositoryFactory.CreateRepository(numberOfClients);
-                        OnPropertyChanged(nameof(Repository));
+                        var worker = new BackgroundWorker { WorkerReportsProgress = true };
+                        RepositoryFactory.ProcessingCountEvent += (i) => worker.ReportProgress(i);
+
+                        worker.DoWork += (s, e) =>
+                        {
+                            LoadingPanelVisibility = true;
+                            Repository = RepositoryFactory.CreateRepository(numberOfClients);
+                        };
+
+                        worker.ProgressChanged += (s, e) =>
+                        {
+                            PercentCount = (double)e.ProgressPercentage / (double)ProgressBarMaximum * 100;
+                            ProgressBarValue = e.ProgressPercentage;
+                        };
+
+                        worker.RunWorkerAsync();
+                        worker.RunWorkerCompleted += (s, a) =>
+                        {
+                            LoadingPanelVisibility = false;
+                            OnPropertyChanged(nameof(Repository));
+                        };
+
                     }
                     catch (Exception ex)
                     {

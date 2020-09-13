@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:intr="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:local="clr-namespace:BankingSystem.Views.Converters"
         mc:Ignorable="d"
@@ -67,9 +66,12 @@
                     Style="{StaticResource LoadingPanelStyle}"
                     Visibility="{Binding LoadingPanelVisibility, Converter={StaticResource booleanToVisibilityConverter}}">
                     <TextBlock 
-                        Text="Загрузка"
+                        Text="{Binding PercentCount, StringFormat={}Загрузка {0}%..., Mode=OneWay}"
                         HorizontalAlignment="Center"/>
-                    <ProgressBar Style="{StaticResource LoadingProgressBarStyle}"/>
+                    <ProgressBar 
+                        Value="{Binding ProgressBarValue,UpdateSourceTrigger=PropertyChanged}"
+                        Maximum="{Binding ProgressBarMaximum, Mode=OneWay}"
+                        Style="{StaticResource LoadingProgressBarStyle}"/>
                 </StackPanel>
         </Border>
         

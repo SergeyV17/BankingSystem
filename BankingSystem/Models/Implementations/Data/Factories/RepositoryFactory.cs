@@ -19,6 +19,9 @@ namespace BankingSystem.Models.Implementations.Data.Factories
     /// </summary>
     class RepositoryFactory
     {
+        public static event Action<int> ProcessingCountEvent;
+        public static int Count { get; private set; }
+
         private static readonly Random random;
         private static readonly object locker;
 
@@ -47,6 +50,7 @@ namespace BankingSystem.Models.Implementations.Data.Factories
                     FillRepository(context, quantity);
             }
 
+            ProcessingCountEvent?.Invoke(Count++);
             return Repository.GetRepository(root);
         }
 
@@ -140,6 +144,7 @@ namespace BankingSystem.Models.Implementations.Data.Factories
                             throw new ArgumentOutOfRangeException();
                     }
 
+                    ProcessingCountEvent?.Invoke(Count++);
                     dbContext.Add(client);
                 }
             });

@@ -40,6 +40,8 @@ namespace BankingSystem.ViewModels
         private decimal profit;
         private decimal balanceWithProfit;
 
+        private const int numberOfClients = 1_000;
+
         #endregion
 
         #region Конструктор
@@ -224,7 +226,7 @@ namespace BankingSystem.ViewModels
                 {
                     try
                     {
-                        Repository = RepositoryFactory.CreateRepository(20);
+                        Repository = RepositoryFactory.CreateRepository(numberOfClients);
                         OnPropertyChanged(nameof(Repository));
                     }
                     catch (Exception ex)

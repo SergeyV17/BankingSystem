@@ -84,10 +84,8 @@
                     <Calendar
                         x:Name="DepositCalendar"
                         SelectedDate="{Binding SelectedDate}"
-                        DisplayDateStart="{Binding ElementName=LisOfClients, Path=SelectedItem.Account.Deposit.DateOfDepositOpen, Mode=OneWay,
-                        FallbackValue={x:Static sys:DateTime.MinValue}}"
-                        DisplayDateEnd="{Binding ElementName=LisOfClients, Path=SelectedItem.Account.Deposit.DateOfDepositClose, Mode=OneWay,
-                        FallbackValue={x:Static sys:DateTime.MaxValue}}"/>
+                        DisplayDateStart="{Binding DisplayDateStart, Mode=OneWay}"
+                        DisplayDateEnd="{Binding DisplayDateEnd, Mode=OneWay}"/>
                 </Viewbox>
                 <!--Дерево-->
                 <TreeView 

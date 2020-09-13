@@ -83,13 +83,16 @@ namespace BankingSystem.ViewModels
             get => selectedDate;
             set
             {
-                selectedDate = value;
-                OnPropertyChanged(nameof(SelectedDate));
-
                 try
                 {
-                    if (SelectedClient != null)
+                    if (SelectedClient == null)
                     {
+                        selectedDate = DateTime.Now;
+                    }
+                    else
+                    {
+                        selectedDate = value;
+
                         if (SelectedClient.Account.Deposit.DepositCapitalization)
                         {
                             (Profit, BalanceWithProfit) = CalculateDeposit.CalculateWithCapitalization(
@@ -107,11 +110,39 @@ namespace BankingSystem.ViewModels
                                 selectedDate);
                         }
                     }
+
+                    OnPropertyChanged(nameof(SelectedDate));
                 }
                 catch (Exception ex)
                 {
                     messageService.ShowErrorMessage(mainWindow, ex.Message);
                 }
+            }
+        }
+
+        public DateTime DisplayDateStart
+        {
+            get
+            {
+                if (selectedClient != null)
+                {
+                    return selectedClient.Account.Deposit.DateOfDepositOpen;
+                }
+
+                return DateTime.MinValue;
+            }
+        }
+
+        public DateTime DisplayDateEnd
+        {
+            get
+            {
+                if (selectedClient != null)
+                {
+                    return selectedClient.Account.Deposit.DateOfDepositClose;
+                }
+
+                return DateTime.MaxValue;
             }
         }
 
@@ -309,11 +340,15 @@ namespace BankingSystem.ViewModels
                                 break;
                         }
 
+                        SelectedClient = null;
+
                         CardPanelVisibility = false;
                         DepositPanelVisibility = false;
 
                         OnPropertyChanged(nameof(Clients));
                         OnPropertyChanged(nameof(ClientsVisibility));
+                        OnPropertyChanged(nameof(DisplayDateStart));
+                        OnPropertyChanged(nameof(DisplayDateEnd));
                     }
                     catch (Exception ex)
                     {
@@ -330,7 +365,7 @@ namespace BankingSystem.ViewModels
         public ICommand SelectedClientChangedCommand
         {
             get
-            {
+            { 
                 return selectedClientChangedCommand ??
                 (selectedClientChangedCommand = new RelayCommand(obj =>
                 {
@@ -339,6 +374,8 @@ namespace BankingSystem.ViewModels
                         OnPropertyChanged(nameof(OpenDepositBtnVisibility));
                         OnPropertyChanged(nameof(DepositInfoVisibility));
                         SelectedDate = SelectedDate;
+                        OnPropertyChanged(nameof(DisplayDateStart));
+                        OnPropertyChanged(nameof(DisplayDateEnd));
                     }
                     catch (Exception ex)
                     {

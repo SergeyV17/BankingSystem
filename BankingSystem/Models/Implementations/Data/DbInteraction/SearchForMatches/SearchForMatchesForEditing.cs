@@ -14,7 +14,7 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction.SearchesForMat
         /// <summary>
         /// Метод проверки на совпадения базовых полей с БД клиентов
         /// </summary>
-        /// <param name="context">контекст БД</param>
+        /// <param name="current">выбранный клиент</param>
         /// <param name="passport">пасспортные данные</param>
         /// <param name="contact">контакнтные данные</param>
         /// <returns>признак совпадений, сообщение</returns>
@@ -49,7 +49,7 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction.SearchesForMat
         /// <summary>
         /// Метод проверки на совпадения полей с БД клиентов
         /// </summary>
-        /// <param name="context">контекст БД</param>
+        /// <param name="current">выбранный клиент</param>
         /// <param name="passport">паспортные данные</param>
         /// <param name="contact">контактные данные</param>
         /// <returns>признак совпадений, сообщение</returns>
@@ -79,7 +79,7 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction.SearchesForMat
         /// <summary>
         /// Метод проверки на совпадения полей с БД клиентов
         /// </summary>
-        /// <param name="context">контекст БД</param>
+        /// <param name="current">выбранный клиент</param>
         /// <param name="passport">паспортные данные</param>
         /// <param name="contact">контактные данные</param>
         /// <returns>признак совпадений, сообщение</returns>
@@ -103,7 +103,7 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction.SearchesForMat
                 {
                     return (false, "Клиент с введёнными реквизитами уже существует\n-проверьте наименование компании");
                 }
-                else if (context.Entities.FirstOrDefault(c => c.Company.Website == company.Website) != null)
+                else if (context.Entities.FirstOrDefault(c => c.Company.Website != current.Company.Website && c.Company.Website == company.Website) != null)
                 {
                     return (false, "Клиент с введёнными реквизитами уже существует\n-проверьте вебсайт");
                 }

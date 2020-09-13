@@ -11,19 +11,25 @@
             <!--Добавление-->
             <TabItem Header="Добавление">
                 <TabItem.Content>
-                    <ListBox ItemContainerStyle="{StaticResource HistoryListBoxItemStyle}"/>
+                    <ListBox 
+                        ItemsSource="{Binding AddClientList}"
+                        ItemContainerStyle="{StaticResource HistoryListBoxItemStyle}"/>
                 </TabItem.Content>
             </TabItem>
             <!--Редактирование-->
             <TabItem Header="Редактирование">
                 <TabItem.Content>
-                    <ListBox ItemContainerStyle="{StaticResource HistoryListBoxItemStyle}"/>
+                    <ListBox
+                        ItemsSource="{Binding EditClientList}"
+                        ItemContainerStyle="{StaticResource HistoryListBoxItemStyle}"/>
                 </TabItem.Content>
             </TabItem>
             <!--Удаление-->
             <TabItem Header="Удаление">
                 <TabItem.Content>
-                    <ListBox ItemContainerStyle="{StaticResource HistoryListBoxItemStyle}"/>
+                    <ListBox 
+                        ItemsSource="{Binding DeleteClientList}"
+                        ItemContainerStyle="{StaticResource HistoryListBoxItemStyle}"/>
                 </TabItem.Content>
             </TabItem>
         </TabControl>

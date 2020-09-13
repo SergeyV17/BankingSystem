@@ -221,6 +221,9 @@
     <Compile Include="Models\Implementations\Data\DbInteraction\CardOperations\TransferCardToCard.cs" />
     <Compile Include="Models\Implementations\Data\DbInteraction\ClientBaseEditing\DeleteClient.cs" />
     <Compile Include="Models\Implementations\Data\DbInteraction\ClientBaseEditing\EditClient.cs" />
+    <Compile Include="Models\Implementations\Data\DbInteraction\ClientBaseEditing\EventArgs\AddClientEventArgs.cs" />
+    <Compile Include="Models\Implementations\Data\DbInteraction\ClientBaseEditing\EventArgs\DeleteClientEventArgs.cs" />
+    <Compile Include="Models\Implementations\Data\DbInteraction\ClientBaseEditing\EventArgs\EditClientEventArgs.cs" />
     <Compile Include="Models\Implementations\Data\DbInteraction\DepositOperations\EventArgs\CloseDepositEventArgs.cs" />
     <Compile Include="Models\Implementations\Data\DbInteraction\DepositOperations\EventArgs\OpenDepositEventArgs.cs" />
     <Compile Include="Models\Implementations\Data\DbInteraction\DepositOperations\СloseDeposit.cs" />

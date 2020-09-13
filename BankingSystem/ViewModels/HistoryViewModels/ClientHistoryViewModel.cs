@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using BankingSystem.Models.Implementations.Data.DbInteraction.ClientBaseEditing.EventArgs;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace BankingSystem.ViewModels.HistoryViewModels
 {
@@ -7,30 +9,36 @@ namespace BankingSystem.ViewModels.HistoryViewModels
     /// </summary>
     class ClientHistoryViewModel : ViewModelBase
     {
-        public static ObservableCollection<string> addClientList;
-        public static ObservableCollection<string> editClientList;
-        public static ObservableCollection<string> deleteClientList;
+        public static IList<string> AddClientList { get; private set; }
+        public static IList<string> EditClientList { get; private set; }
+        public static IList<string> DeleteClientList { get; private set; }
 
         static ClientHistoryViewModel()
         {
-            addClientList = new ObservableCollection<string>();
-            editClientList = new ObservableCollection<string>();
-            deleteClientList = new ObservableCollection<string>();
+            AddClientList = new ObservableCollection<string>();
+            EditClientList = new ObservableCollection<string>();
+            DeleteClientList = new ObservableCollection<string>();
         }
 
-        public static void AddAddOperationClientInfo(string Information)
-        {
-            addClientList.Add(Information);
-        }
+        /// <summary>
+        /// Метод загрузки отчета о добавлении клиента в лог лист
+        /// </summary>
+        /// <param name="source">источник</param>
+        /// <param name="args">аргументы</param>
+        public static void OnClientAdded(object source, AddClientEventArgs args) => AddClientList.Add(args.LogMessage);
 
-        public static void AddEditOperationClientInfo(string Information)
-        {
-            editClientList.Add(Information);
-        }
+        /// <summary>
+        /// Метод загрузки отчета о редактировании клиента в лог лист
+        /// </summary>
+        /// <param name="source">источник</param>
+        /// <param name="args">аргументы</param>
+        public static void OnClientEdited(object source, EditClientEventArgs args) =>  EditClientList.Add(args.LogMessage);
 
-        public static void AddDeleteOperationClientInfo(string Information)
-        {
-            deleteClientList.Add(Information);
-        }
+        /// <summary>
+        /// Метод загрузки отчета о удалении клиента в лог лист
+        /// </summary>
+        /// <param name="source">источник</param>
+        /// <param name="args">аргументы</param>
+        public static void OnClientDeleted(object source, DeleteClientEventArgs args) => DeleteClientList.Add(args.LogMessage);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using BankingSystem.Models.Implementations.Data.DbInteraction.CardOperations;
+using BankingSystem.Models.Implementations.Data.DbInteraction.ClientBaseEditing;
 using BankingSystem.Models.Implementations.Data.DbInteraction.DepositOperations;
 using BankingSystem.ViewModels.HistoryViewModels;
 using System.Globalization;
@@ -36,7 +37,9 @@ namespace BankingSystem
         private void SubscribeToLogs()
         {
             //События редактирования БД клиентов
-
+            AddClient.ClientAdded += ClientHistoryViewModel.OnClientAdded;
+            EditClient.ClientEdited += ClientHistoryViewModel.OnClientEdited;
+            DeleteClient.ClientDeleted += ClientHistoryViewModel.OnClientDeleted;
 
             // События операций
             ReplenishCard.CardReplenished += OperationHistoryViewModel.OnCardReplenished;

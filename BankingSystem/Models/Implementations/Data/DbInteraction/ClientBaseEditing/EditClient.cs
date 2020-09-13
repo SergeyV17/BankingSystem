@@ -1,5 +1,7 @@
-﻿using BankingSystem.Models.Implementations.BankServices.CardService.Factories;
+﻿using BankingSystem.Models.Implementations.Accounts;
+using BankingSystem.Models.Implementations.BankServices.CardService.Factories;
 using BankingSystem.Models.Implementations.Clients;
+using BankingSystem.Models.Implementations.Data.DbInteraction.ClientBaseEditing.EventArgs;
 using BankingSystem.Models.Implementations.Data.DbInteraction.SearchesForMatches;
 using BankingSystem.Models.Implementations.Requisites.ClientRequisites.CompanyData.Factories;
 using BankingSystem.Models.Implementations.Requisites.ClientRequisites.ContactData;
@@ -7,6 +9,7 @@ using BankingSystem.Models.Implementations.Requisites.ClientRequisites.ContactDa
 using BankingSystem.Models.Implementations.Requisites.ClientRequisites.Factories;
 using BankingSystem.Models.Implementations.Requisites.ClientRequisites.PassportData;
 using BankingSystem.Models.Implementations.Requisites.ClientRequisites.PassportData.Factories;
+using System;
 using System.Linq;
 
 namespace BankingSystem.Models.Implementations.Data.DbInteraction.ClientBaseEditing
@@ -16,6 +19,8 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction.ClientBaseEdit
     /// </summary>
     class EditClient
     {
+        public static event EventHandler<EditClientEventArgs> ClientEdited;
+
         /// <summary>
         /// Метод создания базовых реквизитов
         /// </summary>
@@ -91,7 +96,15 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction.ClientBaseEdit
                     }
 
                     context.SaveChanges();
-                    message = SuccessMessage(passport.FullName.Name);
+                    message = "Произведена операция редактирования:\n" +
+                               $"Клиент: {individual.Passport.FullName.Name}\n" +
+                               $"Карта: {selectedIndividual.Account.Card.CardName}\n" +
+                               $"Номер: {selectedIndividual.Account.Card.CardNumber}\n" +
+                               $"Статус: {(selectedIndividual.Account is RegularAccount ? "Стандарт" : "VIP")}\n" +
+                               $"Дата: {DateTime.Now: dd/MM/yyyy HH:mm:ss}\n" +
+                               "Отчет: Успешно";
+
+                    ClientEdited?.Invoke(null, new EditClientEventArgs { LogMessage = message });
                 }
 
                 return (noMatchesFound, message);
@@ -138,21 +151,19 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction.ClientBaseEdit
                     entity.Company = company;
 
                     context.SaveChanges();
-                    message = SuccessMessage(passport.FullName.Name);
+                    message = "Произведена операция редактирования:\n" +
+                               $"Клиент: {entity.Passport.FullName.Name}\n" +
+                               $"Карта: {selectedEntity.Account.Card.CardName}\n" +
+                               $"Номер: {selectedEntity.Account.Card.CardNumber}\n" +
+                               $"Статус: {(selectedEntity.Account is RegularAccount ? "Стандарт" : "VIP")}\n" +
+                               $"Дата: {DateTime.Now: dd/MM/yyyy HH:mm:ss}\n" +
+                               "Отчет: Успешно";
+
+                    ClientEdited?.Invoke(null, new EditClientEventArgs { LogMessage = message });
                 }
 
                 return (noMatchesFound, message);
             }
-        }
-
-        /// <summary>
-        /// Метод порождающий сообщение об успешном редактировании клиента
-        /// </summary>
-        /// <param name="clientName">полное имя клиента</param>
-        /// <returns>сообщение</returns>
-        private static string SuccessMessage(string clientName)
-        {
-            return $"Клиент \"{clientName}\" успешно отредактирован.";
         }
     }
 }

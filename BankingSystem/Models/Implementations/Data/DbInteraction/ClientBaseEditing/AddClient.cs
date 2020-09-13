@@ -10,14 +10,18 @@ using BankingSystem.Models.Implementations.Requisites.ClientRequisites.PassportD
 using BankingSystem.Models.Implementations.Requisites.ClientRequisites.PassportData;
 using BankingSystem.Models.Implementations.Requisites.ClientRequisites.ContactData;
 using BankingSystem.Models.Implementations.Data.DbInteraction.SearchesForMatches;
+using System;
+using BankingSystem.Models.Implementations.Data.DbInteraction.ClientBaseEditing.EventArgs;
 
 namespace BankingSystem.Models.Implementations.Data.DbInteraction.ClientBaseEditing
 {
     /// <summary>
     /// Класс добавления клиентов в БД
     /// </summary>
-    static class AddClient
+    class AddClient
     {
+        public static event EventHandler<AddClientEventArgs> ClientAdded;
+
         /// <summary>
         /// Метод создания базовых реквизитов
         /// </summary>
@@ -90,7 +94,15 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction.ClientBaseEdit
                     context.Clients.Add(individual);
 
                     context.SaveChanges();
-                    message = SuccessMessage(passport.FullName.Name);
+                    message = "Произведена операция добавления:\n" +
+                               $"Клиент: {individual.Passport.FullName.Name}\n" +
+                               $"Карта: {individual.Account.Card.CardName}\n" +
+                               $"Номер: {individual.Account.Card.CardNumber}\n" +
+                               $"Статус: {(individual.Account is RegularAccount ? "Стандарт" : "VIP")}\n" +
+                               $"Дата: {DateTime.Now: dd/MM/yyyy HH:mm:ss}\n" +
+                               "Отчет: Успешно";
+
+                    ClientAdded?.Invoke(null, new AddClientEventArgs { LogMessage = message });
                 }
 
                 return (noMatchesFound, message);
@@ -136,21 +148,19 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction.ClientBaseEdit
                     context.Clients.Add(entity);
 
                     context.SaveChanges();
-                    message = SuccessMessage(passport.FullName.Name);
+                    message = "Произведена операция добавления:\n" +
+                                $"Клиент: {entity.Passport.FullName.Name}\n" +
+                                $"Карта: {entity.Account.Card.CardName}\n" +
+                                $"Номер: {entity.Account.Card.CardNumber}\n" +
+                                $"Статус: {(entity.Account is RegularAccount ? "Стандарт" : "VIP")}\n" +
+                                $"Дата: {DateTime.Now : dd/MM/yyyy HH:mm:ss}\n" +
+                                "Отчет: Успешно";
+
+                    ClientAdded?.Invoke(null, new AddClientEventArgs { LogMessage = message });
                 }
 
                 return (noMatchesFound, message);
             }
-        }
-
-        /// <summary>
-        /// Метод порождающий сообщение об успешном добавлении клиента
-        /// </summary>
-        /// <param name="clientName">полное имя клиента</param>
-        /// <returns>сообщение</returns>
-        private static string SuccessMessage(string clientName)
-        {
-            return $"Клиент \"{clientName}\" успешно добавлен.";
         }
     }
 }

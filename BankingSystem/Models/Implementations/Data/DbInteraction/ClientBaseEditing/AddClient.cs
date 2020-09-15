@@ -54,7 +54,7 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction.ClientBaseEdit
             //Данные аккаунта
             var card = CardFactory.CreateCard(cardName, default);
             var deposit = new NullDeposit();
-            var account = AccountFactory.CreateAccount(accountType, card, deposit);
+            var account = SimpleAccountFactory.CreateAccount(accountType, card, deposit);
 
             return (passport, contact, account);
         }

@@ -192,12 +192,14 @@
     <Compile Include="Models\Implementations\Accounts\AccountType.cs" />
     <Compile Include="Models\Implementations\Accounts\Factories\AccountFactory.cs" />
     <Compile Include="Models\Implementations\Accounts\Factories\RegularAccountFactory.cs" />
+    <Compile Include="Models\Implementations\Accounts\Factories\SimpleAccountFactory.cs" />
     <Compile Include="Models\Implementations\Accounts\Factories\VipAccountFactory.cs" />
     <Compile Include="Models\Implementations\Accounts\RegularAccount.cs" />
     <Compile Include="Models\Implementations\Accounts\VipAccount.cs" />
     <Compile Include="Models\Implementations\BankServices\CardService\Card.cs" />
     <Compile Include="Models\Implementations\BankServices\CardService\CardNames.cs" />
     <Compile Include="Models\Implementations\BankServices\CardService\Factories\CardFactory.cs" />
+    <Compile Include="Models\Implementations\BankServices\CardService\Factories\SimpleCardFactory.cs" />
     <Compile Include="Models\Implementations\BankServices\CardService\Factories\VisaBlackFactory.cs" />
     <Compile Include="Models\Implementations\BankServices\CardService\Factories\VisaClassicFactory.cs" />
     <Compile Include="Models\Implementations\BankServices\CardService\Factories\VisaCorporateFactory.cs" />

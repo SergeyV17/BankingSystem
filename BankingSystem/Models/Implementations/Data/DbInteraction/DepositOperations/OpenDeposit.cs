@@ -25,18 +25,13 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction.DepositOperati
         {
             using (AppDbContext context = new AppDbContext())
             {
-                var newDeposit = new DefaultDepositFactory().CreateDeposit(amount, capitalization, type);
-
                 try
                 {
                     var card = context.Cards.FirstOrDefault(c => c.Id == selectedClient.Account.Card.Id);
                     var account = context.Accounts.FirstOrDefault(a => a.Id == selectedClient.Account.Id);
 
-                    var deposit = context.Deposits.FirstOrDefault(d => d.AccountId == selectedClient.Account.Id);
-                    context.Remove(deposit);
-
                     card.CardBalance -= amount;
-                    account.Deposit = newDeposit;
+                    account.Deposit = new DefaultDepositFactory().CreateDeposit(amount, capitalization, type);
 
                     context.SaveChanges();
                 }

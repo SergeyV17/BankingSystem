@@ -25,8 +25,8 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction.CardOperations
             {
                 try
                 {
-                    var from = context.Cards.FirstOrDefault(c => c.AccountId == fromClient.Account.Id);
-                    var to = context.Cards.FirstOrDefault(c => c.AccountId == toClient.Account.Id);
+                    var from = context.Cards.FirstOrDefault(c => c.Id == fromClient.Account.Card.Id);
+                    var to = context.Cards.FirstOrDefault(c => c.Id == toClient.Account.Card.Id);
 
                     from.CardBalance -= amount;
                     to.CardBalance += amount;

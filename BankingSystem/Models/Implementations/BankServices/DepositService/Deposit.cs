@@ -43,7 +43,7 @@ namespace BankingSystem.Models.Implementations.BankServices.DepositService
         public double DepositRate { get; set; }
 
         //Свойства для БД
-        public int AccountId { get; set; }
+        //public int AccountId { get; set; }
         public Account Account { get; set; }
 
         /// <summary>

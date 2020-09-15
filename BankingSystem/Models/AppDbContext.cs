@@ -33,9 +33,38 @@ namespace BankingSystem.Models
 
         #endregion
 
+        /// <summary>
+        /// Метод срабатывающий при настройки конфигурации БД
+        /// </summary>
+        /// <param name="optionsBuilder">строитель настроек</param>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=BankingSystem;Trusted_Connection=True;");
+        }
+
+        /// <summary>
+        /// Метод срабатывающий при создании моделей БД
+        /// </summary>
+        /// <param name="modelBuilder">строитель моделей</param>
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder
+                .Entity<Client>()
+                .HasOne(c => c.Account)
+                .WithOne(a => a.Client)
+                .HasForeignKey<Account>(a => a.ClientId);
+
+            modelBuilder.Entity<Account>()
+                .HasOne(e => e.Card).WithOne(e => e.Account)
+                .HasForeignKey<Card>(e => e.Id);
+
+            modelBuilder.Entity<Account>()
+                .HasOne(e => e.Deposit).WithOne(e => e.Account)
+                .HasForeignKey<Deposit>(e => e.Id);
+
+            modelBuilder.Entity<Account>().ToTable("Accounts");
+            modelBuilder.Entity<Card>().ToTable("Accounts");
+            modelBuilder.Entity<Deposit>().ToTable("Accounts");
         }
     }
 }

@@ -36,6 +36,17 @@ namespace BankingSystem.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    CardName = table.Column<string>(nullable: true),
+                    CardNumber = table.Column<string>(nullable: true),
+                    CardBalance = table.Column<decimal>(nullable: true),
+                    Card_Discriminator = table.Column<string>(nullable: true),
+                    DepositNumber = table.Column<string>(nullable: true),
+                    DepositBalance = table.Column<decimal>(nullable: true),
+                    DateOfDepositOpen = table.Column<DateTime>(nullable: true),
+                    DateOfDepositClose = table.Column<DateTime>(nullable: true),
+                    DepositCapitalization = table.Column<bool>(nullable: true),
+                    DepositRate = table.Column<double>(nullable: true),
+                    Deposit_Discriminator = table.Column<string>(nullable: true),
                     AccountLockout = table.Column<bool>(nullable: false),
                     AmountOfReplenishmentPerDay = table.Column<decimal>(nullable: false),
                     DateOfLastReplenish = table.Column<DateTime>(nullable: false),
@@ -53,82 +64,15 @@ namespace BankingSystem.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Cards",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CardName = table.Column<string>(nullable: true),
-                    CardNumber = table.Column<string>(nullable: true),
-                    CardBalance = table.Column<decimal>(nullable: false),
-                    AccountId = table.Column<int>(nullable: false),
-                    Discriminator = table.Column<string>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Cards", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Cards_Accounts_AccountId",
-                        column: x => x.AccountId,
-                        principalTable: "Accounts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Deposits",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    DepositNumber = table.Column<string>(nullable: true),
-                    DepositBalance = table.Column<decimal>(nullable: false),
-                    DateOfDepositOpen = table.Column<DateTime>(nullable: false),
-                    DateOfDepositClose = table.Column<DateTime>(nullable: false),
-                    DepositCapitalization = table.Column<bool>(nullable: false),
-                    DepositRate = table.Column<double>(nullable: false),
-                    AccountId = table.Column<int>(nullable: false),
-                    Discriminator = table.Column<string>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Deposits", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Deposits_Accounts_AccountId",
-                        column: x => x.AccountId,
-                        principalTable: "Accounts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_Accounts_ClientId",
                 table: "Accounts",
                 column: "ClientId",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Cards_AccountId",
-                table: "Cards",
-                column: "AccountId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Deposits_AccountId",
-                table: "Deposits",
-                column: "AccountId",
-                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Cards");
-
-            migrationBuilder.DropTable(
-                name: "Deposits");
-
             migrationBuilder.DropTable(
                 name: "Accounts");
 

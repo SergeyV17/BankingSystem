@@ -88,11 +88,7 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction.ClientBaseEdit
 
                     if (cardName != selectedIndividual.Account.Card.CardName)
                     {
-                        var newCard = CardFactory.CreateCard(cardName, selectedIndividual.Account.Card.CardBalance);
-                        var oldCard = context.Cards.FirstOrDefault(c => c.AccountId == selectedIndividual.Account.Id);
-
-                        context.Remove(oldCard);
-                        account.Card = newCard;
+                        account.Card = CardFactory.CreateCard(cardName, selectedIndividual.Account.Card.CardBalance);
                     }
 
                     context.SaveChanges();

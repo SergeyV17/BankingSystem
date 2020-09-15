@@ -59,9 +59,6 @@ namespace BankingSystem.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("AccountId")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("CardBalance")
                         .HasColumnType("decimal(18,2)");
 
@@ -73,14 +70,12 @@ namespace BankingSystem.Migrations
 
                     b.Property<string>("Discriminator")
                         .IsRequired()
+                        .HasColumnName("Card_Discriminator")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AccountId")
-                        .IsUnique();
-
-                    b.ToTable("Cards");
+                    b.ToTable("Accounts");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Card");
                 });
@@ -91,9 +86,6 @@ namespace BankingSystem.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("AccountId")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("DateOfDepositClose")
                         .HasColumnType("datetime2");
@@ -115,14 +107,12 @@ namespace BankingSystem.Migrations
 
                     b.Property<string>("Discriminator")
                         .IsRequired()
+                        .HasColumnName("Deposit_Discriminator")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AccountId")
-                        .IsUnique();
-
-                    b.ToTable("Deposits");
+                    b.ToTable("Accounts");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Deposit");
                 });
@@ -228,7 +218,7 @@ namespace BankingSystem.Migrations
                 {
                     b.HasOne("BankingSystem.Models.Implementations.Accounts.Account", "Account")
                         .WithOne("Card")
-                        .HasForeignKey("BankingSystem.Models.Implementations.BankServices.CardService.Card", "AccountId")
+                        .HasForeignKey("BankingSystem.Models.Implementations.BankServices.CardService.Card", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -237,7 +227,7 @@ namespace BankingSystem.Migrations
                 {
                     b.HasOne("BankingSystem.Models.Implementations.Accounts.Account", "Account")
                         .WithOne("Deposit")
-                        .HasForeignKey("BankingSystem.Models.Implementations.BankServices.DepositService.Deposit", "AccountId")
+                        .HasForeignKey("BankingSystem.Models.Implementations.BankServices.DepositService.Deposit", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

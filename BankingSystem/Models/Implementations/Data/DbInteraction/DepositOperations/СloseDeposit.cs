@@ -22,17 +22,12 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction.DepositOperati
         {
             using (AppDbContext context = new AppDbContext())
             {
-                Deposit deposit = null;
-
                 try
                 {
-                    var card = context.Cards.FirstOrDefault(c => c.AccountId == selectedClient.Account.Id);
-                    card.CardBalance += selectedClient.Account.Deposit.DepositBalance;
-
-                    deposit = context.Deposits.FirstOrDefault(d => d.AccountId == selectedClient.Account.Id);
-                    context.Remove(deposit);
-
                     var account = context.Accounts.FirstOrDefault(a => a.Id == selectedClient.Account.Id);
+                    var card = context.Cards.FirstOrDefault(c => c.Id == selectedClient.Account.Card.Id);
+
+                    card.CardBalance += selectedClient.Account.Deposit.DepositBalance;
                     account.Deposit = new NullDeposit();
 
                     context.SaveChanges();

@@ -52,7 +52,7 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction.ClientBaseEdit
             var contact = ContactFactory.CreateContact(phone, email);
 
             //Данные аккаунта
-            var card = CardFactory.CreateCard(cardName, default);
+            var card = SimpleCardFactory.CreateCard(cardName, default);
             var deposit = new NullDeposit();
             var account = SimpleAccountFactory.CreateAccount(accountType, card, deposit);
 

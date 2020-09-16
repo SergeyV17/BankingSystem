@@ -88,7 +88,7 @@ namespace BankingSystem.Models.Implementations.Data.DbInteraction.ClientBaseEdit
 
                     if (cardName != selectedIndividual.Account.Card.CardName)
                     {
-                        account.Card = CardFactory.CreateCard(cardName, selectedIndividual.Account.Card.CardBalance);
+                        account.Card = SimpleCardFactory.CreateCard(cardName, selectedIndividual.Account.Card.CardBalance);
                     }
 
                     context.SaveChanges();

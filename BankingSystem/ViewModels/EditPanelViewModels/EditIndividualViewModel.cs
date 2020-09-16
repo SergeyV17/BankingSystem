@@ -1,8 +1,8 @@
 ﻿using BankingSystem.Commands;
 using BankingSystem.Models.Abstractions;
-using BankingSystem.Models.Implementations.Clients;
-using BankingSystem.Models.Implementations.Data.DbInteraction.ClientBaseEditing;
-using BankingSystem.Models.Implementations.Requisites.ClientRequisites.Factories;
+using DataLibrary.Clients;
+using DbInteraction.ClientBaseEditing;
+using RequisitesLibrary.ClientRequisites.Factories;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

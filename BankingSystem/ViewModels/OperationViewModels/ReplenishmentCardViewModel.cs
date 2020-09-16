@@ -1,8 +1,7 @@
 ﻿using BankingSystem.Commands;
 using BankingSystem.Models.Abstractions;
-using BankingSystem.Models.Implementations.BankServices.CardService;
-using BankingSystem.Models.Implementations.Clients;
-using BankingSystem.Models.Implementations.Data.DbInteraction.CardOperations;
+using DataLibrary.Clients;
+using DbInteraction.CardOperations;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

@@ -1,7 +1,7 @@
-﻿using BankingSystem.Models.Implementations.Data.DbInteraction.CardOperations;
-using BankingSystem.Models.Implementations.Data.DbInteraction.ClientBaseEditing;
-using BankingSystem.Models.Implementations.Data.DbInteraction.DepositOperations;
-using BankingSystem.ViewModels.HistoryViewModels;
+﻿using BankingSystem.ViewModels.HistoryViewModels;
+using DbInteraction.CardOperations;
+using DbInteraction.ClientBaseEditing;
+using DbInteraction.DepositOperations;
 using System.Globalization;
 using System.Threading;
 using System.Windows;

@@ -1,5 +1,5 @@
-﻿using BankingSystem.Models.Implementations.Accounts.Factories;
-using BankingSystem.Models.Implementations.BankServices.CardService.Factories;
+﻿using DataLibrary.Accounts.Factories;
+using DataLibrary.Cards.Factories;
 
 namespace BankingSystem.Models.Implementations.Data.Factories
 {

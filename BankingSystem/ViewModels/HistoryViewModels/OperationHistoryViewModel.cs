@@ -1,5 +1,5 @@
-﻿using BankingSystem.Models.Implementations.Data.DbInteraction.CardOperations.EventArgs;
-using BankingSystem.Models.Implementations.Data.DbInteraction.DepositOperations.EventArgs;
+﻿using DbInteraction.CardOperations.EventArgs;
+using DbInteraction.DepositOperations.EventArgs;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 

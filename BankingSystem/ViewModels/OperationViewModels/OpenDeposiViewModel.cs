@@ -1,8 +1,9 @@
 ﻿using BankingSystem.Commands;
 using BankingSystem.Models.Abstractions;
-using BankingSystem.Models.Implementations.BankServices.DepositService;
-using BankingSystem.Models.Implementations.Clients;
-using BankingSystem.Models.Implementations.Data.DbInteraction.DepositOperations;
+using DataLibrary.Clients;
+using DataLibrary.Deposits;
+using DbInteraction.DepositOperations;
+using RequisitesLibrary;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

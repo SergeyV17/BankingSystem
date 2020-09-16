@@ -1,4 +1,4 @@
-﻿using BankingSystem.Models.Implementations.Data.DbInteraction.ClientBaseEditing.EventArgs;
+﻿using DbInteraction.ClientBaseEditing.EventArgs;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 

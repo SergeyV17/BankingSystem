@@ -10,14 +10,14 @@ using BankingSystem.ViewModels.HistoryViewModels;
 using BankingSystem.Models.Implementations.Data;
 using BankingSystem.Models.Implementations.Data.Factories;
 using System.Collections.ObjectModel;
-using BankingSystem.Models.Implementations.Clients;
-using BankingSystem.Models.Implementations.Data.DbInteraction.ClientBaseEditing;
 using BankingSystem.Views.Windows.OperationPanel;
-using BankingSystem.Models.Implementations.Data.DbInteraction.Selections;
-using BankingSystem.Models.Implementations.Data.DbInteraction.DepositOperations;
 using CalculateDepositLibrary;
 using BankingSystem.Views.Windows.History;
 using System.ComponentModel;
+using DataLibrary.Clients;
+using DbInteraction.Selections;
+using DbInteraction.ClientBaseEditing;
+using DbInteraction.DepositOperations;
 
 namespace BankingSystem.ViewModels
 {

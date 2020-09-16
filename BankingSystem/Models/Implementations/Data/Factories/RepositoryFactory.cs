@@ -1,15 +1,18 @@
-﻿using System;
+﻿using DataLibrary.Clients;
+using DataLibrary.Clients.Factories;
+using DataLibrary.Deposits;
+using DataLibrary.Deposits.Factories;
+using DbInteraction;
+using RequisitesLibrary;
+using RequisitesLibrary.ClientRequisites.CompanyData.Factories;
+using RequisitesLibrary.ClientRequisites.ContactData.Factories;
+using RequisitesLibrary.ClientRequisites.Factories;
+using RequisitesLibrary.ClientRequisites.PassportData;
+using RequisitesLibrary.ClientRequisites.PassportData.Factories;
+using RequisitesLibrary.PassportData.Factories;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
-using BankingSystem.Models.Implementations.BankServices.DepositService;
-using BankingSystem.Models.Implementations.BankServices.DepositService.Factories;
-using BankingSystem.Models.Implementations.Clients;
-using BankingSystem.Models.Implementations.Clients.Factories;
-using BankingSystem.Models.Implementations.Requisites.ClientRequisites.CompanyData.Factories;
-using BankingSystem.Models.Implementations.Requisites.ClientRequisites.ContactData.Factories;
-using BankingSystem.Models.Implementations.Requisites.ClientRequisites.Factories;
-using BankingSystem.Models.Implementations.Requisites.ClientRequisites.PassportData;
-using BankingSystem.Models.Implementations.Requisites.ClientRequisites.PassportData.Factories;
 using static BankingSystem.Models.Implementations.Data.Factories.AppFactories;
 
 namespace BankingSystem.Models.Implementations.Data.Factories
@@ -95,7 +98,8 @@ namespace BankingSystem.Models.Implementations.Data.Factories
                 {
                     Client client = null;
 
-                    decimal balance = random.Next(1, 10) * 10000;
+                    decimal cardBalance = random.Next(1, 10) * 10000;
+                    decimal depositBalance = random.Next(1, 10) * 10000;
                     bool capitalization = Convert.ToBoolean(random.Next(2));
 
                     //Паспортные данные
@@ -112,9 +116,9 @@ namespace BankingSystem.Models.Implementations.Data.Factories
                         case (int)ClientType.Individual:
 
                             //Данные аккаунта
-                            var card = IndividualsCardFactories[random.Next(IndividualsCardFactories.Length)].CreateCard(balance);
+                            var card = IndividualsCardFactories[random.Next(IndividualsCardFactories.Length)].CreateCard(cardBalance);
                             var deposit = random.Next(2) == 0 ? 
-                                                new DefaultDepositFactory().CreateDeposit(balance, capitalization, ClientType.Individual) : 
+                                                new DefaultDepositFactory().CreateDeposit(depositBalance, capitalization, ClientType.Individual) : 
                                                 new NullDeposit();
 
                             var individualAccount = AccountFactories[random.Next(AccountFactories.Length)].CreateAccount(card, deposit);
@@ -126,9 +130,9 @@ namespace BankingSystem.Models.Implementations.Data.Factories
                         case (int)ClientType.Entity:
 
                             //Данные аккаунта
-                            card = EntitiesCardFactories[random.Next(EntitiesCardFactories.Length)].CreateCard(balance);
+                            card = EntitiesCardFactories[random.Next(EntitiesCardFactories.Length)].CreateCard(cardBalance);
                             deposit = random.Next(2) == 0 ? 
-                                            new DefaultDepositFactory().CreateDeposit(balance, capitalization, ClientType.Entity) : 
+                                            new DefaultDepositFactory().CreateDeposit(depositBalance, capitalization, ClientType.Entity) : 
                                             new NullDeposit();
 
                             var entityAccount = AccountFactories[random.Next(AccountFactories.Length)].CreateAccount(card, deposit);

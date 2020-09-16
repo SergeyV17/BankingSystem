@@ -7,10 +7,10 @@ using System.Windows;
 using System.Windows.Input;
 using BankingSystem.Commands;
 using BankingSystem.Models.Abstractions;
-using BankingSystem.Models.Implementations.Accounts;
-using BankingSystem.Models.Implementations.BankServices.CardService;
-using BankingSystem.Models.Implementations.Data.DbInteraction.ClientBaseEditing;
-using BankingSystem.Models.Implementations.Requisites.CardRequisites.Factories;
+using DataLibrary.Accounts;
+using DbInteraction.ClientBaseEditing;
+using RequisitesLibrary.CardRequisites;
+using RequisitesLibrary.CardRequisites.Factories;
 
 namespace BankingSystem.ViewModels.EditPanelViewModels
 {

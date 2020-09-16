@@ -17,7 +17,9 @@
 2) Cгенерируйте БД с клиентами. Для этого:
 	а) В IDE Visual Studio откройте консоль менеджера пакетов NuGet.
 	Путь: 'Tools' -> 'NuGet Package Manager' -> 'Package Manager Console'
-	б) Введите команду Update-database, нажмите 'Enter'.
+	б) Доустановите отсутсвующие пакеты, нажав на кнопку Restore.
+	в) Выберите в комбобоксе DefaultProject библиотеку DbInteraction.
+	г) Введите команду Update-database, нажмите 'Enter'.
 3) Запустите приложение. Ctrl + F5.
 
 			Программные средства необходимые для запуска и работы
